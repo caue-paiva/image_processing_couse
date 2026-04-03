@@ -26,7 +26,7 @@ python tb1/editor.py creative -i "$IMG6" -o "$OUT/img6_solarize.jpeg"  --thresho
 # === TRANSFORMACOES GEOMETRICAS ===
 
 python tb1/editor.py translate -i "$IMG7" -o "$OUT/img7_translate.jpeg"        --dx 200 --dy 150
-python tb1/editor.py rotate    -i "$IMG1" -o "$OUT/img1_rotate_30.jpeg"        --angle 30 --force
+python tb1/editor.py rotate    -i "$IMG1" -o "$OUT/img1_rotate_30.jpeg"        --angle 30 --strategy nearest
 python tb1/editor.py rotate    -i "$IMG2" -o "$OUT/img2_rotate_autozoom.jpeg"  --angle 30 --strategy autozoom
 python tb1/editor.py rotate    -i "$IMG3" -o "$OUT/img3_rotate_nearest.jpeg"   --angle 45 --strategy nearest
 python tb1/editor.py scale     -i "$IMG4" -o "$OUT/img4_scale_4x.jpeg"         --factor 4.0

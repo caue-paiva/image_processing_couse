@@ -98,7 +98,7 @@ class TestRotate:
         inp, original = gray_img
         out = str(tmp_path / "out.png")
         r = run_editor('rotate', '-i', inp, '-o', out,
-                        '--angle', '0', '--force')
+                        '--angle', '0', '--strategy', 'nearest')
         assert r.returncode == 0
         result = imageio.imread(out).astype(np.float64)
         npt.assert_array_almost_equal(result, original, decimal=0)
@@ -107,7 +107,7 @@ class TestRotate:
         inp, original = gray_img
         out = str(tmp_path / "out.png")
         r = run_editor('rotate', '-i', inp, '-o', out,
-                        '--angle', '90', '--force')
+                        '--angle', '90', '--strategy', 'nearest')
         assert r.returncode == 0
         result = imageio.imread(out).astype(np.float64)
         # Rotacao 90 graus CCW = transpor + flip vertical
@@ -254,7 +254,7 @@ class TestCreative:
 class TestRGBSupport:
     @pytest.mark.parametrize("cmd,extra_args", [
         ('translate', ['--dx', '1', '--dy', '1']),
-        ('rotate', ['--angle', '15', '--force']),
+        ('rotate', ['--angle', '15', '--strategy', 'nearest']),
         ('scale', ['--factor', '1.5']),
         ('crop', ['--x', '1', '--y', '1', '--w', '5', '--h', '5']),
         ('inverse', []),

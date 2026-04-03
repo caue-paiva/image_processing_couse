@@ -156,37 +156,24 @@ def _rotate_core(img, angle, mode='constant', cval=0.0):
     return _bilinear_interp(img, src_y, src_x, mode=mode, cval=cval)
 
 
-def rotate_image(img, angle, strategy=None, force=False):
-    """Rotacao em torno do centro com deteccao de pixels pretos.
+def rotate_image(img, angle, strategy):
+    """Rotacao em torno do centro sem pixels pretos.
 
-    strategy: None (padrao), 'autozoom', ou 'nearest'
-    force: pula prompt interativo
+    strategy: 'autozoom' ou 'nearest'
     """
     if strategy == 'nearest':
         return _rotate_core(img, angle, mode='nearest')
 
-    if strategy == 'autozoom':
-        h, w = img.shape[:2]
-        zf = compute_autozoom_factor(angle, h, w)
-        zoomed = scale_image(img, zf)
-        rotated = _rotate_core(zoomed, angle, mode='constant', cval=0.0)
-        # Recortar ao tamanho original (centro)
-        rh, rw = rotated.shape[:2]
-        start_y = (rh - h) // 2
-        start_x = (rw - w) // 2
-        return rotated[start_y:start_y + h, start_x:start_x + w]
-
-    # Estrategia padrao: rotaciona e avisa sobre pixels pretos
-    rotated = _rotate_core(img, angle, mode='constant', cval=0.0)
-    has_new, count, pct = detect_black_pixels(img, rotated)
-    if has_new and not force:
-        print(f"Aviso: {count} pixels pretos novos detectados ({pct:.2f}%).")
-        print("Use --strategy autozoom ou --strategy nearest para evitar.")
-        resp = input("Continuar mesmo assim? [s/N] ").strip().lower()
-        if resp != 's':
-            print("Operacao cancelada.")
-            sys.exit(0)
-    return rotated
+    # autozoom
+    h, w = img.shape[:2]
+    zf = compute_autozoom_factor(angle, h, w)
+    zoomed = scale_image(img, zf)
+    rotated = _rotate_core(zoomed, angle, mode='constant', cval=0.0)
+    # Recortar ao tamanho original (centro)
+    rh, rw = rotated.shape[:2]
+    start_y = (rh - h) // 2
+    start_x = (rw - w) // 2
+    return rotated[start_y:start_y + h, start_x:start_x + w]
 
 
 def scale_image(img, factor):
@@ -263,10 +250,8 @@ def build_parser():
     p = sub.add_parser('rotate', help='Rotacao')
     add_io(p)
     p.add_argument('--angle', type=float, required=True)
-    p.add_argument('--force', action='store_true',
-                   help='Pula prompt interativo')
     p.add_argument('--strategy', choices=['autozoom', 'nearest'],
-                   default=None, help='Estrategia para pixels pretos')
+                   required=True, help='Estrategia para pixels pretos')
 
     # scale
     p = sub.add_parser('scale', help='Escala')
@@ -320,8 +305,7 @@ def main():
         result = translate(img, args.dx, args.dy)
 
     elif args.command == 'rotate':
-        result = rotate_image(img, args.angle,
-                              strategy=args.strategy, force=args.force)
+        result = rotate_image(img, args.angle, strategy=args.strategy)
 
     elif args.command == 'scale':
         result = scale_image(img, args.factor)

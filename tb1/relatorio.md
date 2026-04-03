@@ -33,7 +33,7 @@ python editor.py <comando> -i <entrada> -o <saida> [opcoes]
 | Comando     | Descrição                          | Opções                                       |
 |-------------|------------------------------------|----------------------------------------------|
 | `translate` | Translação com wrap-around         | `--dx`, `--dy`                               |
-| `rotate`    | Rotação em torno do centro         | `--angle`, `--force`, `--strategy`           |
+| `rotate`    | Rotação em torno do centro         | `--angle`, `--strategy` (obrigatório)        |
 | `scale`     | Escala por fator                   | `--factor`                                   |
 | `crop`      | Recorte de região                  | `--x`, `--y`, `--w`, `--h`                   |
 | `inverse`   | Inversão de intensidade            | —                                            |
@@ -91,7 +91,7 @@ onde $(c_x, c_y)$ é o centro da imagem e $\theta$ é o ângulo de rotação.
 
 #### Tratamento de Pixels Pretos
 
-A rotação pode introduzir pixels pretos nas bordas. O editor detecta automaticamente novos pixels pretos e oferece duas estratégias:
+A rotação pode introduzir pixels pretos nas bordas. Para evitar isso, o usuário deve escolher obrigatoriamente uma das duas estratégias via `--strategy`:
 
 - **autozoom**: calcula um fator de zoom que elimina as bordas pretas, amplia a imagem antes de rotacionar, e recorta ao tamanho original.
 - **nearest**: estende os pixels da borda para preencher as áreas vazias.
@@ -99,10 +99,6 @@ A rotação pode introduzir pixels pretos nas bordas. O editor detecta automatic
 **Imagem original:**
 
 <!-- ![Original](imagens/original.png) -->
-
-**Rotação 30° (padrão):**
-
-<!-- ![Rotação padrão](imagens/rotate_default.png) -->
 
 **Rotação 30° (autozoom):**
 
