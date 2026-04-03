@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(pip3 install:*)",
+      "Bash(/Users/caue.lira/Desktop/facul/proc_imagens/venv/bin/pip install:*)",
+      "Bash(/Users/caue.lira/Desktop/facul/proc_imagens/venv/bin/python3:*)",
+      "Bash(unzip:*)",
+      "Bash(/Users/caue.lira/Desktop/facul/proc_imagens/venv/bin/python:*)",
+      "Bash(source:*)"
+    ]
+  }
+}
