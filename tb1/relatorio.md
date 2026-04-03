@@ -1,8 +1,8 @@
 # Image CLIpper — Relatório do Trabalho 01
 
-**Disciplina:** SCC0251 — Processamento de Imagens
-**Profa.:** Leo Sampaio Ferraz Ribeiro
-**Aluno:** Cauê Paiva Lira — 14675416
+**Disciplina:** SCC0251 — Processamento de Imagens <br>
+**Profa.:** Leo Sampaio Ferraz Ribeiro  <br>
+**Aluno:** Cauê Paiva Lira — 14675416 <br>
 **Semestre:** 1/2026
 
 ---
@@ -72,11 +72,11 @@ Desloca a imagem em `dx` pixels na horizontal e `dy` pixels na vertical. Utiliza
 
 **Imagem original:**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.16%20(1).jpeg)
 
-**Resultado (dx=50, dy=30):**
+**Resultado (dx=200, dy=150):**
 
-<!-- ![Translação](imagens/translate.png) -->
+![Translação](imagens/resultados/img7_translate.jpeg)
 
 ### 3.2 Rotação
 
@@ -96,33 +96,41 @@ A rotação pode introduzir pixels pretos nas bordas. Para evitar isso, o usuár
 - **autozoom**: calcula um fator de zoom que elimina as bordas pretas, amplia a imagem antes de rotacionar, e recorta ao tamanho original.
 - **nearest**: estende os pixels da borda para preencher as áreas vazias.
 
-**Imagem original:**
+**Imagem original (rotação 30° autozoom):**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15%20(1).jpeg)
 
 **Rotação 30° (autozoom):**
 
-<!-- ![Rotação autozoom](imagens/rotate_autozoom.png) -->
+![Rotação autozoom](imagens/resultados/img2_rotate_autozoom.jpeg)
+
+**Imagem original (rotação 30° nearest):**
+
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15.jpeg)
+
+**Rotação 30° (nearest):**
+
+![Rotação nearest](imagens/resultados/img1_rotate_30.jpeg)
+
+**Imagem original (rotação 45° nearest):**
+
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15%20(2).jpeg)
 
 **Rotação 45° (nearest):**
 
-<!-- ![Rotação nearest](imagens/rotate_nearest.png) -->
+![Rotação nearest 45°](imagens/resultados/img3_rotate_nearest.jpeg)
 
 ### 3.3 Escala
 
 Redimensiona a imagem por um fator multiplicativo usando **interpolação bilinear**. As coordenadas de saída são mapeadas linearmente para a imagem original com `numpy.linspace`, e os valores são interpolados com a função `_bilinear_interp`.
 
-**Imagem original:**
+**Imagem original (escala 0.1x):**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15%20(4).jpeg)
 
-**Escala 2x:**
+**Escala 0.1x:**
 
-<!-- ![Escala 2x](imagens/scale_2x.png) -->
-
-**Escala 0.5x:**
-
-<!-- ![Escala 0.5x](imagens/scale_half.png) -->
+![Escala 0.1x](imagens/resultados/img5_scale_010.jpeg)
 
 ### 3.4 Crop (Recorte)
 
@@ -130,11 +138,11 @@ Recorta uma região retangular da imagem definida por posição $(x, y)$ e dimen
 
 **Imagem original:**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.16.jpeg)
 
-**Recorte (x=50, y=50, w=200, h=150):**
+**Recorte (x=200, y=600, w=500, h=400):**
 
-<!-- ![Crop](imagens/crop.png) -->
+![Crop](imagens/resultados/img6_crop.jpeg)
 
 ---
 
@@ -146,11 +154,11 @@ Inverte os valores de intensidade: $f(x) = 255 - x$. Pixels claros tornam-se esc
 
 **Imagem original:**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15.jpeg)
 
 **Resultado:**
 
-<!-- ![Inversa](imagens/inverse.png) -->
+![Inversa](imagens/resultados/img1_inverse.jpeg)
 
 ### 4.2 Log
 
@@ -158,27 +166,31 @@ Transformação logarítmica: $f(x) = c \cdot \ln(1 + x)$, onde $c = \frac{255}{
 
 **Imagem original:**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15%20(1).jpeg)
 
 **Resultado:**
 
-<!-- ![Log](imagens/log.png) -->
+![Log](imagens/resultados/img2_log.jpeg)
 
 ### 4.3 Gamma
 
 Correção gamma: $f(x) = 255 \cdot \left(\frac{x}{255}\right)^\gamma$. Valores de $\gamma < 1$ clareiam a imagem; valores de $\gamma > 1$ escurecem.
 
-**Imagem original:**
+**Imagem original (gamma 3.5):**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15%20(2).jpeg)
 
-**Gamma = 0.5 (clareamento):**
+**Gamma = 3.5 (escurecimento intenso):**
 
-<!-- ![Gamma 0.5](imagens/gamma_05.png) -->
+![Gamma 3.5](imagens/resultados/img3_gamma_35.jpeg)
 
-**Gamma = 2.2 (escurecimento):**
+**Imagem original (gamma 2.2):**
 
-<!-- ![Gamma 2.2](imagens/gamma_22.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15%20(3).jpeg)
+
+**Gamma = 2.2 (escurecimento moderado):**
+
+![Gamma 2.2](imagens/resultados/img4_gamma_22.jpeg)
 
 ### 4.4 Modulação de Contraste
 
@@ -188,11 +200,11 @@ Exemplo: `--intervals "0,50,200,255" --targets "0,150,200,255"` expande o contra
 
 **Imagem original:**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.15%20(4).jpeg)
 
 **Resultado:**
 
-<!-- ![Contraste](imagens/contrast.png) -->
+![Contraste](imagens/resultados/img5_contrast.jpeg)
 
 ### 4.5 Solarização (Transformação Criativa)
 
@@ -204,11 +216,11 @@ Isso cria um efeito surreal que mistura tons positivos e negativos na mesma imag
 
 **Imagem original:**
 
-<!-- ![Original](imagens/original.png) -->
+![Original](imagens/WhatsApp%20Image%202026-04-03%20at%2018.45.16.jpeg)
 
 **Solarização (threshold=128):**
 
-<!-- ![Solarização](imagens/solarize.png) -->
+![Solarização](imagens/resultados/img6_solarize.jpeg)
 
 ---
 
@@ -246,31 +258,6 @@ O arquivo `editor.py` está organizado nas seguintes seções:
 
 ---
 
-## 6. Testes
-
-O arquivo `test_editor.py` contém 27 testes de integração que invocam o CLI via `subprocess` e verificam os resultados com `numpy.testing`. Os testes cobrem:
-
-- Propriedades matemáticas (identidade, roundtrip, involução)
-- Dimensões corretas após escala e crop
-- Ausência de pixels pretos indesejados na translação e autozoom
-- Suporte a imagens RGB em todos os comandos
-- Tratamento de argumentos inválidos
-
-```
-$ python -m pytest test_editor.py -v
-========================== 27 passed ==========================
-```
-
----
-
-## 7. Exemplos com Imagens
-
-*Seção a ser preenchida com exemplos visuais de cada transformação aplicada a uma imagem real.*
-
-<!-- Adicionar imagens de exemplo aqui -->
-
----
-
-## 8. Conclusão
+## 6. Conclusão
 
 O Image CLIpper implementa todas as funcionalidades exigidas pelo trabalho: três transformações geométricas (translação, rotação e escala/crop) e cinco transformações de intensidade (inversa, log, gamma, modulação de contraste e solarização como transformação criativa). As transformações geométricas foram implementadas do zero, incluindo a interpolação bilinear, sem depender de funções prontas de bibliotecas como scipy. O software funciona tanto com imagens em escala de cinza quanto com imagens RGB coloridas.
