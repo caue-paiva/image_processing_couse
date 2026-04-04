@@ -1,0 +1,14 @@
+\makeatletter
+\def\ScaleIfNeeded{%
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+\setkeys{Gin}{width=\ScaleIfNeeded,keepaspectratio,height=0.4\textheight}
+
+% Força figuras a aparecerem exatamente onde foram colocadas no texto
+\usepackage{float}
+\floatplacement{figure}{H}

@@ -1,5 +1,5 @@
 """
-Editor de Imagens CLI - Trabalho 01
+Editor de Imagens - Trabalho 01
 SCC0251 - Processamento de Imagens
 Aluno: Cauê Paiva Lira - 14675416
 Data: Semestre 1 de 2026
@@ -9,7 +9,6 @@ Image CLIpper - Ferramenta CLI para manipular imagens
 """
 
 import argparse
-import sys
 import numpy as np
 import imageio.v2 as imageio
 

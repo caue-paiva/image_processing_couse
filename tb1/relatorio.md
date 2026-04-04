@@ -1,8 +1,8 @@
 # Image CLIpper — Relatório do Trabalho 01
 
-**Disciplina:** SCC0251 — Processamento de Imagens <br>
-**Profa.:** Leo Sampaio Ferraz Ribeiro  <br>
-**Aluno:** Cauê Paiva Lira — 14675416 <br>
+**Disciplina:** SCC0251 — Processamento de Imagens\
+**Profa.:** Leo Sampaio Ferraz Ribeiro\
+**Aluno:** Cauê Paiva Lira — 14675416\
 **Semestre:** 1/2026
 
 ---
