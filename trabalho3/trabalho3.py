@@ -27,6 +27,10 @@ os.makedirs(DIR_RESULTADOS, exist_ok=True)
 # Se False, não abre janelas; apenas salva arquivos em resultados/
 SHOW_PLOTS = False
 
+# Limite para DFT manual usada em espectros/resposta em frequência (Parte I).
+# Mantém os gráficos rápidos mesmo para imagens grandes.
+DFT_MAX_SIZE = 96
+
 
 # ============================================================
 # Funções Utilitárias
@@ -79,7 +83,7 @@ def show_side_by_side(img1, img2, t1="Original", t2="Resultado", save_path=None)
     plt.close(fig)
 
 
-def compute_spectrum(img):
+def compute_spectrum(img, max_size=DFT_MAX_SIZE):
     """
     Retorna espectro de magnitude (log, centralizado) e fase.
 
@@ -89,7 +93,7 @@ def compute_spectrum(img):
     (por amostragem) quando a imagem é grande.
     """
     img = img.astype(float)
-    img_small = downsample_for_dft(img, max_size=256)
+    img_small = downsample_for_dft(img, max_size=max_size)
     F = fftshift2(dft2d(img_small))
     magnitude = np.log2(np.abs(F) + 1e-6)
     phase = np.angle(F)
@@ -238,7 +242,7 @@ def filter_frequency_response(kernel, img_shape):
     padded = np.zeros(img_shape, dtype=float)
     kh, kw = kernel.shape
     padded[:kh, :kw] = kernel
-    padded_small = downsample_for_dft(padded, max_size=256)
+    padded_small = downsample_for_dft(padded, max_size=DFT_MAX_SIZE)
     F = fftshift2(dft2d(padded_small))
     return np.log2(np.abs(F) + 1e-6)
 
@@ -274,7 +278,7 @@ def demo_padding(img, kernel, filter_name, save_prefix):
     print(f"  Salvo: {path}")
 
 
-def demo_frequency(img, kernel, filter_name, save_prefix):
+def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
     """Mostra espectro antes/depois do filtro e resposta em frequência do kernel."""
     result = convolve(img, kernel, padding_mode='reflect')
 
@@ -282,7 +286,8 @@ def demo_frequency(img, kernel, filter_name, save_prefix):
     fig.suptitle(f"{filter_name} — Domínio da Frequência", fontsize=14)
 
     # Espectro original
-    mag_orig, _ = compute_spectrum(img)
+    if mag_orig is None:
+        mag_orig, _ = compute_spectrum(img)
     axes[0].imshow(mag_orig, cmap='gray')
     axes[0].set_title("Espectro Original")
     axes[0].axis('off')
@@ -328,7 +333,7 @@ def demo_filter(img, kernel, filter_name, save_prefix):
     demo_frequency(img, kernel, filter_name, save_prefix)
 
 
-def demo_process(img, process_fn, process_name, save_prefix, **kwargs):
+def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kwargs):
     """Demonstração de um processo (sobel magnitude, sharpen, unsharp)."""
     print(f"\n{'='*60}")
     print(f"  {process_name}")
@@ -361,7 +366,8 @@ def demo_process(img, process_fn, process_name, save_prefix, **kwargs):
     # Espectro antes/depois
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     fig.suptitle(f"{process_name} — Espectro Antes e Depois", fontsize=14)
-    mag_orig, _ = compute_spectrum(img)
+    if mag_orig is None:
+        mag_orig, _ = compute_spectrum(img)
     axes[0].imshow(mag_orig, cmap='gray')
     axes[0].set_title("Espectro Original")
     axes[0].axis('off')
@@ -388,6 +394,9 @@ def run_parte1(img_path):
     show_bw(img, "Imagem Original",
             save_path=os.path.join(DIR_RESULTADOS, "original.png"))
 
+    # Cache: espectro original (DFT manual é caro; reaproveitar em todas as demos)
+    mag_orig, _ = compute_spectrum(img)
+
     # Filtros simples (kernel direto)
     filtros = [
         (shift_kernel(11), "Shift 11x11", "01_shift"),
@@ -398,10 +407,22 @@ def run_parte1(img_path):
     ]
 
     for kernel, name, prefix in filtros:
-        demo_filter(img, kernel, name, prefix)
+        # demo_filter chama demo_frequency; passamos o espectro original para evitar recomputar
+        print(f"\n{'='*60}")
+        print(f"  {name}")
+        print(f"{'='*60}")
+
+        result = convolve(img, kernel, padding_mode='reflect')
+        result_show = norm_minmax(result).astype(np.uint8)
+        path = os.path.join(DIR_RESULTADOS, f"{prefix}_resultado.png")
+        show_side_by_side(img, result_show, "Original", name, save_path=path)
+        print(f"  Salvo: {path}")
+
+        demo_padding(img, kernel, name, prefix)
+        demo_frequency(img, kernel, name, prefix, mag_orig=mag_orig)
 
     # Sobel (magnitude de dois kernels)
-    demo_process(img, sobel_magnitude, "Sobel (Magnitude)", "05_sobel")
+    demo_process(img, sobel_magnitude, "Sobel (Magnitude)", "05_sobel", mag_orig=mag_orig)
 
     # Frequência do Sobel — mostramos os dois kernels
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
@@ -421,11 +442,11 @@ def run_parte1(img_path):
 
     # Sharpen com Laplace
     demo_process(img, sharpen_laplace, "Sharpen (Laplace, alpha=0.5)",
-                 "06_sharpen_laplace", alpha=0.5)
+                 "06_sharpen_laplace", mag_orig=mag_orig, alpha=0.5)
 
     # Unsharp Mask
     demo_process(img, sharpen_unsharp, "Unsharp Mask (sigma=2, alpha=1.5)",
-                 "07_unsharp_mask", size=5, sigma=2.0, alpha=1.5)
+                 "07_unsharp_mask", mag_orig=mag_orig, size=5, sigma=2.0, alpha=1.5)
 
 
 # ============================================================
