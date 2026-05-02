@@ -72,8 +72,17 @@ def show_side_by_side(img1, img2, t1="Original", t2="Resultado", save_path=None)
 
 
 def compute_spectrum(img):
-    """Retorna espectro de magnitude (log, centralizado) e fase."""
-    F = np.fft.fftshift(np.fft.fft2(img.astype(float)))
+    """
+    Retorna espectro de magnitude (log, centralizado) e fase.
+
+    Observação: este trabalho não permite usar FFT pronta do numpy.
+    Portanto, calculamos a DFT 2D manualmente (matricial) e aplicamos shift manual.
+    Para manter viabilidade, o espectro é calculado sobre uma versão reduzida
+    (por amostragem) quando a imagem é grande.
+    """
+    img = img.astype(float)
+    img_small = downsample_for_dft(img, max_size=256)
+    F = fftshift2(dft2d(img_small))
     magnitude = np.log2(np.abs(F) + 1e-6)
     phase = np.angle(F)
     return magnitude, phase
@@ -221,12 +230,14 @@ def sharpen_unsharp(img, size=5, sigma=2.0, alpha=1.5, padding_mode='reflect'):
 def filter_frequency_response(kernel, img_shape):
     """
     Calcula a resposta em frequência de um kernel espacial.
-    Faz padding do kernel para o tamanho da imagem e aplica FFT.
+    Faz padding do kernel para o tamanho da imagem e aplica DFT manual (matricial).
+    Para viabilidade, limita o cálculo a um tamanho máximo (amostragem) se necessário.
     """
-    padded = np.zeros(img_shape)
+    padded = np.zeros(img_shape, dtype=float)
     kh, kw = kernel.shape
     padded[:kh, :kw] = kernel
-    F = np.fft.fftshift(np.fft.fft2(padded))
+    padded_small = downsample_for_dft(padded, max_size=256)
+    F = fftshift2(dft2d(padded_small))
     return np.log2(np.abs(F) + 1e-6)
 
 
@@ -409,6 +420,33 @@ def run_parte1(img_path):
 # Parte II — Transformada de Fourier e Reconstrução Progressiva
 # ============================================================
 
+def downsample_for_dft(img, max_size=256):
+    """
+    Reduz a imagem por amostragem para tornar DFT manual viável.
+    Mantém proporção e nunca aumenta a imagem.
+    """
+    h, w = img.shape
+    scale = min(max_size / h, max_size / w, 1.0)
+    if scale >= 1.0:
+        return img
+    new_h, new_w = max(1, int(h * scale)), max(1, int(w * scale))
+    rows = np.linspace(0, h - 1, new_h).astype(int)
+    cols = np.linspace(0, w - 1, new_w).astype(int)
+    return img[np.ix_(rows, cols)]
+
+
+def fftshift2(arr):
+    """Versão 2D de fftshift (sem usar np.fft)."""
+    h, w = arr.shape
+    return np.roll(np.roll(arr, h // 2, axis=0), w // 2, axis=1)
+
+
+def ifftshift2(arr):
+    """Versão 2D de ifftshift (sem usar np.fft)."""
+    h, w = arr.shape
+    return np.roll(np.roll(arr, -(h // 2), axis=0), -(w // 2), axis=1)
+
+
 def dft2d(img):
     """
     DFT 2D manual via fórmula direta.
@@ -416,18 +454,20 @@ def dft2d(img):
 
     Usa imagem reduzida para viabilidade computacional.
     """
-    img = img.astype(np.complex128)
+    img = img.astype(np.complex128, copy=False)
     M, N = img.shape
-    F = np.zeros((M, N), dtype=np.complex128)
-    x_idx = np.arange(M)
-    y_idx = np.arange(N)
 
-    for u in range(M):
-        for v in range(N):
-            exp_term = np.exp(-1j * 2 * np.pi * (u * x_idx / M))[:, None] * \
-                       np.exp(-1j * 2 * np.pi * (v * y_idx / N))[None, :]
-            F[u, v] = (img * exp_term).sum()
-    return F
+    # Forma matricial separável:
+    # F = W_M @ img @ W_N
+    x = np.arange(M)
+    u = x[:, None]
+    Wm = np.exp(-1j * 2 * np.pi * (u * x[None, :]) / M)
+
+    y = np.arange(N)
+    v = y[:, None]
+    Wn = np.exp(-1j * 2 * np.pi * (v * y[None, :]) / N)
+
+    return Wm @ img @ Wn.T
 
 
 def idft2d(F):
@@ -435,17 +475,22 @@ def idft2d(F):
     IDFT 2D manual via fórmula direta.
     f(x,y) = (1/MN) sum_u sum_v F(u,v) * exp(j*2*pi*(u*x/M + v*y/N))
     """
+    F = F.astype(np.complex128, copy=False)
     M, N = F.shape
-    img = np.zeros((M, N), dtype=np.complex128)
-    u_idx = np.arange(M)
-    v_idx = np.arange(N)
 
-    for x in range(M):
-        for y in range(N):
-            exp_term = np.exp(1j * 2 * np.pi * (u_idx * x / M))[:, None] * \
-                       np.exp(1j * 2 * np.pi * (v_idx * y / N))[None, :]
-            img[x, y] = (F * exp_term).sum()
-    return img.real / (M * N)
+    # Forma matricial separável:
+    # f = (1/MN) * (W_M^{-1} @ F @ W_N^{-1})
+    # onde W^{-1} = exp(+j*2*pi*x*u/N)
+    u = np.arange(M)
+    x = u[:, None]
+    Wm_inv = np.exp(1j * 2 * np.pi * (x * u[None, :]) / M)
+
+    v = np.arange(N)
+    y = v[:, None]
+    Wn_inv = np.exp(1j * 2 * np.pi * (y * v[None, :]) / N)
+
+    img = (Wm_inv @ F @ Wn_inv.T) / (M * N)
+    return img.real
 
 
 def idft2d_progressive(F_shifted, n_steps=10):
@@ -469,7 +514,9 @@ def idft2d_progressive(F_shifted, n_steps=10):
         radius = (step / n_steps) * max_dist
         mask = (distances <= radius).astype(float)
         F_partial = F_shifted * mask
-        img_partial = np.real(np.fft.ifft2(np.fft.ifftshift(F_partial)))
+        # Reconstrução manual: desfaz shift e aplica IDFT 2D (matricial)
+        F_unshifted = ifftshift2(F_partial)
+        img_partial = idft2d(F_unshifted)
         results.append((radius, img_partial))
 
     return results
@@ -506,10 +553,10 @@ def run_parte2(img_high_path, img_low_path, n_steps=10, max_size=128):
 
         print(f"  Tamanho usado: {img_small.shape}")
 
-        # DFT manual
+        # DFT manual (matricial) — imagem reduzida para viabilidade
         print("  Calculando DFT 2D manual...")
         F = dft2d(img_small)
-        F_shifted = np.fft.fftshift(F)
+        F_shifted = fftshift2(F)
 
         # Espectro de magnitude
         mag = np.log2(np.abs(F_shifted) + 1e-6)
