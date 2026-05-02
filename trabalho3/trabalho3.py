@@ -23,6 +23,9 @@ DIR_IMAGENS = "imagens"
 DIR_RESULTADOS = "resultados"
 os.makedirs(DIR_RESULTADOS, exist_ok=True)
 
+# Se False, não abre janelas; apenas salva arquivos em resultados/
+SHOW_PLOTS = False
+
 
 # ============================================================
 # Funções Utilitárias
@@ -53,7 +56,9 @@ def show_bw(img, title="", save_path=None):
     plt.axis('off')
     if save_path:
         plt.savefig(save_path, bbox_inches='tight', dpi=150)
-    plt.show()
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close()
 
 
 def show_side_by_side(img1, img2, t1="Original", t2="Resultado", save_path=None):
@@ -68,7 +73,9 @@ def show_side_by_side(img1, img2, t1="Original", t2="Resultado", save_path=None)
     plt.tight_layout()
     if save_path:
         plt.savefig(save_path, bbox_inches='tight', dpi=150)
-    plt.show()
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
 
 
 def compute_spectrum(img):
@@ -266,7 +273,9 @@ def demo_padding(img, kernel, filter_name, save_prefix):
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_padding.png")
     plt.savefig(path, bbox_inches='tight', dpi=150)
-    plt.show()
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
     print(f"  Salvo: {path}")
 
 
@@ -298,7 +307,9 @@ def demo_frequency(img, kernel, filter_name, save_prefix):
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_frequencia.png")
     plt.savefig(path, bbox_inches='tight', dpi=150)
-    plt.show()
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
     print(f"  Salvo: {path}")
 
 
@@ -340,7 +351,9 @@ def demo_process(img, process_fn, process_name, save_prefix, **kwargs):
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_padding.png")
     plt.savefig(path, bbox_inches='tight', dpi=150)
-    plt.show()
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
     print(f"  Salvo: {path}")
 
     # Resultado com reflect (padrão)
@@ -364,7 +377,9 @@ def demo_process(img, process_fn, process_name, save_prefix, **kwargs):
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_frequencia.png")
     plt.savefig(path, bbox_inches='tight', dpi=150)
-    plt.show()
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
     print(f"  Salvo: {path}")
 
 
@@ -405,7 +420,9 @@ def run_parte1(img_path):
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, "05_sobel_freq_kernels.png")
     plt.savefig(path, bbox_inches='tight', dpi=150)
-    plt.show()
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
 
     # Sharpen com Laplace
     demo_process(img, sharpen_laplace, "Sharpen (Laplace, alpha=0.5)",
@@ -587,7 +604,9 @@ def run_parte2(img_high_path, img_low_path, n_steps=10, max_size=128):
         plt.tight_layout()
         path = os.path.join(DIR_RESULTADOS, f"p2_{label}_progressivo.png")
         plt.savefig(path, bbox_inches='tight', dpi=150)
-        plt.show()
+        if SHOW_PLOTS:
+            plt.show()
+        plt.close(fig)
         print(f"  Salvo: {path}")
 
         # Verificação: reconstrução completa vs original
