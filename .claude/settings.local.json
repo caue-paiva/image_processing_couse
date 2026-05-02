@@ -8,7 +8,10 @@
       "Bash(unzip:*)",
       "Bash(/Users/caue.lira/Desktop/facul/proc_imagens/venv/bin/python:*)",
       "Bash(source:*)",
-      "Bash(pandoc:*)"
+      "Bash(pandoc:*)",
+      "Bash(xxd:*)",
+      "Bash(pyenv versions:*)",
+      "Bash(.venv/bin/python3:*)"
     ]
   }
 }
