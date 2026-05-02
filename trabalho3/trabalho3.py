@@ -13,6 +13,7 @@ import os
 import numpy as np
 import imageio.v3 as iio
 import matplotlib.pyplot as plt
+from scipy.signal import convolve2d
 
 
 # ============================================================
@@ -116,37 +117,31 @@ def convolve(img, kernel, padding_mode='reflect'):
         'wrap'    — circular (toroidal)
     """
     img = img.astype(float)
-    kernel = np.flip(kernel)
     k_h, k_w = kernel.shape
     a = (k_h - 1) // 2
     b = (k_w - 1) // 2
 
     if padding_mode == 'none':
-        # Sem padding: bordas não são processadas
-        new_img = np.zeros_like(img)
-        h, w = img.shape
-        for i in range(a, h - a):
-            for j in range(b, w - b):
-                region = img[i - a:i + a + 1, j - b:j + b + 1]
-                new_img[i, j] = (kernel * region).sum()
+        # Calcula com zero-padding e depois zera as bordas para manter
+        # o comportamento original (borda "não processada").
+        new_img = convolve2d(img, kernel, mode='same', boundary='fill', fillvalue=0)
+        if a > 0:
+            new_img[:a, :] = 0
+            new_img[-a:, :] = 0
+        if b > 0:
+            new_img[:, :b] = 0
+            new_img[:, -b:] = 0
         return new_img
 
-    # Modos com padding via np.pad
-    pad_modes = {
-        'zero': ('constant', {'constant_values': 0}),
-        'reflect': ('reflect', {}),
-        'wrap': ('wrap', {}),
-    }
-    mode, kwargs = pad_modes[padding_mode]
-    img_pad = np.pad(img, ((a, a), (b, b)), mode=mode, **kwargs)
+    if padding_mode == 'zero':
+        return convolve2d(img, kernel, mode='same', boundary='fill', fillvalue=0)
+    if padding_mode == 'reflect':
+        # SciPy usa 'symm' para reflexão/simetria nas bordas
+        return convolve2d(img, kernel, mode='same', boundary='symm')
+    if padding_mode == 'wrap':
+        return convolve2d(img, kernel, mode='same', boundary='wrap')
 
-    h, w = img.shape
-    new_img = np.zeros((h, w))
-    for i in range(h):
-        for j in range(w):
-            region = img_pad[i:i + k_h, j:j + k_w]
-            new_img[i, j] = (kernel * region).sum()
-    return new_img
+    raise ValueError(f"padding_mode inválido: {padding_mode!r}")
 
 
 # ============================================================
