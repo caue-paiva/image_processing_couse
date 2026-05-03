@@ -128,6 +128,47 @@ def convolve(img, kernel, padding_mode='reflect'):
     a = (k_h - 1) // 2
     b = (k_w - 1) // 2
 
+    def _box_filter_numpy(image, kh, kw, pad_mode):
+        """
+        Box filter (kernel constante) via imagem integral (O(H*W)).
+        Suporta padding via np.pad: constant/reflect/wrap.
+
+        Para tamanhos pares, usamos padding assimétrico para imitar o alinhamento
+        de 'same' (top/left bias): before=a, after=kh-1-a.
+        """
+        pad_top = a
+        pad_left = b
+        pad_bottom = (kh - 1 - a)
+        pad_right = (kw - 1 - b)
+
+        if pad_mode == 'zero':
+            padded = np.pad(image, ((pad_top, pad_bottom), (pad_left, pad_right)),
+                            mode='constant', constant_values=0)
+        elif pad_mode == 'reflect':
+            padded = np.pad(image, ((pad_top, pad_bottom), (pad_left, pad_right)),
+                            mode='reflect')
+        elif pad_mode == 'wrap':
+            padded = np.pad(image, ((pad_top, pad_bottom), (pad_left, pad_right)),
+                            mode='wrap')
+        else:
+            raise ValueError(pad_mode)
+
+        # imagem integral com borda 0 para facilitar diferenças
+        S = np.pad(padded, ((1, 0), (1, 0)), mode='constant', constant_values=0).cumsum(0).cumsum(1)
+
+        H, W = image.shape
+        y0 = np.arange(0, H)
+        x0 = np.arange(0, W)
+        y1 = y0 + kh
+        x1 = x0 + kw
+
+        # somas por broadcast: (H,1) e (1,W)
+        A = S[y1[:, None], x1[None, :]]
+        B = S[y0[:, None], x1[None, :]]
+        C = S[y1[:, None], x0[None, :]]
+        D = S[y0[:, None], x0[None, :]]
+        return A - B - C + D
+
     # Fast-path: kernel tipo "shift" (delta) — evita O(H*W*k^2) do convolve2d
     # Detecta kernel com um único valor não-zero.
     nz = np.argwhere(kernel != 0)
@@ -171,6 +212,22 @@ def convolve(img, kernel, padding_mode='reflect'):
                 return img_pad[:h, :w] * delta
 
             raise ValueError(f"padding_mode inválido: {padding_mode!r}")
+
+    # Fast-path: Box filter (kernel constante) via numpy (imagem integral)
+    if np.all(kernel == kernel.flat[0]):
+        if padding_mode == 'none':
+            out = _box_filter_numpy(img, k_h, k_w, pad_mode='zero') * float(kernel.flat[0])
+            # manter comportamento de borda "não processada"
+            if a > 0:
+                out[:a, :] = 0
+                out[-a:, :] = 0
+            if b > 0:
+                out[:, :b] = 0
+                out[:, -b:] = 0
+            return out
+        if padding_mode in ('zero', 'reflect', 'wrap'):
+            return _box_filter_numpy(img, k_h, k_w, pad_mode=padding_mode) * float(kernel.flat[0])
+        raise ValueError(f"padding_mode inválido: {padding_mode!r}")
 
     if padding_mode == 'none':
         # Calcula com zero-padding e depois zera as bordas para manter
@@ -536,7 +593,7 @@ def run_parte1(img_path):
     # Filtros simples (kernel direto)
     filtros = [
         (shift_kernel(111), "Shift 111x111", "01_shift"),
-        (box_kernel(7), "Caixa/Média 7x7", "02_box"),
+        (box_kernel(44), "Caixa/Média 44x44", "02_box"),
         (gaussian_kernel(7, 2.0), "Gaussiano 7x7 sigma=2", "03_gaussiano"),
         (laplace_kernel(), "Laplaciano 3x3", "04_laplace"),
         (emboss_kernel(), "Emboss (Relevo) 3x3", "08_emboss"),
