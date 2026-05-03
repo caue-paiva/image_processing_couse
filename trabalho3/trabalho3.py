@@ -471,6 +471,7 @@ def demo_padding(img, kernel, filter_name, save_prefix):
     results = []
     for mode in modes:
         results.append(convolve(img, kernel, padding_mode=mode))
+    mode_to_result = dict(zip(modes, results))
 
     # Usar a mesma escala em todos os subplots para a diferença ser visível
     mn = float(min(r.min() for r in results))
@@ -480,21 +481,25 @@ def demo_padding(img, kernel, filter_name, save_prefix):
     else:
         vmin, vmax = mn, mx
 
-    # --- Figura 1: imagem inteira (mantém o comportamento atual) ---
-    fig, axes = plt.subplots(1, 4, figsize=(20, 5))
-    fig.suptitle(f"{filter_name} — Comparação de Padding", fontsize=14)
-    for ax, mode, result in zip(axes, modes, results):
-        ax.imshow(result, cmap='gray', vmin=vmin, vmax=vmax)
-        ax.set_title(mode)
-        ax.axis('off')
-
-    plt.tight_layout()
-    path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_padding.png")
-    plt.savefig(path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close(fig)
-    print(f"  Salvo: {path}")
+    # --- Figura 1: imagem inteira (duas figuras: [zero, reflect] e [none, wrap]) ---
+    pairs = [
+        (("zero", "reflect"), f"{save_prefix}_padding_zero_reflect.png"),
+        (("none", "wrap"), f"{save_prefix}_padding_none_wrap.png"),
+    ]
+    for (m1, m2), filename in pairs:
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        fig.suptitle(f"{filter_name} — Padding ({m1} vs {m2})", fontsize=14)
+        for ax, mode in zip(axes, (m1, m2)):
+            ax.imshow(mode_to_result[mode], cmap='gray', vmin=vmin, vmax=vmax)
+            ax.set_title(mode)
+            ax.axis('off')
+        plt.tight_layout()
+        path = os.path.join(DIR_RESULTADOS, filename)
+        plt.savefig(path, bbox_inches='tight', dpi=150)
+        if SHOW_PLOTS:
+            plt.show()
+        plt.close(fig)
+        print(f"  Salvo: {path}")
 
     # --- Figura 2: recortes dos cantos (diferenças de padding ficam evidentes) ---
     h, w = img.shape
@@ -509,34 +514,40 @@ def demo_padding(img, kernel, filter_name, save_prefix):
         ("BR", (slice(h - crop, h), slice(w - crop, w))),
     ]
 
-    fig, axes = plt.subplots(4, 4, figsize=(14, 14))
-    fig.suptitle(f"{filter_name} — Padding (Cantos, crop={crop}px)", fontsize=14)
+    pairs_cantos = [
+        (("zero", "reflect"), f"{save_prefix}_padding_cantos_zero_reflect.png"),
+        (("none", "wrap"), f"{save_prefix}_padding_cantos_none_wrap.png"),
+    ]
+    for (m1, m2), filename in pairs_cantos:
+        fig, axes = plt.subplots(4, 2, figsize=(10, 14))
+        fig.suptitle(f"{filter_name} — Padding Cantos ({m1} vs {m2}, crop={crop}px)", fontsize=14)
 
-    for r, (corner_label, (rs, cs)) in enumerate(corners):
-        row_crops = [res[rs, cs] for res in results]
-        row_min = float(min(c.min() for c in row_crops))
-        row_max = float(max(c.max() for c in row_crops))
-        if row_max - row_min < 1e-12:
-            row_vmin, row_vmax = row_min, row_min + 1.0
-        else:
-            row_vmin, row_vmax = row_min, row_max
+        for r, (corner_label, (rs, cs)) in enumerate(corners):
+            c1 = mode_to_result[m1][rs, cs]
+            c2 = mode_to_result[m2][rs, cs]
+            row_min = float(min(c1.min(), c2.min()))
+            row_max = float(max(c1.max(), c2.max()))
+            if row_max - row_min < 1e-12:
+                row_vmin, row_vmax = row_min, row_min + 1.0
+            else:
+                row_vmin, row_vmax = row_min, row_max
 
-        for c, (mode, crop_img) in enumerate(zip(modes, row_crops)):
-            ax = axes[r, c]
-            ax.imshow(crop_img, cmap='gray', vmin=row_vmin, vmax=row_vmax)
-            if r == 0:
-                ax.set_title(mode)
-            if c == 0:
-                ax.set_ylabel(corner_label, rotation=0, labelpad=20, va='center')
-            ax.axis('off')
+            for c, (mode, crop_img) in enumerate(((m1, c1), (m2, c2))):
+                ax = axes[r, c]
+                ax.imshow(crop_img, cmap='gray', vmin=row_vmin, vmax=row_vmax)
+                if r == 0:
+                    ax.set_title(mode)
+                if c == 0:
+                    ax.set_ylabel(corner_label, rotation=0, labelpad=20, va='center')
+                ax.axis('off')
 
-    plt.tight_layout()
-    path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_padding_cantos.png")
-    plt.savefig(path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close(fig)
-    print(f"  Salvo: {path}")
+        plt.tight_layout()
+        path = os.path.join(DIR_RESULTADOS, filename)
+        plt.savefig(path, bbox_inches='tight', dpi=150)
+        if SHOW_PLOTS:
+            plt.show()
+        plt.close(fig)
+        print(f"  Salvo: {path}")
 
 
 def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
@@ -606,22 +617,26 @@ def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kw
     print(f"  {process_name}")
     print(f"{'='*60}")
 
-    # Comparação de padding para processos
-    modes = ['none', 'zero', 'reflect', 'wrap']
-    fig, axes = plt.subplots(1, 4, figsize=(20, 5))
-    fig.suptitle(f"{process_name} — Comparação de Padding", fontsize=14)
-    for ax, mode in zip(axes, modes):
-        result = process_fn(img, padding_mode=mode, **kwargs)
-        ax.imshow(norm_minmax(result), cmap='gray')
-        ax.set_title(mode)
-        ax.axis('off')
-    plt.tight_layout()
-    path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_padding.png")
-    plt.savefig(path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close(fig)
-    print(f"  Salvo: {path}")
+    # Comparação de padding para processos (duas figuras: [zero, reflect] e [none, wrap])
+    pairs = [
+        (("zero", "reflect"), f"{save_prefix}_padding_zero_reflect.png"),
+        (("none", "wrap"), f"{save_prefix}_padding_none_wrap.png"),
+    ]
+    for (m1, m2), filename in pairs:
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        fig.suptitle(f"{process_name} — Padding ({m1} vs {m2})", fontsize=14)
+        for ax, mode in zip(axes, (m1, m2)):
+            result = process_fn(img, padding_mode=mode, **kwargs)
+            ax.imshow(norm_minmax(result), cmap='gray')
+            ax.set_title(mode)
+            ax.axis('off')
+        plt.tight_layout()
+        path = os.path.join(DIR_RESULTADOS, filename)
+        plt.savefig(path, bbox_inches='tight', dpi=150)
+        if SHOW_PLOTS:
+            plt.show()
+        plt.close(fig)
+        print(f"  Salvo: {path}")
 
     # Resultado com reflect (padrão)
     result = process_fn(img, padding_mode='reflect', **kwargs)
