@@ -33,7 +33,7 @@ SHOW_PLOTS = False
 DFT_MAX_SIZE = 96
 
 # Tamanho do recorte (pixels) para visualizar diferenças de padding nas bordas
-PADDING_CROP = 200
+PADDING_CROP = 500
 
 
 # ============================================================
