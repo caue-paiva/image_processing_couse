@@ -365,11 +365,29 @@ def sobel_y_kernel(size=13):
     raise ValueError(f"size inválido para sobel_y_kernel: {size} (use 3, 7 ou 13)")
 
 
-def emboss_kernel():
-    """Filtro de relevo (emboss) — efeito tridimensional."""
-    return np.array([[-2, -1, 0],
-                     [-1, 1, 1],
-                     [0, 1, 2]])
+def emboss_kernel(size=3):
+    """
+    Filtro de relevo (emboss) — efeito tridimensional.
+
+    - size=3: kernel clássico 3x3
+    - size=13: kernel maior (rampa direcional) para evidenciar efeitos de padding
+    """
+    if size == 3:
+        return np.array([[-2, -1, 0],
+                         [-1, 1, 1],
+                         [0, 1, 2]], dtype=float)
+    if size != 13:
+        raise ValueError(f"size inválido para emboss_kernel: {size} (use 3 ou 13)")
+
+    # Rampa direcional na diagonal (tipo "sombra" -> "luz")
+    ax = np.arange(size, dtype=float) - (size - 1) / 2.0
+    xx, yy = np.meshgrid(ax, ax, indexing='xy')
+    k = (xx + yy)
+    k = k - k.mean()  # soma ~ 0
+    m = np.max(np.abs(k))
+    if m > 0:
+        k = k / m
+    return k
 
 
 # ============================================================
@@ -654,7 +672,7 @@ def run_parte1(img_path):
         (box_kernel(33), "Caixa/Média 33x33", "02_box"),
         (gaussian_kernel(28, 3.0), "Gaussiano 28x28 sigma=4", "03_gaussiano"),
         (laplace_kernel(3), "Laplaciano 3x3", "04_laplace"),
-        (emboss_kernel(), "Emboss (Relevo) 3x3", "08_emboss"),
+        (emboss_kernel(13), "Emboss (Relevo) 13x13", "08_emboss"),
     ]
 
     for kernel, name, prefix in filtros:
