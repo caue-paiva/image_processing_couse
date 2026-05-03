@@ -281,9 +281,20 @@ def demo_padding(img, kernel, filter_name, save_prefix):
     fig, axes = plt.subplots(1, 4, figsize=(20, 5))
     fig.suptitle(f"{filter_name} — Comparação de Padding", fontsize=14)
 
-    for ax, mode in zip(axes, modes):
-        result = convolve(img, kernel, padding_mode=mode)
-        ax.imshow(norm_minmax(result), cmap='gray')
+    results = []
+    for mode in modes:
+        results.append(convolve(img, kernel, padding_mode=mode))
+
+    # Usar a mesma escala em todos os subplots para a diferença ser visível
+    mn = float(min(r.min() for r in results))
+    mx = float(max(r.max() for r in results))
+    if mx - mn < 1e-12:
+        vmin, vmax = mn, mn + 1.0
+    else:
+        vmin, vmax = mn, mx
+
+    for ax, mode, result in zip(axes, modes, results):
+        ax.imshow(result, cmap='gray', vmin=vmin, vmax=vmax)
         ax.set_title(mode)
         ax.axis('off')
 
