@@ -280,8 +280,10 @@ def box_kernel(size):
 
 def gaussian_kernel(size, sigma):
     """Filtro gaussiano 2D com desvio padrão sigma."""
-    ax = np.arange(-(size // 2), size // 2 + 1, dtype=float)
-    xx, yy = np.meshgrid(ax, ax)
+    # Suporta tamanhos pares e ímpares mantendo exatamente (size x size).
+    # Coordenadas centradas em (size-1)/2.
+    ax = np.arange(size, dtype=float) - (size - 1) / 2.0
+    xx, yy = np.meshgrid(ax, ax, indexing='xy')
     kernel = np.exp(-(xx ** 2 + yy ** 2) / (2 * sigma ** 2))
     return kernel / kernel.sum()
 
@@ -594,7 +596,7 @@ def run_parte1(img_path):
     filtros = [
         (shift_kernel(111), "Shift 111x111", "01_shift"),
         (box_kernel(33), "Caixa/Média 33x33", "02_box"),
-        (gaussian_kernel(7, 2.0), "Gaussiano 7x7 sigma=2", "03_gaussiano"),
+        (gaussian_kernel(28, 3.0), "Gaussiano 28x28 sigma=4", "03_gaussiano"),
         (laplace_kernel(), "Laplaciano 3x3", "04_laplace"),
         (emboss_kernel(), "Emboss (Relevo) 3x3", "08_emboss"),
     ]
