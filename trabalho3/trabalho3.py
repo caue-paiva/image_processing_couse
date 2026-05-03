@@ -128,6 +128,49 @@ def convolve(img, kernel, padding_mode='reflect'):
     a = (k_h - 1) // 2
     b = (k_w - 1) // 2
 
+    # Fast-path: kernel tipo "shift" (delta) — evita O(H*W*k^2) do convolve2d
+    # Detecta kernel com um único valor não-zero.
+    nz = np.argwhere(kernel != 0)
+    if nz.shape[0] == 1:
+        (ku, kv) = nz[0]
+        delta = float(kernel[ku, kv])
+        if abs(delta) > 0:
+            # Para um delta em (ku,kv), a convolução (com flip) equivale a um deslocamento
+            # por (k_h-1-ku, k_w-1-kv). No caso padrão shift_kernel(k), isso vira (k-1,k-1).
+            du = (k_h - 1 - ku)
+            dv = (k_w - 1 - kv)
+
+            h, w = img.shape
+            out = np.zeros((h, w), dtype=float)
+
+            if padding_mode in ('none', 'zero'):
+                # Região que consegue "puxar" pixels válidos sem sair dos limites
+                src_r0, src_r1 = du, h
+                src_c0, src_c1 = dv, w
+                dst_r0, dst_r1 = 0, h - du
+                dst_c0, dst_c1 = 0, w - dv
+                if dst_r1 > dst_r0 and dst_c1 > dst_c0:
+                    out[dst_r0:dst_r1, dst_c0:dst_c1] = img[src_r0:src_r1, src_c0:src_c1] * delta
+                if padding_mode == 'none':
+                    # Manter comportamento "borda não processada" equivalente ao kernel:
+                    # zera uma faixa de a/b pixels (apesar de shift não ser centrado, isso
+                    # é coerente com o resto do trabalho).
+                    if a > 0:
+                        out[:a, :] = 0
+                        out[-a:, :] = 0
+                    if b > 0:
+                        out[:, :b] = 0
+                        out[:, -b:] = 0
+                return out
+
+            # reflect / wrap: usa padding e faz slicing (rápido)
+            pad_map = {'reflect': 'reflect', 'wrap': 'wrap'}
+            if padding_mode in pad_map:
+                img_pad = np.pad(img, ((du, 0), (dv, 0)), mode=pad_map[padding_mode])
+                return img_pad[:h, :w] * delta
+
+            raise ValueError(f"padding_mode inválido: {padding_mode!r}")
+
     if padding_mode == 'none':
         # Calcula com zero-padding e depois zera as bordas para manter
         # o comportamento original (borda "não processada").
@@ -155,10 +198,20 @@ def convolve(img, kernel, padding_mode='reflect'):
 # Kernels — Parte I
 # ============================================================
 
-def shift_kernel(k):
-    """Kernel de deslocamento k x k. Desloca a imagem para cima-esquerda."""
+def shift_kernel(k, shift=None):
+    """
+    Kernel de deslocamento k x k (delta).
+
+    Por padrão, desloca em (k-1) pixels para cima-esquerda (delta no canto inferior-direito).
+    Se `shift` for informado, desloca exatamente `shift` pixels (delta em [shift, shift]).
+    """
     kernel = np.zeros((k, k))
-    kernel[k - 1, k - 1] = 1
+    if shift is None:
+        kernel[k - 1, k - 1] = 1
+    else:
+        if shift < 0 or shift >= k:
+            raise ValueError(f"shift inválido: {shift} (precisa 0 <= shift < k)")
+        kernel[shift, shift] = 1
     return kernel
 
 
@@ -481,7 +534,7 @@ def run_parte1(img_path):
 
     # Filtros simples (kernel direto)
     filtros = [
-        (shift_kernel(11), "Shift 11x11", "01_shift"),
+        (shift_kernel(77), "Shift 77x77", "01_shift"),
         (box_kernel(7), "Caixa/Média 7x7", "02_box"),
         (gaussian_kernel(7, 2.0), "Gaussiano 7x7 sigma=2", "03_gaussiano"),
         (laplace_kernel(), "Laplaciano 3x3", "04_laplace"),
