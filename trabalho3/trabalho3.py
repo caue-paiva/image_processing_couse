@@ -13,7 +13,7 @@ import os
 import numpy as np
 import imageio.v3 as iio
 import matplotlib.pyplot as plt
-from scipy.signal import convolve2d
+
 import math
 
 
@@ -227,10 +227,23 @@ def convolve(img, kernel, padding_mode='reflect'):
             return _box_filter_numpy(img, k_h, k_w, pad_mode=padding_mode) * float(kernel.flat[0])
         raise ValueError(f"padding_mode inválido: {padding_mode!r}")
 
+    # Convolução manual genérica com np.pad (sem dependência de scipy)
+    kernel_flipped = np.flip(kernel)
+    h, w = img.shape
+
+    # Padding assimétrico para kernels de tamanho par
+    pad_top, pad_bottom = a, k_h - 1 - a
+    pad_left, pad_right = b, k_w - 1 - b
+
     if padding_mode == 'none':
-        # Calcula com zero-padding e depois zera as bordas para manter
-        # o comportamento original (borda "não processada").
-        new_img = convolve2d(img, kernel, mode='same', boundary='fill', fillvalue=0)
+        # Sem padding: bordas ficam zero (usa zero-pad interno, depois zera bordas)
+        img_pad = np.pad(img, ((pad_top, pad_bottom), (pad_left, pad_right)),
+                         mode='constant', constant_values=0)
+        new_img = np.zeros((h, w), dtype=float)
+        for i in range(h):
+            for j in range(w):
+                neighbourhood = img_pad[i:i + k_h, j:j + k_w]
+                new_img[i, j] = (kernel_flipped * neighbourhood).sum()
         if a > 0:
             new_img[:a, :] = 0
             new_img[-a:, :] = 0
@@ -239,15 +252,20 @@ def convolve(img, kernel, padding_mode='reflect'):
             new_img[:, -b:] = 0
         return new_img
 
-    if padding_mode == 'zero':
-        return convolve2d(img, kernel, mode='same', boundary='fill', fillvalue=0)
-    if padding_mode == 'reflect':
-        # SciPy usa 'symm' para reflexão/simetria nas bordas
-        return convolve2d(img, kernel, mode='same', boundary='symm')
-    if padding_mode == 'wrap':
-        return convolve2d(img, kernel, mode='same', boundary='wrap')
+    # Com padding: pad -> loop completo
+    pad_modes = {'zero': 'constant', 'reflect': 'reflect', 'wrap': 'wrap'}
+    if padding_mode not in pad_modes:
+        raise ValueError(f"padding_mode inválido: {padding_mode!r}")
+    pad_kwargs = {'constant_values': 0} if padding_mode == 'zero' else {}
+    img_pad = np.pad(img, ((pad_top, pad_bottom), (pad_left, pad_right)),
+                     mode=pad_modes[padding_mode], **pad_kwargs)
 
-    raise ValueError(f"padding_mode inválido: {padding_mode!r}")
+    new_img = np.zeros((h, w), dtype=float)
+    for i in range(h):
+        for j in range(w):
+            neighbourhood = img_pad[i:i + k_h, j:j + k_w]
+            new_img[i, j] = (kernel_flipped * neighbourhood).sum()
+    return new_img
 
 
 # ============================================================
