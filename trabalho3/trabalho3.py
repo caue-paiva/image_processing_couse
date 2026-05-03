@@ -236,13 +236,31 @@ def sharpen_unsharp(img, size=5, sigma=2.0, alpha=1.5, padding_mode='reflect'):
 def filter_frequency_response(kernel, img_shape):
     """
     Calcula a resposta em frequência de um kernel espacial.
-    Faz padding do kernel para o tamanho da imagem e aplica DFT manual (matricial).
-    Para viabilidade, limita o cálculo a um tamanho máximo (amostragem) se necessário.
+    Faz padding do kernel e aplica DFT manual (matricial).
+
+    Importante: não fazemos downsample do kernel após colocá-lo em um canvas do
+    tamanho da imagem, pois a amostragem pode "pular" o suporte do kernel e
+    zerá-lo (ex.: shift 11x11 com 1 em [10,10]). Em vez disso, calculamos a
+    resposta em frequência em um canvas pequeno (DFT_MAX_SIZE) e colocamos o
+    kernel centralizado nele.
     """
-    padded = np.zeros(img_shape, dtype=float)
     kh, kw = kernel.shape
-    padded[:kh, :kw] = kernel
-    padded_small = downsample_for_dft(padded, max_size=DFT_MAX_SIZE)
+    H, W = img_shape
+    Hc = min(DFT_MAX_SIZE, H)
+    Wc = min(DFT_MAX_SIZE, W)
+
+    padded_small = np.zeros((Hc, Wc), dtype=float)
+
+    # Coloca o kernel centralizado no canvas pequeno.
+    # Se o kernel for maior que o canvas, recorta (situação improvável aqui).
+    kh_use = min(kh, Hc)
+    kw_use = min(kw, Wc)
+    k_crop = kernel[:kh_use, :kw_use]
+
+    top = (Hc - kh_use) // 2
+    left = (Wc - kw_use) // 2
+    padded_small[top:top + kh_use, left:left + kw_use] = k_crop
+
     F = fftshift2(dft2d(padded_small))
     return np.log2(np.abs(F) + 1e-6)
 
@@ -288,7 +306,15 @@ def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
     # Espectro original
     if mag_orig is None:
         mag_orig, _ = compute_spectrum(img)
-    axes[0].imshow(mag_orig, cmap='gray')
+
+    # Espectro após filtragem
+    mag_result, _ = compute_spectrum(result)
+
+    # Usar a MESMA escala para os espectros antes/depois, para a diferença ficar visível
+    vmin = min(float(mag_orig.min()), float(mag_result.min()))
+    vmax = max(float(mag_orig.max()), float(mag_result.max()))
+
+    axes[0].imshow(mag_orig, cmap='gray', vmin=vmin, vmax=vmax)
     axes[0].set_title("Espectro Original")
     axes[0].axis('off')
 
@@ -298,9 +324,7 @@ def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
     axes[1].set_title("Resposta do Filtro")
     axes[1].axis('off')
 
-    # Espectro após filtragem
-    mag_result, _ = compute_spectrum(result)
-    axes[2].imshow(mag_result, cmap='gray')
+    axes[2].imshow(mag_result, cmap='gray', vmin=vmin, vmax=vmax)
     axes[2].set_title("Espectro Filtrado")
     axes[2].axis('off')
 
