@@ -695,9 +695,9 @@ def run_parte1(img_path):
     demo_process(img, sharpen_laplace, "Sharpen (Laplace 36x36, alpha=0.5)",
                  "06_sharpen_laplace", mag_orig=mag_orig, alpha=0.5, laplace_size=36)
 
-    # Unsharp Mask
-    demo_process(img, sharpen_unsharp, "Unsharp Mask (sigma=2, alpha=1.5)",
-                 "07_unsharp_mask", mag_orig=mag_orig, size=5, sigma=2.0, alpha=1.5)
+    # Unsharp Mask (blur maior para evidenciar efeitos de padding)
+    demo_process(img, sharpen_unsharp, "Unsharp Mask (size=24, sigma=6, alpha=1.5)",
+                 "07_unsharp_mask", mag_orig=mag_orig, size=24, sigma=6.0, alpha=1.5)
 
 
 # ============================================================
