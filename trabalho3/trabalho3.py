@@ -295,18 +295,51 @@ def laplace_kernel():
                      [1, 1, 1]])
 
 
-def sobel_x_kernel():
-    """Sobel para gradiente horizontal (detecta bordas verticais)."""
-    return np.array([[-1, 0, 1],
-                     [-2, 0, 2],
-                     [-1, 0, 1]])
+def sobel_x_kernel(size=13):
+    """
+    Sobel para gradiente horizontal (detecta bordas verticais).
+
+    Por padrão usamos a versão 13x13 para que as diferenças de padding fiquem
+    mais evidentes no relatório. Passe size=3 para o Sobel clássico 3x3.
+    """
+    if size == 3:
+        return np.array([[-1, 0, 1],
+                         [-2, 0, 2],
+                         [-1, 0, 1]])
+    if size == 7:
+        # Construção separável 7x7: suavização (binomial) x derivada discreta
+        s = np.array([1, 6, 15, 20, 15, 6, 1], dtype=float)
+        d = np.array([-1, -4, -5, 0, 5, 4, 1], dtype=float)
+        return np.outer(s, d)
+    if size == 13:
+        # Construção separável 13x13 (hardcoded):
+        # s = coeficientes binomiais (linha 12 do triângulo de Pascal)
+        # d = vetor derivativo anti-simétrico (realça variações horizontais)
+        s = np.array([1, 12, 66, 220, 495, 792, 924, 792, 495, 220, 66, 12, 1], dtype=float)
+        d = np.array([-1, -12, -66, -220, -495, -792, 0, 792, 495, 220, 66, 12, 1], dtype=float)
+        return np.outer(s, d)
+    raise ValueError(f"size inválido para sobel_x_kernel: {size} (use 3, 7 ou 13)")
 
 
-def sobel_y_kernel():
-    """Sobel para gradiente vertical (detecta bordas horizontais)."""
-    return np.array([[-1, -2, -1],
-                     [0, 0, 0],
-                     [1, 2, 1]])
+def sobel_y_kernel(size=13):
+    """
+    Sobel para gradiente vertical (detecta bordas horizontais).
+
+    Por padrão usamos a versão 13x13; passe size=3 para o Sobel clássico 3x3.
+    """
+    if size == 3:
+        return np.array([[-1, -2, -1],
+                         [0, 0, 0],
+                         [1, 2, 1]])
+    if size == 7:
+        s = np.array([1, 6, 15, 20, 15, 6, 1], dtype=float)
+        d = np.array([-1, -4, -5, 0, 5, 4, 1], dtype=float)
+        return np.outer(d, s)
+    if size == 13:
+        s = np.array([1, 12, 66, 220, 495, 792, 924, 792, 495, 220, 66, 12, 1], dtype=float)
+        d = np.array([-1, -12, -66, -220, -495, -792, 0, 792, 495, 220, 66, 12, 1], dtype=float)
+        return np.outer(d, s)
+    raise ValueError(f"size inválido para sobel_y_kernel: {size} (use 3, 7 ou 13)")
 
 
 def emboss_kernel():
@@ -320,10 +353,10 @@ def emboss_kernel():
 # Processos com Filtros
 # ============================================================
 
-def sobel_magnitude(img, padding_mode='reflect'):
+def sobel_magnitude(img, padding_mode='reflect', size=13):
     """Magnitude do gradiente de Sobel: |Gx| + |Gy|."""
-    gx = convolve(img, sobel_x_kernel(), padding_mode)
-    gy = convolve(img, sobel_y_kernel(), padding_mode)
+    gx = convolve(img, sobel_x_kernel(size=size), padding_mode)
+    gy = convolve(img, sobel_y_kernel(size=size), padding_mode)
     return np.abs(gx) + np.abs(gy)
 
 
@@ -616,16 +649,16 @@ def run_parte1(img_path):
         demo_padding(img, kernel, name, prefix)
         demo_frequency(img, kernel, name, prefix, mag_orig=mag_orig)
 
-    # Sobel (magnitude de dois kernels)
-    demo_process(img, sobel_magnitude, "Sobel (Magnitude)", "05_sobel", mag_orig=mag_orig)
+    # Sobel (magnitude) — usando kernel 13x13
+    demo_process(img, sobel_magnitude, "Sobel 13x13 (Magnitude)", "05_sobel", mag_orig=mag_orig, size=13)
 
     # Frequência do Sobel — mostramos os dois kernels
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-    fig.suptitle("Sobel — Resposta em Frequência (Gx e Gy)", fontsize=14)
-    axes[0].imshow(filter_frequency_response(sobel_x_kernel(), img.shape), cmap='gray')
+    fig.suptitle("Sobel 13x13 — Resposta em Frequência (Gx e Gy)", fontsize=14)
+    axes[0].imshow(filter_frequency_response(sobel_x_kernel(size=13), img.shape), cmap='gray')
     axes[0].set_title("Sobel X (horizontal)")
     axes[0].axis('off')
-    axes[1].imshow(filter_frequency_response(sobel_y_kernel(), img.shape), cmap='gray')
+    axes[1].imshow(filter_frequency_response(sobel_y_kernel(size=13), img.shape), cmap='gray')
     axes[1].set_title("Sobel Y (vertical)")
     axes[1].axis('off')
     plt.tight_layout()
