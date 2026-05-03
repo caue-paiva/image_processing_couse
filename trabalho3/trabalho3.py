@@ -535,7 +535,7 @@ def run_parte1(img_path):
 
     # Filtros simples (kernel direto)
     filtros = [
-        (shift_kernel(77), "Shift 77x77", "01_shift"),
+        (shift_kernel(111), "Shift 111x111", "01_shift"),
         (box_kernel(7), "Caixa/Média 7x7", "02_box"),
         (gaussian_kernel(7, 2.0), "Gaussiano 7x7 sigma=2", "03_gaussiano"),
         (laplace_kernel(), "Laplaciano 3x3", "04_laplace"),
