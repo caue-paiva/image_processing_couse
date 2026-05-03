@@ -1,12 +1,22 @@
 # Relatório — Filtros Convolucionais e Transformada de Fourier
 
+Feito por: 
+
+**Cauê Paiva Lira - 14675416**
+
+Disciplina: 
+
+**SCC0251 - Processamento de Imagens (Graduação)**
+
 ## 1. Introdução
 
 Este relatório apresenta a implementação e análise de filtros convolucionais aplicados a imagens digitais. A convolução é a operação fundamental do processamento de imagens no domínio espacial, definida como C(x, y) = Σ_dx Σ_dy A(dx, dy) · B(x - dx, y - dy), onde A é o kernel e B a imagem. Pelo teorema da convolução, essa operação equivale a uma multiplicação no domínio da frequência: G(u,v) = F(u,v) · H(u,v). Essa dualidade permite analisar o comportamento de cada filtro tanto visualmente quanto em termos de quais componentes frequenciais são preservadas ou suprimidas.
 
 Imagem original utilizada nos experimentos:
 
-![Imagem Original](imagens_relatorio/original.png)
+![Imagem Original](imagens/foto.jpg)
+
+Essa imagem foi tirada numa exibição durante minha visita ao MIT Museum. Nela  o [artista](https://www.alanbogana.com/portfolio/light-orientedontologies/) Alan Bogana explora a relação entre a luz e as formas de vida primordiais da terra.
 
 ---
 
@@ -44,7 +54,7 @@ No domínio da frequência, o deslocamento espacial corresponde a multiplicar o 
 
 **Propósito:** Suavizar a imagem calculando a média aritmética da vizinhança de cada pixel. Cada elemento do kernel tem valor 1/N², onde N é o tamanho do filtro.
 
-**Comparação:** Efeito de blur similar ao filtro Gaussiano, porém mais intenso para o mesmo tamanho de kernel. O Box trata todos os vizinhos igualmente, enquanto o Gaussiano pondera pela distância ao centro, preservando melhor as bordas. Além disso, o Box gera ringing no domínio da frequência por ter corte mais abrupto.
+**Comparação:** Efeito de blur similar ao filtro Gaussiano, porém mais intenso para o mesmo tamanho de kernel. O Box trata todos os vizinhos igualmente, enquanto o Gaussiano pondera pela distância ao centro, preservando melhor as bordas. Além disso, o corte abrupto da janela retangular no domínio espacial produz uma função sinc na frequência, cujos lobos laterais causam ringing.
 
 **Resultado:**
 
@@ -176,7 +186,7 @@ O Sobel é um passa-alta direcional. A resposta em frequência de cada kernel (G
 
 ![Sharpen Laplace - Frequência](imagens_relatorio/06_sharpen_laplace_frequencia.png)
 
-A resposta em frequência do Sharpen com Laplace é H(u,v) = 1 + α·(u² + v²) — mantém todas as frequências baixas (ganho unitário no centro) e amplifica progressivamente as altas frequências. O fator α controla a intensidade do realce. Diferente do Laplace puro que elimina as baixas frequências, o sharpen as preserva, apenas somando energia nas altas.
+A resposta em frequência do Sharpen com Laplace é H(u,v) = 1 + α·4π²(u² + v²) — mantém todas as frequências baixas (ganho unitário no centro) e amplifica progressivamente as altas frequências. O fator α controla a intensidade do realce. Diferente do Laplace puro que elimina as baixas frequências, o sharpen as preserva, apenas somando energia nas altas.
 
 **Aplicação no dia a dia:** Ferramenta "Sharpen" no Adobe Photoshop e Lightroom, pós-processamento de imagens RAW em fotografia digital, realce de detalhes em imagens médicas (radiografias, tomografias).
 
@@ -240,11 +250,19 @@ O Emboss é um passa-alta direcional assimétrico no domínio da frequência. Su
 
 ## 3. Parte II — Transformada de Fourier e Reconstrução Progressiva
 
-A Transformada Discreta de Fourier (DFT) decompõe uma imagem em soma de senos e cossenos de diferentes frequências: F(u,v) = (1/MN) Σ_x Σ_y f(x,y) · e^{-j2π(ux/N + vy/M)}. A inversa (IDFT) reconstrói a imagem a partir desses coeficientes. Nesta seção, visualizamos a reconstrução progressiva — começando pelas baixas frequências (centro do espectro) e adicionando frequências cada vez mais altas — para duas imagens com características espectrais distintas.
+A Transformada Discreta de Fourier (DFT) decompõe uma imagem em soma de senos e cossenos de diferentes frequências: F(u,v) = (1/MN) Σ_x Σ_y f(x,y) · e^{-j2π(ux/N + vy/M)}. A inversa (IDFT) reconstrói a imagem a partir desses coeficientes.
+
+A DFT 2D foi implementada manualmente explorando a propriedade de separabilidade: aplica-se a FFT 1D (algoritmo Cooley-Tukey, O(N log N)) em cada linha da imagem e, em seguida, em cada coluna do resultado. Para a reconstrução progressiva, utilizou-se a IDFT parcial: os coeficientes no domínio da frequência são ordenados por distância ao centro do espectro (após fftshift), e a inversa é calculada incluindo apenas os coeficientes dentro de um raio crescente — das baixas frequências (centro) até as altas (periferia). Isso permite visualizar como a imagem se forma progressivamente à medida que componentes de frequência mais alta são adicionadas.
+
+Nesta seção, aplicamos esse processo para duas imagens com características espectrais distintas: uma imagem com coeficientes dominantes em altas frequências e outra com coeficientes dominantes em baixas frequências.
 
 ---
 
 ### 3.1 Imagem com altas frequências dominantes
+
+**Imagem original:**
+
+![Alta Frequência - Original](imagens/alta_freq.jpg)
 
 **Espectro de magnitude:**
 
@@ -266,7 +284,11 @@ O espectro mostra energia distribuída ao longo de toda a extensão, com coefici
 
 ---
 
-### 3.2 Imagem com baixas frequências dominantes
+### 3.2 Imagem com baixas frequências dominantes (paisagem)
+
+**Imagem original:**
+
+![Baixa Frequência - Original](imagens/baixa_freq.jpg)
 
 **Espectro de magnitude:**
 
@@ -280,7 +302,7 @@ O espectro concentra a maior parte da energia no centro, com coeficientes que de
 
 **Passo escolhido 1 — r=12 (30%):** Com apenas 30% das frequências, a paisagem já é bastante reconhecível — a divisão entre céu, horizonte e terreno está bem definida, e a variação tonal do céu é visível. Isso demonstra como imagens dominadas por baixas frequências se formam rapidamente na reconstrução: a maior parte da informação visual está concentrada nos coeficientes próximos ao centro do espectro.
 
-**Passo escolhido 2 — r=40 (100%):** Na reconstrução completa, é possível ver claramente um ponto preto no meio do céu. À primeira vista, esse ponto levanta questionamentos — parece um objeto voador não identificado flutuando na cena. Porém, ao consultar a imagem original, percebe-se que é simplesmente a lâmpada de um poste. Isso ilustra uma observação importante: mesmo com 100% das frequências recuperadas, detalhes cruciais da paisagem nem sempre são representados com fidelidade suficiente para evitar interpretações ambíguas. A resolução e o processo de discretização da DFT podem transformar objetos reconhecíveis em artefatos que mudam completamente a leitura da cena.
+**Passo escolhido 2 — r=36 (90%):** A 90% das frequências, a paisagem já está quase completa, mas é possível ver claramente um ponto preto no meio do céu. À primeira vista, esse ponto levanta questionamentos — parece um objeto voador não identificado flutuando na cena. Porém, ao consultar a imagem original, percebe-se que é simplesmente a lâmpada de um poste. Isso ilustra uma observação importante: mesmo com 90% das frequências recuperadas, detalhes cruciais da paisagem nem sempre são representados com fidelidade suficiente para evitar interpretações ambíguas. A resolução e o processo de discretização da DFT podem transformar objetos reconhecíveis em artefatos que mudam completamente a leitura da cena.
 
 **Imagem reconstruída (100%):**
 
