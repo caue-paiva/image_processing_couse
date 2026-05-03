@@ -101,11 +101,6 @@ def compute_spectrum(img, max_size=DFT_MAX_SIZE):
     return magnitude, phase
 
 
-def show_spectrum(img, title="Espectro", save_path=None):
-    """Exibe o espectro de magnitude de uma imagem."""
-    mag, _ = compute_spectrum(img)
-    show_bw(mag, title=title, save_path=save_path)
-
 
 # ============================================================
 # Convolução 2D
@@ -470,11 +465,6 @@ def filter_frequency_response(kernel, img_shape):
     return np.log2(np.abs(F) + 1e-6)
 
 
-def show_filter_freq_response(kernel, img_shape, title="Resposta em Frequência", save_path=None):
-    """Exibe a resposta em frequência de um filtro."""
-    resp = filter_frequency_response(kernel, img_shape)
-    show_bw(resp, title=title, save_path=save_path)
-
 
 # ============================================================
 # Demonstrações — Parte I
@@ -557,25 +547,6 @@ def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
     plt.close(fig)
     print(f"  Salvo: {path}")
 
-
-def demo_filter(img, kernel, filter_name, save_prefix):
-    """Demonstração completa de um filtro: resultado, padding e frequência."""
-    print(f"\n{'='*60}")
-    print(f"  {filter_name}")
-    print(f"{'='*60}")
-
-    # Resultado visual
-    result = convolve(img, kernel, padding_mode='reflect')
-    result_show = norm_minmax(result).astype(np.uint8)
-    path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_resultado.png")
-    show_side_by_side(img, result_show, "Original", filter_name, save_path=path)
-    print(f"  Salvo: {path}")
-
-    # Comparação de padding
-    demo_padding(img, kernel, filter_name, save_prefix)
-
-    # Análise na frequência
-    demo_frequency(img, kernel, filter_name, save_prefix)
 
 
 def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kwargs):
