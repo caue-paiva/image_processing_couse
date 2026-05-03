@@ -135,8 +135,9 @@ def convolve(img, kernel, padding_mode='reflect'):
         (ku, kv) = nz[0]
         delta = float(kernel[ku, kv])
         if abs(delta) > 0:
-            # Para um delta em (ku,kv), a convolução (com flip) equivale a um deslocamento
-            # por (k_h-1-ku, k_w-1-kv). No caso padrão shift_kernel(k), isso vira (k-1,k-1).
+            # Para um delta em (ku,kv), a convolução (com flip interno do convolve2d)
+            # equivale a deslocar a imagem em (k_h-1-ku, k_w-1-kv) pixels para cima-esquerda.
+            # Ex.: shift_kernel(k) coloca delta em (0,0) => desloca (k-1,k-1).
             du = (k_h - 1 - ku)
             dv = (k_w - 1 - kv)
 
@@ -202,12 +203,12 @@ def shift_kernel(k, shift=None):
     """
     Kernel de deslocamento k x k (delta).
 
-    Por padrão, desloca em (k-1) pixels para cima-esquerda (delta no canto inferior-direito).
+    Por padrão, desloca em (k-1) pixels para cima-esquerda (delta no canto superior-esquerdo).
     Se `shift` for informado, desloca exatamente `shift` pixels (delta em [shift, shift]).
     """
     kernel = np.zeros((k, k))
     if shift is None:
-        kernel[k - 1, k - 1] = 1
+        kernel[0, 0] = 1
     else:
         if shift < 0 or shift >= k:
             raise ValueError(f"shift inválido: {shift} (precisa 0 <= shift < k)")
