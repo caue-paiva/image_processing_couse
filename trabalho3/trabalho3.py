@@ -53,18 +53,28 @@ def norm_minmax(img, C=255):
     return (img - mn) / (mx - mn) * C
 
 
+def save_fig(fig, path):
+    """Salva figura, exibe se SHOW_PLOTS, fecha e imprime o caminho."""
+    fig.savefig(path, bbox_inches='tight', dpi=150)
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
+    print(f"  Salvo: {path}")
+
+
 def show_bw(img, title="", save_path=None):
     """Exibe imagem em escala de cinza e opcionalmente salva."""
-    plt.figure()
+    fig = plt.figure()
     if title:
         plt.title(title)
     plt.imshow(img, cmap='gray')
     plt.axis('off')
     if save_path:
-        plt.savefig(save_path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close()
+        save_fig(fig, save_path)
+    else:
+        if SHOW_PLOTS:
+            plt.show()
+        plt.close(fig)
 
 
 def show_side_by_side(img1, img2, t1="Original", t2="Resultado", save_path=None):
@@ -78,10 +88,11 @@ def show_side_by_side(img1, img2, t1="Original", t2="Resultado", save_path=None)
     axes[1].axis('off')
     plt.tight_layout()
     if save_path:
-        plt.savefig(save_path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close(fig)
+        save_fig(fig, save_path)
+    else:
+        if SHOW_PLOTS:
+            plt.show()
+        plt.close(fig)
 
 
 def compute_spectrum(img, max_size=DFT_MAX_SIZE):
@@ -500,11 +511,7 @@ def demo_padding(img, kernel, filter_name, save_prefix):
             ax.axis('off')
         plt.tight_layout()
         path = os.path.join(DIR_RESULTADOS, filename)
-        plt.savefig(path, bbox_inches='tight', dpi=150)
-        if SHOW_PLOTS:
-            plt.show()
-        plt.close(fig)
-        print(f"  Salvo: {path}")
+        save_fig(fig, path)
 
 
 def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
@@ -541,12 +548,7 @@ def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
 
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_frequencia.png")
-    plt.savefig(path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close(fig)
-    print(f"  Salvo: {path}")
-
+    save_fig(fig, path)
 
 
 def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kwargs):
@@ -570,18 +572,13 @@ def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kw
             ax.axis('off')
         plt.tight_layout()
         path = os.path.join(DIR_RESULTADOS, filename)
-        plt.savefig(path, bbox_inches='tight', dpi=150)
-        if SHOW_PLOTS:
-            plt.show()
-        plt.close(fig)
-        print(f"  Salvo: {path}")
+        save_fig(fig, path)
 
     # Resultado com reflect (padrão)
     result = process_fn(img, padding_mode='reflect', **kwargs)
     result_show = norm_minmax(result).astype(np.uint8)
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_resultado.png")
     show_side_by_side(img, result_show, "Original", process_name, save_path=path)
-    print(f"  Salvo: {path}")
 
     # Espectro antes/depois
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
@@ -599,11 +596,7 @@ def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kw
     axes[1].axis('off')
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_frequencia.png")
-    plt.savefig(path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close(fig)
-    print(f"  Salvo: {path}")
+    save_fig(fig, path)
 
 
 def run_parte1(img_path):
@@ -638,7 +631,6 @@ def run_parte1(img_path):
         result_show = norm_minmax(result).astype(np.uint8)
         path = os.path.join(DIR_RESULTADOS, f"{prefix}_resultado.png")
         show_side_by_side(img, result_show, "Original", name, save_path=path)
-        print(f"  Salvo: {path}")
 
         demo_padding(img, kernel, name, prefix)
         demo_frequency(img, kernel, name, prefix, mag_orig=mag_orig)
@@ -657,10 +649,7 @@ def run_parte1(img_path):
     axes[1].axis('off')
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, "05_sobel_freq_kernels.png")
-    plt.savefig(path, bbox_inches='tight', dpi=150)
-    if SHOW_PLOTS:
-        plt.show()
-    plt.close(fig)
+    save_fig(fig, path)
 
     # Sharpen com Laplace
     demo_process(img, sharpen_laplace, "Sharpen (Laplace 36x36, alpha=0.5)",
@@ -795,16 +784,7 @@ def run_parte2(img_high_path, img_low_path, n_steps=10, max_size=128):
         img = luminosity(iio.imread(img_path))
 
         # Reduzir para viabilidade da DFT manual
-        h, w = img.shape
-        scale = min(max_size / h, max_size / w, 1.0)
-        if scale < 1.0:
-            new_h, new_w = int(h * scale), int(w * scale)
-            # Redimensionamento simples por amostragem
-            rows = np.linspace(0, h - 1, new_h).astype(int)
-            cols = np.linspace(0, w - 1, new_w).astype(int)
-            img_small = img[np.ix_(rows, cols)]
-        else:
-            img_small = img
+        img_small = downsample_for_dft(img, max_size=max_size)
 
         print(f"  Tamanho usado: {img_small.shape}")
 
@@ -817,7 +797,6 @@ def run_parte2(img_high_path, img_low_path, n_steps=10, max_size=128):
         mag = np.log2(np.abs(F_shifted) + 1e-6)
         path = os.path.join(DIR_RESULTADOS, f"p2_{label}_espectro.png")
         show_side_by_side(img_small, mag, "Original", "Espectro (DFT manual)", save_path=path)
-        print(f"  Salvo: {path}")
 
         # Reconstrução progressiva
         print("  Reconstruindo progressivamente...")
@@ -841,11 +820,7 @@ def run_parte2(img_high_path, img_low_path, n_steps=10, max_size=128):
 
         plt.tight_layout()
         path = os.path.join(DIR_RESULTADOS, f"p2_{label}_progressivo.png")
-        plt.savefig(path, bbox_inches='tight', dpi=150)
-        if SHOW_PLOTS:
-            plt.show()
-        plt.close(fig)
-        print(f"  Salvo: {path}")
+        save_fig(fig, path)
 
         # Verificação: reconstrução completa vs original
         print("  Calculando IDFT 2D manual (verificação)...")
@@ -856,7 +831,6 @@ def run_parte2(img_high_path, img_low_path, n_steps=10, max_size=128):
         path = os.path.join(DIR_RESULTADOS, f"p2_{label}_reconstruida.png")
         show_side_by_side(img_small, img_reconstructed,
                           "Original", "Reconstruída (IDFT manual)", save_path=path)
-        print(f"  Salvo: {path}")
 
 
 # ============================================================
