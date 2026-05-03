@@ -32,9 +32,6 @@ SHOW_PLOTS = False
 # Mantém os gráficos rápidos mesmo para imagens grandes.
 DFT_MAX_SIZE = 96
 
-# Tamanho do recorte (pixels) para visualizar diferenças de padding nas bordas
-PADDING_CROP = 500
-
 
 # ============================================================
 # Funções Utilitárias
@@ -493,54 +490,6 @@ def demo_padding(img, kernel, filter_name, save_prefix):
             ax.imshow(mode_to_result[mode], cmap='gray', vmin=vmin, vmax=vmax)
             ax.set_title(mode)
             ax.axis('off')
-        plt.tight_layout()
-        path = os.path.join(DIR_RESULTADOS, filename)
-        plt.savefig(path, bbox_inches='tight', dpi=150)
-        if SHOW_PLOTS:
-            plt.show()
-        plt.close(fig)
-        print(f"  Salvo: {path}")
-
-    # --- Figura 2: recortes dos cantos (diferenças de padding ficam evidentes) ---
-    h, w = img.shape
-    crop = int(min(PADDING_CROP, h, w))
-    if crop < 8:
-        return
-
-    corners = [
-        ("TL", (slice(0, crop), slice(0, crop))),
-        ("TR", (slice(0, crop), slice(w - crop, w))),
-        ("BL", (slice(h - crop, h), slice(0, crop))),
-        ("BR", (slice(h - crop, h), slice(w - crop, w))),
-    ]
-
-    pairs_cantos = [
-        (("zero", "reflect"), f"{save_prefix}_padding_cantos_zero_reflect.png"),
-        (("none", "wrap"), f"{save_prefix}_padding_cantos_none_wrap.png"),
-    ]
-    for (m1, m2), filename in pairs_cantos:
-        fig, axes = plt.subplots(4, 2, figsize=(10, 14))
-        fig.suptitle(f"{filter_name} — Padding Cantos ({m1} vs {m2}, crop={crop}px)", fontsize=14)
-
-        for r, (corner_label, (rs, cs)) in enumerate(corners):
-            c1 = mode_to_result[m1][rs, cs]
-            c2 = mode_to_result[m2][rs, cs]
-            row_min = float(min(c1.min(), c2.min()))
-            row_max = float(max(c1.max(), c2.max()))
-            if row_max - row_min < 1e-12:
-                row_vmin, row_vmax = row_min, row_min + 1.0
-            else:
-                row_vmin, row_vmax = row_min, row_max
-
-            for c, (mode, crop_img) in enumerate(((m1, c1), (m2, c2))):
-                ax = axes[r, c]
-                ax.imshow(crop_img, cmap='gray', vmin=row_vmin, vmax=row_vmax)
-                if r == 0:
-                    ax.set_title(mode)
-                if c == 0:
-                    ax.set_ylabel(corner_label, rotation=0, labelpad=20, va='center')
-                ax.axis('off')
-
         plt.tight_layout()
         path = os.path.join(DIR_RESULTADOS, filename)
         plt.savefig(path, bbox_inches='tight', dpi=150)
