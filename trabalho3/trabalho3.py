@@ -14,6 +14,7 @@ import numpy as np
 import imageio.v3 as iio
 import matplotlib.pyplot as plt
 from scipy.signal import convolve2d
+import math
 
 
 # ============================================================
@@ -288,11 +289,33 @@ def gaussian_kernel(size, sigma):
     return kernel / kernel.sum()
 
 
-def laplace_kernel():
-    """Kernel laplaciano 3x3 (segunda derivada isotrópica)."""
-    return np.array([[1, 1, 1],
-                     [1, -8, 1],
-                     [1, 1, 1]])
+def laplace_kernel(size=3):
+    """
+    Kernel laplaciano.
+
+    - size=3: Laplaciano 8-vizinhos (clássico isotrópico)
+    - size=9/18/26/36: Laplaciano "maior" (multi-escala) construído por suavização binomial
+      e 2ª derivada discreta (separável).
+    """
+    if size == 3:
+        return np.array([[1, 1, 1],
+                         [1, -8, 1],
+                         [1, 1, 1]], dtype=float)
+    if size not in (9, 18, 26, 36):
+        raise ValueError(f"size inválido para laplace_kernel: {size} (use 3, 9, 18, 26 ou 36)")
+
+    # Suavização binomial (linha size-1 do triângulo de Pascal) e 2ª derivada discreta
+    n = size - 1
+    s = np.array([math.comb(n, k) for k in range(size)], dtype=float)
+    d2_full = np.convolve(s, np.array([1.0, -2.0, 1.0]), mode='full')
+    start = (len(d2_full) - size) // 2
+    d2 = d2_full[start:start + size]
+
+    K = np.outer(s, d2) + np.outer(d2, s)
+    m = np.max(np.abs(K))
+    if m > 0:
+        K = K / m
+    return K
 
 
 def sobel_x_kernel(size=13):
@@ -360,9 +383,9 @@ def sobel_magnitude(img, padding_mode='reflect', size=13):
     return np.abs(gx) + np.abs(gy)
 
 
-def sharpen_laplace(img, alpha=0.5, padding_mode='reflect'):
+def sharpen_laplace(img, alpha=0.5, padding_mode='reflect', laplace_size=36):
     """Aumento de nitidez com Laplaciano: f_sharp = f - alpha * laplaciano(f)."""
-    lap = convolve(img, laplace_kernel(), padding_mode)
+    lap = convolve(img, laplace_kernel(size=laplace_size), padding_mode)
     result = img.astype(float) - alpha * lap
     return norm_minmax(np.abs(result)).astype(np.uint8)
 
@@ -630,7 +653,7 @@ def run_parte1(img_path):
         (shift_kernel(111), "Shift 111x111", "01_shift"),
         (box_kernel(33), "Caixa/Média 33x33", "02_box"),
         (gaussian_kernel(28, 3.0), "Gaussiano 28x28 sigma=4", "03_gaussiano"),
-        (laplace_kernel(), "Laplaciano 3x3", "04_laplace"),
+        (laplace_kernel(3), "Laplaciano 3x3", "04_laplace"),
         (emboss_kernel(), "Emboss (Relevo) 3x3", "08_emboss"),
     ]
 
@@ -669,8 +692,8 @@ def run_parte1(img_path):
     plt.close(fig)
 
     # Sharpen com Laplace
-    demo_process(img, sharpen_laplace, "Sharpen (Laplace, alpha=0.5)",
-                 "06_sharpen_laplace", mag_orig=mag_orig, alpha=0.5)
+    demo_process(img, sharpen_laplace, "Sharpen (Laplace 36x36, alpha=0.5)",
+                 "06_sharpen_laplace", mag_orig=mag_orig, alpha=0.5, laplace_size=36)
 
     # Unsharp Mask
     demo_process(img, sharpen_unsharp, "Unsharp Mask (sigma=2, alpha=1.5)",
