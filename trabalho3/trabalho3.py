@@ -31,6 +31,9 @@ SHOW_PLOTS = False
 # Mantém os gráficos rápidos mesmo para imagens grandes.
 DFT_MAX_SIZE = 96
 
+# Tamanho do recorte (pixels) para visualizar diferenças de padding nas bordas
+PADDING_CROP = 200
+
 
 # ============================================================
 # Funções Utilitárias
@@ -278,9 +281,6 @@ def show_filter_freq_response(kernel, img_shape, title="Resposta em Frequência"
 def demo_padding(img, kernel, filter_name, save_prefix):
     """Compara o efeito de diferentes modos de padding para um filtro."""
     modes = ['none', 'zero', 'reflect', 'wrap']
-    fig, axes = plt.subplots(1, 4, figsize=(20, 5))
-    fig.suptitle(f"{filter_name} — Comparação de Padding", fontsize=14)
-
     results = []
     for mode in modes:
         results.append(convolve(img, kernel, padding_mode=mode))
@@ -293,6 +293,9 @@ def demo_padding(img, kernel, filter_name, save_prefix):
     else:
         vmin, vmax = mn, mx
 
+    # --- Figura 1: imagem inteira (mantém o comportamento atual) ---
+    fig, axes = plt.subplots(1, 4, figsize=(20, 5))
+    fig.suptitle(f"{filter_name} — Comparação de Padding", fontsize=14)
     for ax, mode, result in zip(axes, modes, results):
         ax.imshow(result, cmap='gray', vmin=vmin, vmax=vmax)
         ax.set_title(mode)
@@ -300,6 +303,48 @@ def demo_padding(img, kernel, filter_name, save_prefix):
 
     plt.tight_layout()
     path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_padding.png")
+    plt.savefig(path, bbox_inches='tight', dpi=150)
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close(fig)
+    print(f"  Salvo: {path}")
+
+    # --- Figura 2: recortes dos cantos (diferenças de padding ficam evidentes) ---
+    h, w = img.shape
+    crop = int(min(PADDING_CROP, h, w))
+    if crop < 8:
+        return
+
+    corners = [
+        ("TL", (slice(0, crop), slice(0, crop))),
+        ("TR", (slice(0, crop), slice(w - crop, w))),
+        ("BL", (slice(h - crop, h), slice(0, crop))),
+        ("BR", (slice(h - crop, h), slice(w - crop, w))),
+    ]
+
+    fig, axes = plt.subplots(4, 4, figsize=(14, 14))
+    fig.suptitle(f"{filter_name} — Padding (Cantos, crop={crop}px)", fontsize=14)
+
+    for r, (corner_label, (rs, cs)) in enumerate(corners):
+        row_crops = [res[rs, cs] for res in results]
+        row_min = float(min(c.min() for c in row_crops))
+        row_max = float(max(c.max() for c in row_crops))
+        if row_max - row_min < 1e-12:
+            row_vmin, row_vmax = row_min, row_min + 1.0
+        else:
+            row_vmin, row_vmax = row_min, row_max
+
+        for c, (mode, crop_img) in enumerate(zip(modes, row_crops)):
+            ax = axes[r, c]
+            ax.imshow(crop_img, cmap='gray', vmin=row_vmin, vmax=row_vmax)
+            if r == 0:
+                ax.set_title(mode)
+            if c == 0:
+                ax.set_ylabel(corner_label, rotation=0, labelpad=20, va='center')
+            ax.axis('off')
+
+    plt.tight_layout()
+    path = os.path.join(DIR_RESULTADOS, f"{save_prefix}_padding_cantos.png")
     plt.savefig(path, bbox_inches='tight', dpi=150)
     if SHOW_PLOTS:
         plt.show()
