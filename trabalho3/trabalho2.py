@@ -1,6 +1,8 @@
 """
-Trabalho 3 — Filtros Convolucionais e Transformada de Fourier
-Processamento de Imagens
+Trabalho 2 — Filtros Convolucionais e Transformada de Fourier
+SCC0251 - Processamento de Imagens (Graduação)
+
+Cauê Paiva Lira - 14675416
 
 Parte I:  Filtros convolucionais (shift, caixa, gaussiano, laplace, sobel,
           sharpen laplace, unsharp mask, emboss)
