@@ -20,7 +20,7 @@
 
 \graphicspath{{./}}
 
-\title{Relatório --- Filtros Convolucionais e Transformada de Fourier}
+\title{Relatório: Filtros Convolucionais e Transformada de Fourier}
 \author{Cauê Paiva Lira - 14675416}
 \date{SCC0251 - Processamento de Imagens (Graduação)}
 
@@ -54,11 +54,11 @@ A pasta \texttt{resultados/} é criada automaticamente pelo código com todas as
 O arquivo \texttt{trabalho3.py} está organizado em seções:
 
 \begin{enumerate}
-  \item \textbf{Funções utilitárias} --- conversão para cinza (\texttt{luminosity}), normalização (\texttt{norm\_minmax}), exibição e salvamento de figuras
-  \item \textbf{Convolução 2D} --- implementação manual com suporte a 4 modos de padding (\texttt{none}, \texttt{zero}, \texttt{reflect}, \texttt{wrap}), com fast-paths otimizados para kernels delta (shift) e constante (box via imagem integral)
-  \item \textbf{Kernels} --- definição dos 8 filtros: shift, box, gaussiano, laplaciano, sobel, sharpen, unsharp mask e emboss
-  \item \textbf{Demonstrações} --- funções que geram as figuras de resultado, comparação de padding e análise no domínio da frequência
-  \item \textbf{DFT 2D manual} --- implementação matricial separável da DFT e IDFT, com reconstrução progressiva por raio crescente
+  \item \textbf{Funções utilitárias:} conversão para cinza (\texttt{luminosity}), normalização (\texttt{norm\_minmax}), exibição e salvamento de figuras
+  \item \textbf{Convolução 2D:} implementação manual com suporte a 4 modos de padding (\texttt{none}, \texttt{zero}, \texttt{reflect}, \texttt{wrap}), com fast-paths otimizados para kernels delta (shift) e constante (box via imagem integral)
+  \item \textbf{Kernels:} definição dos 8 filtros: shift, box, gaussiano, laplaciano, sobel, sharpen, unsharp mask e emboss
+  \item \textbf{Demonstrações:} funções que geram as figuras de resultado, comparação de padding e análise no domínio da frequência
+  \item \textbf{DFT 2D manual:} implementação matricial separável da DFT e IDFT, com reconstrução progressiva por raio crescente
 \end{enumerate}
 
 As imagens de saída são salvas automaticamente na pasta \texttt{resultados/}.
@@ -82,7 +82,7 @@ Imagem convertida para escala de cinza (luminosidade), utilizada em todos os fil
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{imagens_relatorio/original.png}
-\caption{Imagem original --- escala de cinza}
+\caption{Imagem original em escala de cinza}
 \end{figure}
 
 \section{Filtros Convolucionais}
@@ -98,7 +98,7 @@ Imagem convertida para escala de cinza (luminosidade), utilizada em todos os fil
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/01_shift_resultado.png}
-\caption{Shift --- resultado}
+\caption{Shift: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -106,26 +106,26 @@ Imagem convertida para escala de cinza (luminosidade), utilizada em todos os fil
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/01_shift_padding_zero_reflect.png}
-\caption{Shift --- padding zero e reflect}
+\caption{Shift: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/01_shift_padding_none_wrap.png}
-\caption{Shift --- padding none e wrap}
+\caption{Shift: padding none e wrap}
 \end{figure}
 
-\textbf{Escolha de padding:} O padding reflect produz um efeito muito interessante, interagindo com a natureza ``fractal'' da imagem e criando uma reflexão bonita nas bordas --- parece uma célula ou animal pequeno dentro da água. Achei visualmente coerente e intuitivo.
+\textbf{Escolha de padding:} O padding reflect produz um efeito muito interessante, interagindo com a natureza ``fractal'' da imagem e criando uma reflexão bonita nas bordas. Parece uma célula ou animal pequeno dentro da água. Achei visualmente coerente e intuitivo.
 
 \textbf{Comportamento no domínio da frequência:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/01_shift_frequencia.png}
-\caption{Shift --- domínio da frequência}
+\caption{Shift: domínio da frequência}
 \end{figure}
 
-No domínio da frequência, o deslocamento espacial corresponde a multiplicar o espectro por uma exponencial complexa $e^{-j2\pi(u \cdot dx + v \cdot dy)/N}$. Isso altera apenas a fase dos coeficientes, mantendo a magnitude inalterada. Nenhum coeficiente é suprimido ou ressaltado --- o espectro de magnitude permanece idêntico ao da imagem original.
+No domínio da frequência, o deslocamento espacial corresponde a multiplicar o espectro por uma exponencial complexa $e^{-j2\pi(u \cdot dx + v \cdot dy)/N}$. Isso altera apenas a fase dos coeficientes, mantendo a magnitude inalterada. Nenhum coeficiente é suprimido ou ressaltado, e o espectro de magnitude permanece idêntico ao da imagem original.
 
 \textbf{Aplicação no dia a dia:} Scrolling e parallax em interfaces web e jogos, estabilização de vídeo (compensação de tremor), e operações de registro/alinhamento de imagens em fotogrametria.
 
@@ -140,7 +140,7 @@ No domínio da frequência, o deslocamento espacial corresponde a multiplicar o 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/02_box_resultado.png}
-\caption{Box --- resultado}
+\caption{Box: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -148,13 +148,13 @@ No domínio da frequência, o deslocamento espacial corresponde a multiplicar o 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/02_box_padding_zero_reflect.png}
-\caption{Box --- padding zero e reflect}
+\caption{Box: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/02_box_padding_none_wrap.png}
-\caption{Box --- padding none e wrap}
+\caption{Box: padding none e wrap}
 \end{figure}
 
 \textbf{Escolha de padding:} O padding reflect trouxe um efeito de luz nas bordas superiores direitas, criando uma aparência visualmente legal e coerente com a iluminação da cena original.
@@ -164,10 +164,10 @@ No domínio da frequência, o deslocamento espacial corresponde a multiplicar o 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/02_box_frequencia.png}
-\caption{Box --- domínio da frequência}
+\caption{Box: domínio da frequência}
 \end{figure}
 
-O filtro Box corresponde a uma função sinc 2D no domínio da frequência --- um passa-baixa que suprime as altas frequências (detalhes e bordas) e preserva as baixas frequências (variações suaves de intensidade). Os lobos laterais da sinc causam o fenômeno de ringing, visível como oscilações ao redor de bordas intensas na imagem filtrada.
+O filtro Box corresponde a uma função sinc 2D no domínio da frequência, funcionando como um passa-baixa que suprime as altas frequências (detalhes e bordas) e preserva as baixas frequências (variações suaves de intensidade). Os lobos laterais da sinc causam o fenômeno de ringing, visível como oscilações ao redor de bordas intensas na imagem filtrada.
 
 \textbf{Aplicação no dia a dia:} Blur de fundo em videochamadas (Teams, Zoom), desfoque rápido em aplicativos de edição de foto por ser computacionalmente simples.
 
@@ -182,7 +182,7 @@ O filtro Box corresponde a uma função sinc 2D no domínio da frequência --- u
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/03_gaussiano_resultado.png}
-\caption{Gaussiano --- resultado}
+\caption{Gaussiano: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -190,26 +190,26 @@ O filtro Box corresponde a uma função sinc 2D no domínio da frequência --- u
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/03_gaussiano_padding_zero_reflect.png}
-\caption{Gaussiano --- padding zero e reflect}
+\caption{Gaussiano: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/03_gaussiano_padding_none_wrap.png}
-\caption{Gaussiano --- padding none e wrap}
+\caption{Gaussiano: padding none e wrap}
 \end{figure}
 
-\textbf{Escolha de padding:} O reflect produziu um efeito similar ao do Box --- uma luz coerente nas bordas que se integra naturalmente com a iluminação da cena. Interessante como ambos os filtros de suavização respondem de forma similar ao reflect.
+\textbf{Escolha de padding:} O reflect produziu um efeito similar ao do Box, com uma luz coerente nas bordas que se integra naturalmente com a iluminação da cena. Interessante como ambos os filtros de suavização respondem de forma similar ao reflect.
 
 \textbf{Comportamento no domínio da frequência:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/03_gaussiano_frequencia.png}
-\caption{Gaussiano --- domínio da frequência}
+\caption{Gaussiano: domínio da frequência}
 \end{figure}
 
-No domínio da frequência, o filtro Gaussiano é também uma Gaussiana --- um passa-baixa com transição suave e monotônica. Não há lobos laterais (sem ringing). As altas frequências são atenuadas exponencialmente conforme se afastam do centro do espectro. O parâmetro $\sigma$ controla a largura da banda passante: $\sigma$ maior no espaço $\rightarrow$ corte mais agressivo na frequência.
+No domínio da frequência, o filtro Gaussiano é também uma Gaussiana, ou seja, um passa-baixa com transição suave e monotônica. Não há lobos laterais (sem ringing). As altas frequências são atenuadas exponencialmente conforme se afastam do centro do espectro. O parâmetro $\sigma$ controla a largura da banda passante: $\sigma$ maior no espaço $\rightarrow$ corte mais agressivo na frequência.
 
 \textbf{Aplicação no dia a dia:} Efeito bokeh em câmeras de celular (modo retrato), filtros de suavização no Instagram e Snapchat, pré-processamento para redução de ruído antes de detecção de bordas.
 
@@ -224,7 +224,7 @@ No domínio da frequência, o filtro Gaussiano é também uma Gaussiana --- um p
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/04_laplace_resultado.png}
-\caption{Laplace --- resultado}
+\caption{Laplace: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -232,13 +232,13 @@ No domínio da frequência, o filtro Gaussiano é também uma Gaussiana --- um p
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/04_laplace_padding_zero_reflect.png}
-\caption{Laplace --- padding zero e reflect}
+\caption{Laplace: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/04_laplace_padding_none_wrap.png}
-\caption{Laplace --- padding none e wrap}
+\caption{Laplace: padding none e wrap}
 \end{figure}
 
 \textbf{Escolha de padding:} Não houve tanta diferença perceptível entre os modos de padding, pois a imagem gerada pelo Laplaciano tem cores com pouco contraste (valores próximos de zero nas regiões homogêneas). Dessa forma, o preenchimento nas bordas não é tão visível. Qualquer modo é coerente aqui.
@@ -248,10 +248,10 @@ No domínio da frequência, o filtro Gaussiano é também uma Gaussiana --- um p
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/04_laplace_frequencia.png}
-\caption{Laplace --- domínio da frequência}
+\caption{Laplace: domínio da frequência}
 \end{figure}
 
-O Laplaciano no domínio da frequência tem resposta $H(u,v) \propto -(u^2 + v^2)$ --- um passa-alta cuja magnitude cresce quadraticamente com a distância ao centro do espectro. Suprime completamente a componente DC (frequência zero) e amplifica progressivamente as altas frequências. Isso explica por que realça bordas e detalhes finos enquanto elimina variações suaves.
+O Laplaciano no domínio da frequência tem resposta $H(u,v) \propto -(u^2 + v^2)$, um passa-alta cuja magnitude cresce quadraticamente com a distância ao centro do espectro. Suprime completamente a componente DC (frequência zero) e amplifica progressivamente as altas frequências. Isso explica por que realça bordas e detalhes finos enquanto elimina variações suaves.
 
 \textbf{Aplicação no dia a dia:} Medida de nitidez para autofoco em câmeras digitais (quanto maior a resposta do Laplaciano, mais nítida a imagem), realce de texturas em microscopia, detecção de blobs em visão computacional.
 
@@ -266,7 +266,7 @@ O Laplaciano no domínio da frequência tem resposta $H(u,v) \propto -(u^2 + v^2
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/05_sobel_resultado.png}
-\caption{Sobel --- resultado}
+\caption{Sobel: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -274,29 +274,29 @@ O Laplaciano no domínio da frequência tem resposta $H(u,v) \propto -(u^2 + v^2
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/05_sobel_padding_zero_reflect.png}
-\caption{Sobel --- padding zero e reflect}
+\caption{Sobel: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/05_sobel_padding_none_wrap.png}
-\caption{Sobel --- padding none e wrap}
+\caption{Sobel: padding none e wrap}
 \end{figure}
 
-\textbf{Escolha de padding:} O wrap traz partes da outra borda da imagem (visível por exemplo no topo esquerdo). Mesmo sendo pequenas, essas regiões contrastam fortemente --- o branco delas contra o fundo preto cria um efeito visualmente legal e interessante.
+\textbf{Escolha de padding:} O wrap traz partes da outra borda da imagem (visível por exemplo no topo esquerdo). Mesmo sendo pequenas, essas regiões contrastam fortemente, e o branco delas contra o fundo preto cria um efeito visualmente legal e interessante.
 
 \textbf{Comportamento no domínio da frequência:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/05_sobel_freq_kernels.png}
-\caption{Sobel --- resposta dos kernels}
+\caption{Sobel: resposta dos kernels}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/05_sobel_frequencia.png}
-\caption{Sobel --- domínio da frequência}
+\caption{Sobel: domínio da frequência}
 \end{figure}
 
 O Sobel é um passa-alta direcional. A resposta em frequência de cada kernel ($G_x$, $G_y$) é proporcional à frequência na direção do gradiente correspondente. O kernel horizontal responde a frequências horizontais (bordas verticais) e vice-versa. A magnitude combinada realça todas as altas frequências, mas com seletividade direcional que o Laplace não possui.
@@ -314,7 +314,7 @@ O Sobel é um passa-alta direcional. A resposta em frequência de cada kernel ($
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/06_sharpen_laplace_resultado.png}
-\caption{Sharpen Laplace --- resultado}
+\caption{Sharpen Laplace: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -322,26 +322,26 @@ O Sobel é um passa-alta direcional. A resposta em frequência de cada kernel ($
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/06_sharpen_laplace_padding_zero_reflect.png}
-\caption{Sharpen Laplace --- padding zero e reflect}
+\caption{Sharpen Laplace: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/06_sharpen_laplace_padding_none_wrap.png}
-\caption{Sharpen Laplace --- padding none e wrap}
+\caption{Sharpen Laplace: padding none e wrap}
 \end{figure}
 
-\textbf{Escolha de padding:} O wrap produz efeito similar ao observado no Sobel --- artefatos de borda contrastantes que aparecem como linhas brancas vindas do lado oposto da imagem. Visualmente interessante pelo contraste que gera.
+\textbf{Escolha de padding:} O wrap produz efeito similar ao observado no Sobel, com artefatos de borda contrastantes que aparecem como linhas brancas vindas do lado oposto da imagem. Visualmente interessante pelo contraste que gera.
 
 \textbf{Comportamento no domínio da frequência:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/06_sharpen_laplace_frequencia.png}
-\caption{Sharpen Laplace --- domínio da frequência}
+\caption{Sharpen Laplace: domínio da frequência}
 \end{figure}
 
-A resposta em frequência do Sharpen com Laplace é $H(u,v) = 1 + \alpha \cdot 4\pi^2(u^2 + v^2)$ --- mantém todas as frequências baixas (ganho unitário no centro) e amplifica progressivamente as altas frequências. O fator $\alpha$ controla a intensidade do realce. Diferente do Laplace puro que elimina as baixas frequências, o sharpen as preserva, apenas somando energia nas altas.
+A resposta em frequência do Sharpen com Laplace é $H(u,v) = 1 + \alpha \cdot 4\pi^2(u^2 + v^2)$, que mantém todas as frequências baixas (ganho unitário no centro) e amplifica progressivamente as altas frequências. O fator $\alpha$ controla a intensidade do realce. Diferente do Laplace puro que elimina as baixas frequências, o sharpen as preserva, apenas somando energia nas altas.
 
 \textbf{Aplicação no dia a dia:} Ferramenta ``Sharpen'' no Adobe Photoshop e Lightroom, pós-processamento de imagens RAW em fotografia digital, realce de detalhes em imagens médicas (radiografias, tomografias).
 
@@ -349,14 +349,14 @@ A resposta em frequência do Sharpen com Laplace é $H(u,v) = 1 + \alpha \cdot 4
 
 \textbf{Propósito:} Aumentar a nitidez de forma mais controlável: $f_{\text{sharp}} = f + \alpha \cdot (f - \text{blur}(f))$. Subtrai uma versão borrada (Gaussiana) da imagem original para isolar os detalhes, e então soma esses detalhes amplificados de volta.
 
-\textbf{Comparação:} Efeito similar ao Sharpen com Laplace, porém mais controlável --- permite ajuste independente do sigma (raio do blur) e do alpha (intensidade do realce). Produz resultado mais natural e suave, pois o Gaussiano usado internamente não gera artefatos de ringing.
+\textbf{Comparação:} Efeito similar ao Sharpen com Laplace, porém mais controlável, pois permite ajuste independente do sigma (raio do blur) e do alpha (intensidade do realce). Produz resultado mais natural e suave, pois o Gaussiano usado internamente não gera artefatos de ringing.
 
 \textbf{Resultado:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/07_unsharp_mask_resultado.png}
-\caption{Unsharp Mask --- resultado}
+\caption{Unsharp Mask: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -364,30 +364,30 @@ A resposta em frequência do Sharpen com Laplace é $H(u,v) = 1 + \alpha \cdot 4
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/07_unsharp_mask_padding_zero_reflect.png}
-\caption{Unsharp Mask --- padding zero e reflect}
+\caption{Unsharp Mask: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/07_unsharp_mask_padding_none_wrap.png}
-\caption{Unsharp Mask --- padding none e wrap}
+\caption{Unsharp Mask: padding none e wrap}
 \end{figure}
 
-\textbf{Escolha de padding:} O zero-padding gerou um blur mais claro no topo direito da imagem, trazendo um efeito de iluminação bonito --- como se houvesse uma fonte de luz suave naquela região.
+\textbf{Escolha de padding:} O zero-padding gerou um blur mais claro no topo direito da imagem, trazendo um efeito de iluminação bonito, como se houvesse uma fonte de luz suave naquela região.
 
 \textbf{Comportamento no domínio da frequência:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/07_unsharp_mask_frequencia.png}
-\caption{Unsharp Mask --- domínio da frequência}
+\caption{Unsharp Mask: domínio da frequência}
 \end{figure}
 
 A resposta em frequência é $H(u,v) = 1 + \alpha \cdot (1 - H_{\text{gauss}}(u,v))$. Nas baixas frequências, $H_{\text{gauss}} \approx 1$, então $H \approx 1$ (preserva). Nas altas frequências, $H_{\text{gauss}} \to 0$, então $H \to 1 + \alpha$ (amplifica). O $\sigma$ do Gaussiano controla a frequência de transição: $\sigma$ maior amplifica uma faixa mais ampla de frequências altas. Resultado: amplificação seletiva e suave das altas frequências.
 
 \textbf{Aplicação no dia a dia:} Controles ``Clarity'' e ``Texture'' no Adobe Lightroom, pré-impressão gráfica (compensar perda de nitidez na impressão), processamento de imagens em scanners e câmeras digitais.
 
-\subsection{Emboss (Filtro Criativo --- Relevo)}
+\subsection{Emboss (Filtro Criativo de Relevo)}
 
 \textbf{Propósito:} Criar efeito de relevo 3D usando um kernel direcional assimétrico. Simula iluminação lateral, destacando gradientes numa direção específica e produzindo a aparência de uma superfície em alto-relevo.
 
@@ -398,7 +398,7 @@ A resposta em frequência é $H(u,v) = 1 + \alpha \cdot (1 - H_{\text{gauss}}(u,
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/08_emboss_resultado.png}
-\caption{Emboss --- resultado}
+\caption{Emboss: resultado}
 \end{figure}
 
 \textbf{Padding:}
@@ -406,34 +406,34 @@ A resposta em frequência é $H(u,v) = 1 + \alpha \cdot (1 - H_{\text{gauss}}(u,
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/08_emboss_padding_zero_reflect.png}
-\caption{Emboss --- padding zero e reflect}
+\caption{Emboss: padding zero e reflect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/08_emboss_padding_none_wrap.png}
-\caption{Emboss --- padding none e wrap}
+\caption{Emboss: padding none e wrap}
 \end{figure}
 
-\textbf{Escolha de padding:} O reflect é o menos perceptível nas bordas --- diferente dos outros filtros que mostram artefatos e linhas claras na borda, aqui a transição é suave. A imagem resultante com reflect é muito similar ao que se vê ao observar uma célula em microscópio eletrônico de varredura. Por isso, achei mais correto preservar esse realismo --- bonito e coerente.
+\textbf{Escolha de padding:} O reflect é o menos perceptível nas bordas. Diferente dos outros filtros que mostram artefatos e linhas claras na borda, aqui a transição é suave. A imagem resultante com reflect é muito similar ao que se vê ao observar uma célula em microscópio eletrônico de varredura. Por isso, achei mais correto preservar esse realismo, bonito e coerente.
 
 \textbf{Comportamento no domínio da frequência:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/08_emboss_frequencia.png}
-\caption{Emboss --- domínio da frequência}
+\caption{Emboss: domínio da frequência}
 \end{figure}
 
 O Emboss é um passa-alta direcional assimétrico no domínio da frequência. Sua resposta realça gradientes preferencialmente numa direção (definida pela orientação do kernel), suprimindo componentes de baixa frequência (regiões homogêneas viram cinza médio). Diferente do Laplace que amplifica altas frequências igualmente em todas as direções, o Emboss tem uma resposta angular, amplificando mais as frequências alinhadas com a diagonal do kernel.
 
 \textbf{Aplicação no dia a dia:} Efeitos de relevo em design gráfico e logotipos, texturização de superfícies em jogos 3D, visualização de mapas topográficos, efeitos artísticos em aplicativos de edição de imagem.
 
-\section{Parte II --- Transformada de Fourier e Reconstrução Progressiva}
+\section{Parte II: Transformada de Fourier e Reconstrução Progressiva}
 
 A Transformada Discreta de Fourier (DFT) decompõe uma imagem em soma de senos e cossenos de diferentes frequências: $F(u,v) = \frac{1}{MN} \sum_x \sum_y f(x,y) \cdot e^{-j2\pi(ux/N + vy/M)}$. A inversa (IDFT) reconstrói a imagem a partir desses coeficientes.
 
-A DFT 2D foi implementada manualmente explorando a propriedade de separabilidade: aplica-se a FFT 1D (algoritmo Cooley-Tukey, $O(N \log N)$) em cada linha da imagem e, em seguida, em cada coluna do resultado. Para a reconstrução progressiva, utilizou-se a IDFT parcial: os coeficientes no domínio da frequência são ordenados por distância ao centro do espectro (após fftshift), e a inversa é calculada incluindo apenas os coeficientes dentro de um raio crescente --- das baixas frequências (centro) até as altas (periferia). Isso permite visualizar como a imagem se forma progressivamente à medida que componentes de frequência mais alta são adicionadas.
+A DFT 2D foi implementada manualmente explorando a propriedade de separabilidade: aplica-se a FFT 1D (algoritmo Cooley-Tukey, $O(N \log N)$) em cada linha da imagem e, em seguida, em cada coluna do resultado. Para a reconstrução progressiva, utilizou-se a IDFT parcial: os coeficientes no domínio da frequência são ordenados por distância ao centro do espectro (após fftshift), e a inversa é calculada incluindo apenas os coeficientes dentro de um raio crescente, das baixas frequências (centro) até as altas (periferia). Isso permite visualizar como a imagem se forma progressivamente à medida que componentes de frequência mais alta são adicionadas.
 
 Nesta seção, aplicamos esse processo para duas imagens com características espectrais distintas: uma imagem com coeficientes dominantes em altas frequências e outra com coeficientes dominantes em baixas frequências.
 
@@ -444,7 +444,7 @@ Nesta seção, aplicamos esse processo para duas imagens com características es
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{imagens/alta_freq.jpg}
-\caption{Alta frequência --- imagem original}
+\caption{Alta frequência: imagem original}
 \end{figure}
 
 \textbf{Espectro de magnitude:}
@@ -452,7 +452,7 @@ Nesta seção, aplicamos esse processo para duas imagens com características es
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{imagens_relatorio/p2_alta_freq_espectro.png}
-\caption{Alta frequência --- espectro de magnitude}
+\caption{Alta frequência: espectro de magnitude}
 \end{figure}
 
 O espectro mostra energia distribuída ao longo de toda a extensão, com coeficientes significativos mesmo nas regiões mais afastadas do centro. Isso é característico de imagens com muitos detalhes finos, texturas e transições abruptas de intensidade.
@@ -462,19 +462,19 @@ O espectro mostra energia distribuída ao longo de toda a extensão, com coefici
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/p2_alta_freq_progressivo.png}
-\caption{Alta frequência --- reconstrução progressiva}
+\caption{Alta frequência: reconstrução progressiva}
 \end{figure}
 
-\textbf{Passo escolhido 1 --- r=7 (20\%):} Com apenas 20\% das frequências (as mais baixas), a forma geral da imagem já é reconhecível --- é possível distinguir a silhueta do objeto principal. Porém a imagem é extremamente borrada, sem qualquer detalhe ou textura. O que chama atenção é que tão pouca informação espectral já carrega a essência estrutural da cena.
+\textbf{Passo escolhido 1, r=7 (20\%):} Com apenas 20\% das frequências (as mais baixas), a forma geral da imagem já é reconhecível, sendo possível distinguir a silhueta do objeto principal. Porém a imagem é extremamente borrada, sem qualquer detalhe ou textura. O que chama atenção é que tão pouca informação espectral já carrega a essência estrutural da cena.
 
-\textbf{Passo escolhido 2 --- r=26 (70\%):} A 70\% das frequências, os detalhes de alta frequência começam a aparecer de forma expressiva --- texturas e bordas ganham definição. Ainda assim, a imagem não é fiel à original, evidenciando que esta imagem depende fortemente das altas frequências para uma representação completa. A diferença entre 70\% e 100\% é muito mais marcante aqui do que seria numa imagem de baixa frequência.
+\textbf{Passo escolhido 2, r=26 (70\%):} A 70\% das frequências, os detalhes de alta frequência começam a aparecer de forma expressiva, e texturas e bordas ganham definição. Ainda assim, a imagem não é fiel à original, evidenciando que esta imagem depende fortemente das altas frequências para uma representação completa. A diferença entre 70\% e 100\% é muito mais marcante aqui do que seria numa imagem de baixa frequência.
 
 \textbf{Imagem reconstruída (100\%):}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{imagens_relatorio/p2_alta_freq_reconstruida.png}
-\caption{Alta frequência --- reconstruída (100\%)}
+\caption{Alta frequência: reconstruída (100\%)}
 \end{figure}
 
 \subsection{Imagem com baixas frequências dominantes (paisagem)}
@@ -484,7 +484,7 @@ O espectro mostra energia distribuída ao longo de toda a extensão, com coefici
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{imagens/baixa_freq.jpg}
-\caption{Baixa frequência --- imagem original}
+\caption{Baixa frequência: imagem original}
 \end{figure}
 
 \textbf{Espectro de magnitude:}
@@ -492,29 +492,29 @@ O espectro mostra energia distribuída ao longo de toda a extensão, com coefici
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{imagens_relatorio/p2_baixa_freq_espectro.png}
-\caption{Baixa frequência --- espectro de magnitude}
+\caption{Baixa frequência: espectro de magnitude}
 \end{figure}
 
-O espectro concentra a maior parte da energia no centro, com coeficientes que decaem rapidamente ao se afastar da origem. Isso é típico de imagens com variações suaves de intensidade --- céus, mares e paisagens --- onde as transições são graduais.
+O espectro concentra a maior parte da energia no centro, com coeficientes que decaem rapidamente ao se afastar da origem. Isso é típico de imagens com variações suaves de intensidade (céus, mares e paisagens), onde as transições são graduais.
 
 \textbf{Reconstrução progressiva:}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{imagens_relatorio/p2_baixa_freq_progressivo.png}
-\caption{Baixa frequência --- reconstrução progressiva}
+\caption{Baixa frequência: reconstrução progressiva}
 \end{figure}
 
-\textbf{Passo escolhido 1 --- r=12 (30\%):} Com apenas 30\% das frequências, a paisagem já é bastante reconhecível --- a divisão entre céu, horizonte e terreno está bem definida, e a variação tonal do céu é visível. Isso demonstra como imagens dominadas por baixas frequências se formam rapidamente na reconstrução: a maior parte da informação visual está concentrada nos coeficientes próximos ao centro do espectro.
+\textbf{Passo escolhido 1, r=12 (30\%):} Com apenas 30\% das frequências, a paisagem já é bastante reconhecível. A divisão entre céu, horizonte e terreno está bem definida, e a variação tonal do céu é visível. Isso demonstra como imagens dominadas por baixas frequências se formam rapidamente na reconstrução: a maior parte da informação visual está concentrada nos coeficientes próximos ao centro do espectro.
 
-\textbf{Passo escolhido 2 --- r=36 (90\%):} A 90\% das frequências, a paisagem já está quase completa, mas é possível ver claramente um ponto preto no meio do céu. À primeira vista, esse ponto levanta questionamentos --- parece um objeto voador não identificado flutuando na cena. Porém, ao consultar a imagem original, percebe-se que é simplesmente a lâmpada de um poste. Isso ilustra uma observação importante: mesmo com 90\% das frequências recuperadas, detalhes cruciais da paisagem nem sempre são representados com fidelidade suficiente para evitar interpretações ambíguas. A resolução e o processo de discretização da DFT podem transformar objetos reconhecíveis em artefatos que mudam completamente a leitura da cena.
+\textbf{Passo escolhido 2, r=36 (90\%):} A 90\% das frequências, a paisagem já está quase completa, mas é possível ver claramente um ponto preto no meio do céu. À primeira vista, esse ponto levanta questionamentos, pois parece um objeto voador não identificado flutuando na cena. Porém, ao consultar a imagem original, percebe-se que é simplesmente a lâmpada de um poste. Isso ilustra uma observação importante: mesmo com 90\% das frequências recuperadas, detalhes cruciais da paisagem nem sempre são representados com fidelidade suficiente para evitar interpretações ambíguas. A resolução e o processo de discretização da DFT podem transformar objetos reconhecíveis em artefatos que mudam completamente a leitura da cena.
 
 \textbf{Imagem reconstruída (100\%):}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{imagens_relatorio/p2_baixa_freq_reconstruida.png}
-\caption{Baixa frequência --- reconstruída (100\%)}
+\caption{Baixa frequência: reconstruída (100\%)}
 \end{figure}
 
 \subsection{Discussão}
@@ -522,7 +522,7 @@ O espectro concentra a maior parte da energia no centro, com coeficientes que de
 A comparação entre as duas imagens revela um contraste fundamental no comportamento da reconstrução progressiva:
 
 \begin{itemize}
-  \item A \textbf{imagem de baixa frequência} (paisagem) ganha forma reconhecível muito mais rápido --- já a 30\% é possível identificar a cena. Sua energia está concentrada nas baixas frequências, então os primeiros coeficientes carregam a maior parte da informação visual.
+  \item A \textbf{imagem de baixa frequência} (paisagem) ganha forma reconhecível muito mais rápido. Já a 30\% é possível identificar a cena. Sua energia está concentrada nas baixas frequências, então os primeiros coeficientes carregam a maior parte da informação visual.
 
   \item A \textbf{imagem de alta frequência} precisa de muito mais coeficientes para se tornar fiel ao original. A 20\% é apenas uma silhueta borrada, e mesmo a 70\% ainda faltam detalhes importantes. A informação está distribuída por todo o espectro.
 \end{itemize}
@@ -531,6 +531,6 @@ Isso tem implicação direta em compressão de imagens: paisagens e cenas suaves
 
 \section{Conclusão}
 
-Este trabalho demonstrou na prática a dualidade entre os domínios espacial e da frequência no processamento de imagens. Cada filtro convolucional tem uma interpretação clara no domínio da frequência --- filtros de suavização são passa-baixa, filtros de detecção de bordas são passa-alta --- e essa compreensão permite escolher e parametrizar filtros de forma fundamentada. A reconstrução progressiva via Transformada de Fourier evidenciou como a distribuição espectral de uma imagem determina sua ``complexidade visual'' e como diferentes tipos de cena respondem de maneiras distintas à adição progressiva de componentes frequenciais.
+Este trabalho demonstrou na prática a dualidade entre os domínios espacial e da frequência no processamento de imagens. Cada filtro convolucional tem uma interpretação clara no domínio da frequência (filtros de suavização são passa-baixa, filtros de detecção de bordas são passa-alta), e essa compreensão permite escolher e parametrizar filtros de forma fundamentada. A reconstrução progressiva via Transformada de Fourier evidenciou como a distribuição espectral de uma imagem determina sua ``complexidade visual'' e como diferentes tipos de cena respondem de maneiras distintas à adição progressiva de componentes frequenciais.
 
 \end{document}
