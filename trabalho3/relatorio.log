@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  9 MAY 2026 20:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  9 MAY 2026 20:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -804,12 +804,12 @@ as been already used, duplicate ignored
 l.303 
        <./imagens_relatorio/05_sobel_padding_zero_reflect.png> <./imagens_relat
 orio/05_sobel_padding_none_wrap.png>]
-<imagens_relatorio/05_sobel_frequencia.png, id=220, 860.013pt x 341.1144pt>
+<imagens_relatorio/05_sobel_frequencia.png, id=220, 860.013pt x 341.5962pt>
 File: imagens_relatorio/05_sobel_frequencia.png Graphic file (type png)
 <use imagens_relatorio/05_sobel_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/05_sobel_frequencia.png  used on inp
 ut line 306.
-(pdftex.def)             Requested size: 455.24411pt x 180.56593pt.
+(pdftex.def)             Requested size: 455.24411pt x 180.82098pt.
  [13
 pdfTeX warning (ext4): destination with the same identifier (name{figure.22}) h
 as been already used, duplicate ignored
@@ -864,14 +864,14 @@ as been already used, duplicate ignored
 l.341 
        <./imagens_relatorio/06_sharpen_laplace_resultado.png> <./imagens_relato
 rio/06_sharpen_laplace_padding_zero_reflect.png>]
-<imagens_relatorio/06_sharpen_laplace_frequencia.png, id=241, 860.013pt x 341.1
-144pt>
+<imagens_relatorio/06_sharpen_laplace_frequencia.png, id=241, 860.013pt x 341.5
+962pt>
 File: imagens_relatorio/06_sharpen_laplace_frequencia.png Graphic file (type pn
 g)
 <use imagens_relatorio/06_sharpen_laplace_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/06_sharpen_laplace_frequencia.png  u
 sed on input line 348.
-(pdftex.def)             Requested size: 455.24411pt x 180.56593pt.
+(pdftex.def)             Requested size: 455.24411pt x 180.82098pt.
  [15
 pdfTeX warning (ext4): destination with the same identifier (name{figure.26}) h
 as been already used, duplicate ignored
@@ -923,13 +923,13 @@ as been already used, duplicate ignored
 l.383 
        <./imagens_relatorio/07_unsharp_mask_resultado.png> <./imagens_relatorio
 /07_unsharp_mask_padding_zero_reflect.png>]
-<imagens_relatorio/07_unsharp_mask_frequencia.png, id=261, 860.013pt x 341.1144
+<imagens_relatorio/07_unsharp_mask_frequencia.png, id=261, 860.013pt x 341.5962
 pt>
 File: imagens_relatorio/07_unsharp_mask_frequencia.png Graphic file (type png)
 <use imagens_relatorio/07_unsharp_mask_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/07_unsharp_mask_frequencia.png  used
  on input line 390.
-(pdftex.def)             Requested size: 455.24411pt x 180.56593pt.
+(pdftex.def)             Requested size: 455.24411pt x 180.82098pt.
  [17
 pdfTeX warning (ext4): destination with the same identifier (name{figure.30}) h
 as been already used, duplicate ignored
@@ -1007,12 +1007,12 @@ File: imagens/alta_freq.jpg Graphic file (type jpg)
 <use imagens/alta_freq.jpg>
 Package pdftex.def Info: imagens/alta_freq.jpg  used on input line 456.
 (pdftex.def)             Requested size: 227.62206pt x 130.96068pt.
-<imagens_relatorio/p2_alta_freq_espectro.png, id=292, 860.013pt x 264.0264pt>
+<imagens_relatorio/p2_alta_freq_espectro.png, id=292, 860.013pt x 267.399pt>
 File: imagens_relatorio/p2_alta_freq_espectro.png Graphic file (type png)
 <use imagens_relatorio/p2_alta_freq_espectro.png>
 Package pdftex.def Info: imagens_relatorio/p2_alta_freq_espectro.png  used on i
 nput line 464.
-(pdftex.def)             Requested size: 227.62206pt x 69.87802pt.
+(pdftex.def)             Requested size: 227.62206pt x 70.77063pt.
  [20
 pdfTeX warning (ext4): destination with the same identifier (name{figure.36}) h
 as been already used, duplicate ignored
@@ -1027,20 +1027,20 @@ as been already used, duplicate ignored
 l.470 \textbf{Reconstrução progressiva:}
                                            <./imagens/alta_freq.jpg> <./imagens
 _relatorio/p2_alta_freq_espectro.png>]
-<imagens_relatorio/p2_alta_freq_progressivo.png, id=300, 1438.173pt x 498.1812p
+<imagens_relatorio/p2_alta_freq_progressivo.png, id=300, 1438.173pt x 499.6266p
 t>
 File: imagens_relatorio/p2_alta_freq_progressivo.png Graphic file (type png)
 <use imagens_relatorio/p2_alta_freq_progressivo.png>
 Package pdftex.def Info: imagens_relatorio/p2_alta_freq_progressivo.png  used o
 n input line 474.
-(pdftex.def)             Requested size: 455.24411pt x 157.69566pt.
-<imagens_relatorio/p2_alta_freq_reconstruida.png, id=301, 860.013pt x 264.0264p
-t>
+(pdftex.def)             Requested size: 455.24411pt x 158.1532pt.
+<imagens_relatorio/p2_alta_freq_reconstruida.png, id=301, 860.013pt x 267.399pt
+>
 File: imagens_relatorio/p2_alta_freq_reconstruida.png Graphic file (type png)
 <use imagens_relatorio/p2_alta_freq_reconstruida.png>
 Package pdftex.def Info: imagens_relatorio/p2_alta_freq_reconstruida.png  used 
 on input line 486.
-(pdftex.def)             Requested size: 227.62206pt x 69.87802pt.
+(pdftex.def)             Requested size: 227.62206pt x 70.77063pt.
 <imagens/baixa_freq.jpg, id=302, 3131.7pt x 4175.6pt>
 File: imagens/baixa_freq.jpg Graphic file (type jpg)
 <use imagens/baixa_freq.jpg>
@@ -1125,7 +1125,7 @@ Here is how much of TeX's memory you used:
  42404 multiletter control sequences out of 15000+600000
  637158 words of font info for 77 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 75i,7n,79p,965b,1216s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,7n,79p,967b,1216s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/caue.lira/Library/texlive/2026basic/texmf-var/fonts/pk/ljfour/jknapp
 en/ec/tcrm1200.600pk></usr/local/texlive/2026basic/texmf-dist/fonts/type1/publi
 c/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/p
@@ -1140,7 +1140,7 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026basic
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2026ba
 sic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/20
 26basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on relatorio.pdf (24 pages, 20828675 bytes).
+Output written on relatorio.pdf (24 pages, 21314398 bytes).
 PDF statistics:
  413 PDF objects out of 1000 (max. 8388607)
  276 compressed objects within 3 object streams

@@ -30,7 +30,7 @@ SHOW_PLOTS = False
 
 # Limite para DFT manual usada em espectros/resposta em frequência (Parte I).
 # Mantém os gráficos rápidos mesmo para imagens grandes.
-DFT_MAX_SIZE = 96
+DFT_MAX_SIZE = 128
 
 
 # ============================================================
@@ -853,8 +853,8 @@ if __name__ == "__main__":
     img_baixa = os.path.join(DIR_IMAGENS, "baixa_freq.jpg")
 
     if os.path.exists(img_alta) and os.path.exists(img_baixa):
-        # max_size=64 para DFT manual ser viável (64x64 = ~16M operações)
-        run_parte2(img_alta, img_baixa, n_steps=10, max_size=64)
+        # max_size=128 para DFT manual ser viável
+        run_parte2(img_alta, img_baixa, n_steps=10, max_size=128)
     else:
         print(f"\n[Parte II] Imagens não encontradas:")
         if not os.path.exists(img_alta):
