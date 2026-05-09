@@ -8,21 +8,60 @@ Disciplina:
 
 **SCC0251 - Processamento de Imagens (Graduação)**
 
-## 1. Introdução
+## 1. Como rodar o código
+
+O código está contido em um único arquivo `trabalho3.py` e utiliza apenas `numpy`, `imageio` e `matplotlib`. Para executar:
+
+```bash
+python trabalho3.py
+```
+
+### Estrutura de diretórios
+
+```
+trabalho3/
+├── trabalho3.py              # Código principal (filtros + DFT manual)
+└── imagens/                  # Imagens de entrada (necessárias para rodar)
+    ├── foto.jpg              # Imagem da Parte I (filtros convolucionais)
+    ├── alta_freq.jpg         # Imagem com altas frequências (Parte II)
+    └── baixa_freq.jpg        # Imagem com baixas frequências (Parte II)
+```
+
+A pasta `resultados/` é criada automaticamente pelo código com todas as imagens geradas.
+
+### Organização do código
+
+O arquivo `trabalho3.py` está organizado em seções:
+
+1. **Funções utilitárias** — conversão para cinza (`luminosity`), normalização (`norm_minmax`), exibição e salvamento de figuras
+2. **Convolução 2D** — implementação manual com suporte a 4 modos de padding (`none`, `zero`, `reflect`, `wrap`), com fast-paths otimizados para kernels delta (shift) e constante (box via imagem integral)
+3. **Kernels** — definição dos 8 filtros: shift, box, gaussiano, laplaciano, sobel, sharpen, unsharp mask e emboss
+4. **Demonstrações** — funções que geram as figuras de resultado, comparação de padding e análise no domínio da frequência
+5. **DFT 2D manual** — implementação matricial separável da DFT e IDFT, com reconstrução progressiva por raio crescente
+
+As imagens de saída são salvas automaticamente na pasta `resultados/`.
+
+---
+
+## 2. Introdução
 
 Este relatório apresenta a implementação e análise de filtros convolucionais aplicados a imagens digitais. A convolução é a operação fundamental do processamento de imagens no domínio espacial, definida como C(x, y) = Σ_dx Σ_dy A(dx, dy) · B(x - dx, y - dy), onde A é o kernel e B a imagem. Pelo teorema da convolução, essa operação equivale a uma multiplicação no domínio da frequência: G(u,v) = F(u,v) · H(u,v). Essa dualidade permite analisar o comportamento de cada filtro tanto visualmente quanto em termos de quais componentes frequenciais são preservadas ou suprimidas.
 
-Imagem original utilizada nos experimentos:
+Imagem original utilizada nos experimentos (colorida):
 
 ![Imagem Original](imagens/foto.jpg)
 
 Essa imagem foi tirada numa exibição durante minha visita ao MIT Museum. Nela  o [artista](https://www.alanbogana.com/portfolio/light-orientedontologies/) Alan Bogana explora a relação entre a luz e as formas de vida primordiais da terra.
 
+Imagem convertida para escala de cinza (luminosidade), utilizada em todos os filtros:
+
+![Imagem Original - Escala de Cinza](imagens_relatorio/original.png)
+
 ---
 
-## 2. Filtros Convolucionais
+## 3. Filtros Convolucionais
 
-### 2.1 Shift (Deslocamento)
+### 3.1 Shift (Deslocamento)
 
 **Propósito:** Deslocar a imagem espacialmente sem alterar seu conteúdo. O kernel é um delta de Kronecker posicionado fora do centro, movendo todos os pixels na direção oposta.
 
@@ -50,7 +89,7 @@ No domínio da frequência, o deslocamento espacial corresponde a multiplicar o 
 
 ---
 
-### 2.2 Caixa/Média (Box)
+### 3.2 Caixa/Média (Box)
 
 **Propósito:** Suavizar a imagem calculando a média aritmética da vizinhança de cada pixel. Cada elemento do kernel tem valor 1/N², onde N é o tamanho do filtro.
 
@@ -78,7 +117,7 @@ O filtro Box corresponde a uma função sinc 2D no domínio da frequência — u
 
 ---
 
-### 2.3 Gaussiano
+### 3.3 Gaussiano
 
 **Propósito:** Suavizar a imagem com pesos proporcionais a uma distribuição Gaussiana G(x,y) = (1/2πσ²)·exp(-(x²+y²)/(2σ²)). Pixels mais próximos ao centro têm maior influência no resultado.
 
@@ -106,7 +145,7 @@ No domínio da frequência, o filtro Gaussiano é também uma Gaussiana — um p
 
 ---
 
-### 2.4 Laplace
+### 3.4 Laplace
 
 **Propósito:** Detectar bordas através da segunda derivada da imagem (∇²f). O kernel realça mudanças bruscas de intensidade em todas as direções simultaneamente (isotrópico).
 
@@ -134,7 +173,7 @@ O Laplaciano no domínio da frequência tem resposta H(u,v) ∝ -(u² + v²) —
 
 ---
 
-### 2.5 Sobel
+### 3.5 Sobel
 
 **Propósito:** Detectar bordas através do gradiente direcional da imagem. Usa dois kernels (horizontal e vertical) para calcular a magnitude do gradiente G = √(Gx² + Gy²), destacando contornos e transições de intensidade.
 
@@ -164,7 +203,7 @@ O Sobel é um passa-alta direcional. A resposta em frequência de cada kernel (G
 
 ---
 
-### 2.6 Sharpen com Laplace (Aumento de Nitidez)
+### 3.6 Sharpen com Laplace (Aumento de Nitidez)
 
 **Propósito:** Aumentar a nitidez da imagem subtraindo as bordas detectadas pelo Laplaciano: f_sharp = f - α·∇²f. O resultado realça detalhes e bordas mantendo a estrutura geral da imagem.
 
@@ -192,7 +231,7 @@ A resposta em frequência do Sharpen com Laplace é H(u,v) = 1 + α·4π²(u² +
 
 ---
 
-### 2.7 Unsharp Mask (Máscara de Des-nitidez)
+### 3.7 Unsharp Mask (Máscara de Des-nitidez)
 
 **Propósito:** Aumentar a nitidez de forma mais controlável: f_sharp = f + α·(f - blur(f)). Subtrai uma versão borrada (Gaussiana) da imagem original para isolar os detalhes, e então soma esses detalhes amplificados de volta.
 
@@ -220,7 +259,7 @@ A resposta em frequência é H(u,v) = 1 + α·(1 - H_gauss(u,v)). Nas baixas fre
 
 ---
 
-### 2.8 Emboss (Filtro Criativo — Relevo)
+### 3.8 Emboss (Filtro Criativo — Relevo)
 
 **Propósito:** Criar efeito de relevo 3D usando um kernel direcional assimétrico. Simula iluminação lateral, destacando gradientes numa direção específica e produzindo a aparência de uma superfície em alto-relevo.
 
@@ -248,7 +287,7 @@ O Emboss é um passa-alta direcional assimétrico no domínio da frequência. Su
 
 ---
 
-## 3. Parte II — Transformada de Fourier e Reconstrução Progressiva
+## 4. Parte II — Transformada de Fourier e Reconstrução Progressiva
 
 A Transformada Discreta de Fourier (DFT) decompõe uma imagem em soma de senos e cossenos de diferentes frequências: F(u,v) = (1/MN) Σ_x Σ_y f(x,y) · e^{-j2π(ux/N + vy/M)}. A inversa (IDFT) reconstrói a imagem a partir desses coeficientes.
 
@@ -258,7 +297,7 @@ Nesta seção, aplicamos esse processo para duas imagens com características es
 
 ---
 
-### 3.1 Imagem com altas frequências dominantes
+### 4.1 Imagem com altas frequências dominantes
 
 **Imagem original:**
 
@@ -284,7 +323,7 @@ O espectro mostra energia distribuída ao longo de toda a extensão, com coefici
 
 ---
 
-### 3.2 Imagem com baixas frequências dominantes (paisagem)
+### 4.2 Imagem com baixas frequências dominantes (paisagem)
 
 **Imagem original:**
 
@@ -310,7 +349,7 @@ O espectro concentra a maior parte da energia no centro, com coeficientes que de
 
 ---
 
-### 3.3 Discussão
+### 4.3 Discussão
 
 A comparação entre as duas imagens revela um contraste fundamental no comportamento da reconstrução progressiva:
 
@@ -322,6 +361,6 @@ Isso tem implicação direta em compressão de imagens: paisagens e cenas suaves
 
 ---
 
-## 4. Conclusão
+## 5. Conclusão
 
 Este trabalho demonstrou na prática a dualidade entre os domínios espacial e da frequência no processamento de imagens. Cada filtro convolucional tem uma interpretação clara no domínio da frequência — filtros de suavização são passa-baixa, filtros de detecção de bordas são passa-alta — e essa compreensão permite escolher e parametrizar filtros de forma fundamentada. A reconstrução progressiva via Transformada de Fourier evidenciou como a distribuição espectral de uma imagem determina sua "complexidade visual" e como diferentes tipos de cena respondem de maneiras distintas à adição progressiva de componentes frequenciais.
