@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  9 MAY 2026 20:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  9 MAY 2026 20:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1121,7 +1121,7 @@ Package rerunfilecheck Info: File `relatorio.out' has not changed.
 Here is how much of TeX's memory you used:
  13963 strings out of 469006
  222515 string characters out of 5454813
- 988881 words of memory out of 5000000
+ 988880 words of memory out of 5000000
  42404 multiletter control sequences out of 15000+600000
  637158 words of font info for 77 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
@@ -1140,7 +1140,7 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026basic
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2026ba
 sic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/20
 26basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on relatorio.pdf (24 pages, 21314398 bytes).
+Output written on relatorio.pdf (24 pages, 21314516 bytes).
 PDF statistics:
  413 PDF objects out of 1000 (max. 8388607)
  276 compressed objects within 3 object streams
