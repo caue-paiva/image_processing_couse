@@ -483,7 +483,7 @@ def filter_frequency_response(kernel, img_shape):
 # Demonstrações — Parte I
 # ============================================================
 
-def demo_padding(img, kernel, filter_name, save_prefix):
+def demo_padding(img, kernel, filter_name, save_prefix, zoom_bottom_right=False):
     """Compara o efeito de diferentes modos de padding para um filtro."""
     modes = ['none', 'zero', 'reflect', 'wrap']
     results = []
@@ -491,13 +491,21 @@ def demo_padding(img, kernel, filter_name, save_prefix):
         results.append(convolve(img, kernel, padding_mode=mode))
     mode_to_result = dict(zip(modes, results))
 
+    # Se zoom, recortar canto inferior-direito (~30%) para evidenciar artefatos de borda
+    if zoom_bottom_right:
+        h, w = list(mode_to_result.values())[0].shape
+        r0, c0 = h * 7 // 10, w * 7 // 10
+        mode_to_result = {m: r[r0:, c0:] for m, r in mode_to_result.items()}
+
     # Usar a mesma escala em todos os subplots para a diferença ser visível
-    mn = float(min(r.min() for r in results))
-    mx = float(max(r.max() for r in results))
+    mn = float(min(r.min() for r in mode_to_result.values()))
+    mx = float(max(r.max() for r in mode_to_result.values()))
     if mx - mn < 1e-12:
         vmin, vmax = mn, mn + 1.0
     else:
         vmin, vmax = mn, mx
+
+    zoom_label = " [zoom canto inferior-direito]" if zoom_bottom_right else ""
 
     # --- Figura 1: imagem inteira (duas figuras: [zero, reflect] e [none, wrap]) ---
     pairs = [
@@ -506,7 +514,7 @@ def demo_padding(img, kernel, filter_name, save_prefix):
     ]
     for (m1, m2), filename in pairs:
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-        fig.suptitle(f"{filter_name} — Padding ({m1} vs {m2})", fontsize=14)
+        fig.suptitle(f"{filter_name} — Padding ({m1} vs {m2}){zoom_label}", fontsize=14)
         for ax, mode in zip(axes, (m1, m2)):
             ax.imshow(mode_to_result[mode], cmap='gray', vmin=vmin, vmax=vmax)
             ax.set_title(mode)
@@ -553,11 +561,14 @@ def demo_frequency(img, kernel, filter_name, save_prefix, mag_orig=None):
     save_fig(fig, path)
 
 
-def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kwargs):
+def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None,
+                 zoom_bottom_right=False, **kwargs):
     """Demonstração de um processo (sobel magnitude, sharpen, unsharp)."""
     print(f"\n{'='*60}")
     print(f"  {process_name}")
     print(f"{'='*60}")
+
+    zoom_label = " [zoom canto inferior-direito]" if zoom_bottom_right else ""
 
     # Comparação de padding para processos (duas figuras: [zero, reflect] e [none, wrap])
     pairs = [
@@ -566,10 +577,14 @@ def demo_process(img, process_fn, process_name, save_prefix, mag_orig=None, **kw
     ]
     for (m1, m2), filename in pairs:
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-        fig.suptitle(f"{process_name} — Padding ({m1} vs {m2})", fontsize=14)
+        fig.suptitle(f"{process_name} — Padding ({m1} vs {m2}){zoom_label}", fontsize=14)
         for ax, mode in zip(axes, (m1, m2)):
             result = process_fn(img, padding_mode=mode, **kwargs)
-            ax.imshow(norm_minmax(result), cmap='gray')
+            show = norm_minmax(result)
+            if zoom_bottom_right:
+                h, w = show.shape
+                show = show[h * 7 // 10:, w * 7 // 10:]
+            ax.imshow(show, cmap='gray')
             ax.set_title(mode)
             ax.axis('off')
         plt.tight_layout()
@@ -634,11 +649,12 @@ def run_parte1(img_path):
         path = os.path.join(DIR_RESULTADOS, f"{prefix}_resultado.png")
         show_side_by_side(img, result_show, "Original", name, save_path=path)
 
-        demo_padding(img, kernel, name, prefix)
+        zoom = (prefix != "01_shift")
+        demo_padding(img, kernel, name, prefix, zoom_bottom_right=zoom)
         demo_frequency(img, kernel, name, prefix, mag_orig=mag_orig)
 
     # Sobel (magnitude) — usando kernel 13x13
-    demo_process(img, sobel_magnitude, "Sobel 13x13 (Magnitude)", "05_sobel", mag_orig=mag_orig, size=13)
+    demo_process(img, sobel_magnitude, "Sobel 13x13 (Magnitude)", "05_sobel", mag_orig=mag_orig, zoom_bottom_right=True, size=13)
 
     # Frequência do Sobel — mostramos os dois kernels
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
@@ -655,11 +671,11 @@ def run_parte1(img_path):
 
     # Sharpen com Laplace
     demo_process(img, sharpen_laplace, "Sharpen (Laplace 36x36, alpha=0.5)",
-                 "06_sharpen_laplace", mag_orig=mag_orig, alpha=0.5, laplace_size=36)
+                 "06_sharpen_laplace", mag_orig=mag_orig, zoom_bottom_right=True, alpha=0.5, laplace_size=36)
 
     # Unsharp Mask (blur maior para evidenciar efeitos de padding)
     demo_process(img, sharpen_unsharp, "Unsharp Mask (size=24, sigma=6, alpha=1.5)",
-                 "07_unsharp_mask", mag_orig=mag_orig, size=24, sigma=6.0, alpha=1.5)
+                 "07_unsharp_mask", mag_orig=mag_orig, zoom_bottom_right=True, size=24, sigma=6.0, alpha=1.5)
 
 
 # ============================================================

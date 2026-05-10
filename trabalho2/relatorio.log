@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  9 MAY 2026 20:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  9 MAY 2026 22:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -525,7 +525,7 @@ l.95
 File: imagens_relatorio/01_shift_resultado.png Graphic file (type png)
 <use imagens_relatorio/01_shift_resultado.png>
 Package pdftex.def Info: imagens_relatorio/01_shift_resultado.png  used on inpu
-t line 108.
+t line 110.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
 <imagens_relatorio/01_shift_padding_zero_reflect.png, id=116, 860.013pt x 343.0
 416pt>
@@ -533,20 +533,20 @@ File: imagens_relatorio/01_shift_padding_zero_reflect.png Graphic file (type pn
 g)
 <use imagens_relatorio/01_shift_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/01_shift_padding_zero_reflect.png  u
-sed on input line 116.
+sed on input line 118.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
  [3
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.119 
+l.121 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.119 
+l.121 
        <./imagens_relatorio/original.png> <./imagens_relatorio/01_shift_resulta
 do.png>]
 <imagens_relatorio/01_shift_padding_none_wrap.png, id=125, 860.013pt x 343.0416
@@ -554,88 +554,88 @@ pt>
 File: imagens_relatorio/01_shift_padding_none_wrap.png Graphic file (type png)
 <use imagens_relatorio/01_shift_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/01_shift_padding_none_wrap.png  used
- on input line 122.
+ on input line 124.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 <imagens_relatorio/01_shift_frequencia.png, id=126, 1293.633pt x 357.4956pt>
 File: imagens_relatorio/01_shift_frequencia.png Graphic file (type png)
 <use imagens_relatorio/01_shift_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/01_shift_frequencia.png  used on inp
-ut line 132.
+ut line 134.
 (pdftex.def)             Requested size: 455.24411pt x 125.80719pt.
  [4
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.135 
+l.137 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.135 
+l.137 
        <./imagens_relatorio/01_shift_padding_zero_reflect.png> <./imagens_relat
 orio/01_shift_padding_none_wrap.png>]
 <imagens_relatorio/02_box_resultado.png, id=135, 860.013pt x 315.579pt>
 File: imagens_relatorio/02_box_resultado.png Graphic file (type png)
 <use imagens_relatorio/02_box_resultado.png>
 Package pdftex.def Info: imagens_relatorio/02_box_resultado.png  used on input 
-line 150.
+line 152.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
-<imagens_relatorio/02_box_padding_zero_reflect.png, id=136, 860.013pt x 343.041
-6pt>
+<imagens_relatorio/02_box_padding_zero_reflect.png, id=136, 860.013pt x 343.523
+4pt>
 File: imagens_relatorio/02_box_padding_zero_reflect.png Graphic file (type png)
 
 <use imagens_relatorio/02_box_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/02_box_padding_zero_reflect.png  use
-d on input line 158.
-(pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
+d on input line 160.
+(pdftex.def)             Requested size: 455.24411pt x 181.84113pt.
  [5
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.161 
+l.163 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.161 
+l.163 
        <./imagens_relatorio/01_shift_frequencia.png> <./imagens_relatorio/02_bo
 x_resultado.png>]
-<imagens_relatorio/02_box_padding_none_wrap.png, id=147, 860.013pt x 343.0416pt
+<imagens_relatorio/02_box_padding_none_wrap.png, id=147, 860.013pt x 343.5234pt
 >
 File: imagens_relatorio/02_box_padding_none_wrap.png Graphic file (type png)
 <use imagens_relatorio/02_box_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/02_box_padding_none_wrap.png  used o
-n input line 164.
-(pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
+n input line 166.
+(pdftex.def)             Requested size: 455.24411pt x 181.84113pt.
 <imagens_relatorio/02_box_frequencia.png, id=148, 1293.633pt x 357.4956pt>
 File: imagens_relatorio/02_box_frequencia.png Graphic file (type png)
 <use imagens_relatorio/02_box_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/02_box_frequencia.png  used on input
- line 174.
+ line 176.
 (pdftex.def)             Requested size: 455.24411pt x 125.80719pt.
  [6
 pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.177 
+l.179 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.177 
+l.179 
        <./imagens_relatorio/02_box_padding_zero_reflect.png> <./imagens_relator
 io/02_box_padding_none_wrap.png>]
 <imagens_relatorio/03_gaussiano_resultado.png, id=157, 860.013pt x 315.579pt>
 File: imagens_relatorio/03_gaussiano_resultado.png Graphic file (type png)
 <use imagens_relatorio/03_gaussiano_resultado.png>
 Package pdftex.def Info: imagens_relatorio/03_gaussiano_resultado.png  used on 
-input line 192.
+input line 194.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
 <imagens_relatorio/03_gaussiano_padding_zero_reflect.png, id=158, 860.013pt x 3
 43.0416pt>
@@ -643,20 +643,20 @@ File: imagens_relatorio/03_gaussiano_padding_zero_reflect.png Graphic file (typ
 e png)
 <use imagens_relatorio/03_gaussiano_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/03_gaussiano_padding_zero_reflect.pn
-g  used on input line 200.
+g  used on input line 202.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
  [7
 pdfTeX warning (ext4): destination with the same identifier (name{figure.10}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.203 
+l.205 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.11}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.203 
+l.205 
        <./imagens_relatorio/02_box_frequencia.png> <./imagens_relatorio/03_gaus
 siano_resultado.png>]
 <imagens_relatorio/03_gaussiano_padding_none_wrap.png, id=169, 860.013pt x 343.
@@ -665,30 +665,30 @@ File: imagens_relatorio/03_gaussiano_padding_none_wrap.png Graphic file (type p
 ng)
 <use imagens_relatorio/03_gaussiano_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/03_gaussiano_padding_none_wrap.png  
-used on input line 206.
+used on input line 208.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 <imagens_relatorio/03_gaussiano_frequencia.png, id=170, 1293.633pt x 357.4956pt
 >
 File: imagens_relatorio/03_gaussiano_frequencia.png Graphic file (type png)
 <use imagens_relatorio/03_gaussiano_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/03_gaussiano_frequencia.png  used on
- input line 216.
+ input line 218.
 (pdftex.def)             Requested size: 455.24411pt x 125.80719pt.
  [8
 pdfTeX warning (ext4): destination with the same identifier (name{figure.12}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.219 
+l.221 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.13}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.219 
+l.221 
        <./imagens_relatorio/03_gaussiano_padding_zero_reflect.png> <./imagens_r
 elatorio/03_gaussiano_padding_none_wrap.png>]
-Overfull \hbox (1.30392pt too wide) in paragraph at lines 226--227
+Overfull \hbox (1.30392pt too wide) in paragraph at lines 228--229
 \OT1/cmr/m/n/12 real^^Xca mu-dan^^Xcas brus-cas de in-ten-si-dade em to-das as 
 dire^^Xc~oes si-mul-ta-ne-a-mente (isotr^^Sopico). 
  []
@@ -697,7 +697,7 @@ dire^^Xc~oes si-mul-ta-ne-a-mente (isotr^^Sopico).
 File: imagens_relatorio/04_laplace_resultado.png Graphic file (type png)
 <use imagens_relatorio/04_laplace_resultado.png>
 Package pdftex.def Info: imagens_relatorio/04_laplace_resultado.png  used on in
-put line 234.
+put line 236.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
 <imagens_relatorio/04_laplace_padding_zero_reflect.png, id=181, 860.013pt x 343
 .0416pt>
@@ -705,20 +705,20 @@ File: imagens_relatorio/04_laplace_padding_zero_reflect.png Graphic file (type
 png)
 <use imagens_relatorio/04_laplace_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/04_laplace_padding_zero_reflect.png 
- used on input line 242.
+ used on input line 244.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 [9
 pdfTeX warning (ext4): destination with the same identifier (name{figure.14}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.245 
+l.247 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.15}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.245 
+l.247 
        <./imagens_relatorio/03_gaussiano_frequencia.png> <./imagens_relatorio/0
 4_laplace_resultado.png>]
 <imagens_relatorio/04_laplace_padding_none_wrap.png, id=190, 860.013pt x 343.04
@@ -727,33 +727,33 @@ File: imagens_relatorio/04_laplace_padding_none_wrap.png Graphic file (type png
 )
 <use imagens_relatorio/04_laplace_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/04_laplace_padding_none_wrap.png  us
-ed on input line 248.
+ed on input line 250.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 <imagens_relatorio/04_laplace_frequencia.png, id=191, 1293.633pt x 357.4956pt>
 File: imagens_relatorio/04_laplace_frequencia.png Graphic file (type png)
 <use imagens_relatorio/04_laplace_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/04_laplace_frequencia.png  used on i
-nput line 258.
+nput line 260.
 (pdftex.def)             Requested size: 455.24411pt x 125.80719pt.
  [10
 pdfTeX warning (ext4): destination with the same identifier (name{figure.16}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.261 
+l.263 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.17}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.261 
+l.263 
        <./imagens_relatorio/04_laplace_padding_zero_reflect.png> <./imagens_rel
 atorio/04_laplace_padding_none_wrap.png>]
 <imagens_relatorio/05_sobel_resultado.png, id=200, 860.013pt x 315.579pt>
 File: imagens_relatorio/05_sobel_resultado.png Graphic file (type png)
 <use imagens_relatorio/05_sobel_resultado.png>
 Package pdftex.def Info: imagens_relatorio/05_sobel_resultado.png  used on inpu
-t line 276.
+t line 278.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
 <imagens_relatorio/05_sobel_padding_zero_reflect.png, id=201, 860.013pt x 343.0
 416pt>
@@ -761,20 +761,20 @@ File: imagens_relatorio/05_sobel_padding_zero_reflect.png Graphic file (type pn
 g)
 <use imagens_relatorio/05_sobel_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/05_sobel_padding_zero_reflect.png  u
-sed on input line 284.
+sed on input line 286.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
  [11
 pdfTeX warning (ext4): destination with the same identifier (name{figure.18}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.287 
+l.289 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.19}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.287 
+l.289 
        <./imagens_relatorio/04_laplace_frequencia.png> <./imagens_relatorio/05_
 sobel_resultado.png>]
 <imagens_relatorio/05_sobel_padding_none_wrap.png, id=210, 860.013pt x 343.0416
@@ -782,47 +782,47 @@ pt>
 File: imagens_relatorio/05_sobel_padding_none_wrap.png Graphic file (type png)
 <use imagens_relatorio/05_sobel_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/05_sobel_padding_none_wrap.png  used
- on input line 290.
+ on input line 292.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 <imagens_relatorio/05_sobel_freq_kernels.png, id=211, 727.9998pt x 357.4956pt>
 File: imagens_relatorio/05_sobel_freq_kernels.png Graphic file (type png)
 <use imagens_relatorio/05_sobel_freq_kernels.png>
 Package pdftex.def Info: imagens_relatorio/05_sobel_freq_kernels.png  used on i
-nput line 300.
+nput line 302.
 (pdftex.def)             Requested size: 455.24411pt x 223.55966pt.
  [12
 pdfTeX warning (ext4): destination with the same identifier (name{figure.20}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.303 
+l.305 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.21}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.303 
+l.305 
        <./imagens_relatorio/05_sobel_padding_zero_reflect.png> <./imagens_relat
 orio/05_sobel_padding_none_wrap.png>]
 <imagens_relatorio/05_sobel_frequencia.png, id=220, 860.013pt x 341.5962pt>
 File: imagens_relatorio/05_sobel_frequencia.png Graphic file (type png)
 <use imagens_relatorio/05_sobel_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/05_sobel_frequencia.png  used on inp
-ut line 306.
+ut line 308.
 (pdftex.def)             Requested size: 455.24411pt x 180.82098pt.
  [13
 pdfTeX warning (ext4): destination with the same identifier (name{figure.22}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.318 \textbf{Comparação:}
+l.320 \textbf{Comparação:}
                              Padrão preto e branco similar ao Sobel, porém...
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.23}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.318 \textbf{Comparação:}
+l.320 \textbf{Comparação:}
                              Padrão preto e branco similar ao Sobel, porém...
  <./imagens_relatorio/05_sobel_freq_kernels.png> <./imagens_relatorio/05_sobel_
 frequencia.png>]
@@ -832,7 +832,7 @@ File: imagens_relatorio/06_sharpen_laplace_resultado.png Graphic file (type png
 )
 <use imagens_relatorio/06_sharpen_laplace_resultado.png>
 Package pdftex.def Info: imagens_relatorio/06_sharpen_laplace_resultado.png  us
-ed on input line 324.
+ed on input line 326.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
 <imagens_relatorio/06_sharpen_laplace_padding_zero_reflect.png, id=231, 860.013
 pt x 343.0416pt>
@@ -840,7 +840,7 @@ File: imagens_relatorio/06_sharpen_laplace_padding_zero_reflect.png Graphic fil
 e (type png)
 <use imagens_relatorio/06_sharpen_laplace_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/06_sharpen_laplace_padding_zero_refl
-ect.png  used on input line 332.
+ect.png  used on input line 334.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 <imagens_relatorio/06_sharpen_laplace_padding_none_wrap.png, id=232, 860.013pt 
 x 343.0416pt>
@@ -848,20 +848,20 @@ File: imagens_relatorio/06_sharpen_laplace_padding_none_wrap.png Graphic file (
 type png)
 <use imagens_relatorio/06_sharpen_laplace_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/06_sharpen_laplace_padding_none_wrap
-.png  used on input line 338.
+.png  used on input line 340.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
  [14
 pdfTeX warning (ext4): destination with the same identifier (name{figure.24}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.341 
+l.343 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.25}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.341 
+l.343 
        <./imagens_relatorio/06_sharpen_laplace_resultado.png> <./imagens_relato
 rio/06_sharpen_laplace_padding_zero_reflect.png>]
 <imagens_relatorio/06_sharpen_laplace_frequencia.png, id=241, 860.013pt x 341.5
@@ -870,20 +870,20 @@ File: imagens_relatorio/06_sharpen_laplace_frequencia.png Graphic file (type pn
 g)
 <use imagens_relatorio/06_sharpen_laplace_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/06_sharpen_laplace_frequencia.png  u
-sed on input line 348.
+sed on input line 350.
 (pdftex.def)             Requested size: 455.24411pt x 180.82098pt.
  [15
 pdfTeX warning (ext4): destination with the same identifier (name{figure.26}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.359 
+l.361 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.27}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.359 
+l.361 
        <./imagens_relatorio/06_sharpen_laplace_padding_none_wrap.png> <./imagen
 s_relatorio/06_sharpen_laplace_frequencia.png>]
 <imagens_relatorio/07_unsharp_mask_resultado.png, id=250, 860.013pt x 315.579pt
@@ -891,7 +891,7 @@ s_relatorio/06_sharpen_laplace_frequencia.png>]
 File: imagens_relatorio/07_unsharp_mask_resultado.png Graphic file (type png)
 <use imagens_relatorio/07_unsharp_mask_resultado.png>
 Package pdftex.def Info: imagens_relatorio/07_unsharp_mask_resultado.png  used 
-on input line 366.
+on input line 368.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
 <imagens_relatorio/07_unsharp_mask_padding_zero_reflect.png, id=251, 860.013pt 
 x 343.0416pt>
@@ -899,7 +899,7 @@ File: imagens_relatorio/07_unsharp_mask_padding_zero_reflect.png Graphic file (
 type png)
 <use imagens_relatorio/07_unsharp_mask_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/07_unsharp_mask_padding_zero_reflect
-.png  used on input line 374.
+.png  used on input line 376.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 <imagens_relatorio/07_unsharp_mask_padding_none_wrap.png, id=252, 860.013pt x 3
 43.0416pt>
@@ -907,20 +907,20 @@ File: imagens_relatorio/07_unsharp_mask_padding_none_wrap.png Graphic file (typ
 e png)
 <use imagens_relatorio/07_unsharp_mask_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/07_unsharp_mask_padding_none_wrap.pn
-g  used on input line 380.
+g  used on input line 382.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
  [16
 pdfTeX warning (ext4): destination with the same identifier (name{figure.28}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.383 
+l.385 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.29}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.383 
+l.385 
        <./imagens_relatorio/07_unsharp_mask_resultado.png> <./imagens_relatorio
 /07_unsharp_mask_padding_zero_reflect.png>]
 <imagens_relatorio/07_unsharp_mask_frequencia.png, id=261, 860.013pt x 341.5962
@@ -928,21 +928,21 @@ pt>
 File: imagens_relatorio/07_unsharp_mask_frequencia.png Graphic file (type png)
 <use imagens_relatorio/07_unsharp_mask_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/07_unsharp_mask_frequencia.png  used
- on input line 390.
+ on input line 392.
 (pdftex.def)             Requested size: 455.24411pt x 180.82098pt.
  [17
 pdfTeX warning (ext4): destination with the same identifier (name{figure.30}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.402 \textbf{Propósito:}
+l.404 \textbf{Propósito:}
                            Criar efeito de relevo 3D usando um kernel direci...
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.31}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.402 \textbf{Propósito:}
+l.404 \textbf{Propósito:}
                            Criar efeito de relevo 3D usando um kernel direci...
  <./imagens_relatorio/07_unsharp_mask_padding_none_wrap.png> <./imagens_relator
 io/07_unsharp_mask_frequencia.png>]
@@ -950,7 +950,7 @@ io/07_unsharp_mask_frequencia.png>]
 File: imagens_relatorio/08_emboss_resultado.png Graphic file (type png)
 <use imagens_relatorio/08_emboss_resultado.png>
 Package pdftex.def Info: imagens_relatorio/08_emboss_resultado.png  used on inp
-ut line 410.
+ut line 412.
 (pdftex.def)             Requested size: 455.24411pt x 167.049pt.
 <imagens_relatorio/08_emboss_padding_zero_reflect.png, id=271, 860.013pt x 343.
 0416pt>
@@ -958,7 +958,7 @@ File: imagens_relatorio/08_emboss_padding_zero_reflect.png Graphic file (type p
 ng)
 <use imagens_relatorio/08_emboss_padding_zero_reflect.png>
 Package pdftex.def Info: imagens_relatorio/08_emboss_padding_zero_reflect.png  
-used on input line 418.
+used on input line 420.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
 <imagens_relatorio/08_emboss_padding_none_wrap.png, id=272, 860.013pt x 343.041
 6pt>
@@ -966,65 +966,65 @@ File: imagens_relatorio/08_emboss_padding_none_wrap.png Graphic file (type png)
 
 <use imagens_relatorio/08_emboss_padding_none_wrap.png>
 Package pdftex.def Info: imagens_relatorio/08_emboss_padding_none_wrap.png  use
-d on input line 424.
+d on input line 426.
 (pdftex.def)             Requested size: 455.24411pt x 181.58609pt.
  [18
 pdfTeX warning (ext4): destination with the same identifier (name{figure.32}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.427 
+l.429 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.33}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.427 
+l.429 
        <./imagens_relatorio/08_emboss_resultado.png> <./imagens_relatorio/08_em
 boss_padding_zero_reflect.png>]
 <imagens_relatorio/08_emboss_frequencia.png, id=281, 1293.633pt x 357.4956pt>
 File: imagens_relatorio/08_emboss_frequencia.png Graphic file (type png)
 <use imagens_relatorio/08_emboss_frequencia.png>
 Package pdftex.def Info: imagens_relatorio/08_emboss_frequencia.png  used on in
-put line 434.
+put line 436.
 (pdftex.def)             Requested size: 455.24411pt x 125.80719pt.
  [19
 pdfTeX warning (ext4): destination with the same identifier (name{figure.34}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.445 
+l.447 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.35}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.445 
+l.447 
        <./imagens_relatorio/08_emboss_padding_none_wrap.png> <./imagens_relator
 io/08_emboss_frequencia.png>]
 <imagens/alta_freq.jpg, id=291, 2654.91875pt x 1527.7075pt>
 File: imagens/alta_freq.jpg Graphic file (type jpg)
 <use imagens/alta_freq.jpg>
-Package pdftex.def Info: imagens/alta_freq.jpg  used on input line 456.
+Package pdftex.def Info: imagens/alta_freq.jpg  used on input line 458.
 (pdftex.def)             Requested size: 227.62206pt x 130.96068pt.
 <imagens_relatorio/p2_alta_freq_espectro.png, id=292, 860.013pt x 267.399pt>
 File: imagens_relatorio/p2_alta_freq_espectro.png Graphic file (type png)
 <use imagens_relatorio/p2_alta_freq_espectro.png>
 Package pdftex.def Info: imagens_relatorio/p2_alta_freq_espectro.png  used on i
-nput line 464.
+nput line 466.
 (pdftex.def)             Requested size: 227.62206pt x 70.77063pt.
  [20
 pdfTeX warning (ext4): destination with the same identifier (name{figure.36}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.470 \textbf{Reconstrução progressiva:}
+l.472 \textbf{Reconstrução progressiva:}
                                           
 pdfTeX warning (ext4): destination with the same identifier (name{figure.37}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.470 \textbf{Reconstrução progressiva:}
+l.472 \textbf{Reconstrução progressiva:}
                                            <./imagens/alta_freq.jpg> <./imagens
 _relatorio/p2_alta_freq_espectro.png>]
 <imagens_relatorio/p2_alta_freq_progressivo.png, id=300, 1438.173pt x 499.6266p
@@ -1032,32 +1032,32 @@ t>
 File: imagens_relatorio/p2_alta_freq_progressivo.png Graphic file (type png)
 <use imagens_relatorio/p2_alta_freq_progressivo.png>
 Package pdftex.def Info: imagens_relatorio/p2_alta_freq_progressivo.png  used o
-n input line 474.
+n input line 476.
 (pdftex.def)             Requested size: 455.24411pt x 158.1532pt.
 <imagens_relatorio/p2_alta_freq_reconstruida.png, id=301, 860.013pt x 267.399pt
 >
 File: imagens_relatorio/p2_alta_freq_reconstruida.png Graphic file (type png)
 <use imagens_relatorio/p2_alta_freq_reconstruida.png>
 Package pdftex.def Info: imagens_relatorio/p2_alta_freq_reconstruida.png  used 
-on input line 486.
+on input line 488.
 (pdftex.def)             Requested size: 227.62206pt x 70.77063pt.
 <imagens/baixa_freq.jpg, id=302, 3131.7pt x 4175.6pt>
 File: imagens/baixa_freq.jpg Graphic file (type jpg)
 <use imagens/baixa_freq.jpg>
-Package pdftex.def Info: imagens/baixa_freq.jpg  used on input line 496.
+Package pdftex.def Info: imagens/baixa_freq.jpg  used on input line 498.
 (pdftex.def)             Requested size: 227.62206pt x 303.4719pt.
  [21
 pdfTeX warning (ext4): destination with the same identifier (name{figure.38}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.499 
+l.501 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.39}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.499 
+l.501 
        <./imagens_relatorio/p2_alta_freq_progressivo.png> <./imagens_relatorio/
 p2_alta_freq_reconstruida.png>]
 <imagens_relatorio/p2_baixa_freq_espectro.png, id=311, 637.4214pt x 353.6412pt>
@@ -1065,27 +1065,27 @@ p2_alta_freq_reconstruida.png>]
 File: imagens_relatorio/p2_baixa_freq_espectro.png Graphic file (type png)
 <use imagens_relatorio/p2_baixa_freq_espectro.png>
 Package pdftex.def Info: imagens_relatorio/p2_baixa_freq_espectro.png  used on 
-input line 504.
+input line 506.
 (pdftex.def)             Requested size: 227.62206pt x 126.28546pt.
 <imagens_relatorio/p2_baixa_freq_progressivo.png, id=312, 1312.4232pt x 569.969
 4pt>
 File: imagens_relatorio/p2_baixa_freq_progressivo.png Graphic file (type png)
 <use imagens_relatorio/p2_baixa_freq_progressivo.png>
 Package pdftex.def Info: imagens_relatorio/p2_baixa_freq_progressivo.png  used 
-on input line 514.
+on input line 516.
 (pdftex.def)             Requested size: 455.24411pt x 197.70068pt.
  [22
 pdfTeX warning (ext4): destination with the same identifier (name{figure.40}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.517 
+l.519 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.41}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.517 
+l.519 
        <./imagens/baixa_freq.jpg> <./imagens_relatorio/p2_baixa_freq_espectro.p
 ng>]
 <imagens_relatorio/p2_baixa_freq_reconstruida.png, id=320, 637.4214pt x 353.641
@@ -1093,21 +1093,21 @@ ng>]
 File: imagens_relatorio/p2_baixa_freq_reconstruida.png Graphic file (type png)
 <use imagens_relatorio/p2_baixa_freq_reconstruida.png>
 Package pdftex.def Info: imagens_relatorio/p2_baixa_freq_reconstruida.png  used
- on input line 526.
+ on input line 528.
 (pdftex.def)             Requested size: 227.62206pt x 126.28546pt.
  [23
 pdfTeX warning (ext4): destination with the same identifier (name{figure.42}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.535   \item A
+l.537   \item A
                 \textbf{imagem de baixa frequência} (paisagem) ganha forma ...
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.43}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.535   \item A
+l.537   \item A
                 \textbf{imagem de baixa frequência} (paisagem) ganha forma ...
  <./imagens_relatorio/p2_baixa_freq_progressivo.png> <./imagens_relatorio/p2_ba
 ixa_freq_reconstruida.png>] [24] (./relatorio.aux)
@@ -1140,7 +1140,7 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026basic
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2026ba
 sic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/20
 26basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on relatorio.pdf (24 pages, 21314399 bytes).
+Output written on relatorio.pdf (24 pages, 15364239 bytes).
 PDF statistics:
  413 PDF objects out of 1000 (max. 8388607)
  276 compressed objects within 3 object streams

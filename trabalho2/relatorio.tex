@@ -95,6 +95,8 @@ Imagem convertida para escala de cinza (luminosidade), utilizada em todos os fil
 
 \section{Filtros Convolucionais}
 
+Nas imagens de comparação de padding, com exceção do filtro Shift, é exibido apenas o canto inferior direito da imagem (aproximadamente 30\%), permitindo uma observação mais clara dos artefatos introduzidos por cada modo de padding nas bordas. O filtro Shift mantém a imagem completa, pois seu efeito, o deslocamento espacial, é global e não se limita às bordas sendo fácil de visualizar.
+
 \subsection{Shift (Deslocamento)}
 
 \textbf{Propósito:} Deslocar a imagem espacialmente sem alterar seu conteúdo. O kernel é um delta de Kronecker posicionado fora do centro, movendo todos os pixels na direção oposta.
