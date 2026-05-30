@@ -1,0 +1,321 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+\graphicspath{{../outputs/figures/}{../outputs/retrieval_examples/}{outputs/figures/}{outputs/retrieval_examples/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+\title{Sistema de Busca e Classificação de Animais de Estimação}
+\author{Caue Lira}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este trabalho apresenta um sistema de busca e classificação de animais de estimação baseado em descritores clássicos de imagens. Foram avaliados seis descritores globais ou semiglobais, incluindo um descritor não visto em aula, além de combinações entre eles. A base utilizada contém 367 imagens distribuídas em 43 classes de pets. Para classificação, foram consideradas 362 imagens de 38 classes, removendo pets com menos de três fotos. Para busca, foram usadas todas as 367 imagens. Os experimentos mostram que combinações compactas de cor e textura produzem os melhores resultados, com destaque para GCH+LBP+GLCM+Gabor na classificação e GCH+LBP+GLCM na busca. O método Bag of Visual Words também foi implementado e analisado por métricas de busca e projeções em duas dimensões.
+\end{abstract}
+
+\section{Introdução}
+
+A identificação visual de animais de estimação é uma tarefa difícil para descritores clássicos, pois diferentes imagens do mesmo pet podem variar em pose, iluminação, enquadramento, fundo e escala. Ao mesmo tempo, pets diferentes podem compartilhar cores de pelagem, texturas e formas muito parecidas. Neste trabalho, o objetivo é investigar até que ponto descritores de cor, textura e forma conseguem representar características úteis para duas tarefas: classificação do pet e busca por imagens similares.
+
+O estudo foi organizado em torno de três perguntas experimentais. Primeiro, quais tipos de descritores capturam melhor as diferenças entre pets individuais? Segundo, combinações de descritores são mais robustas do que descritores isolados? Terceiro, uma representação por Bag of Visual Words (BoVW) consegue competir com os descritores globais usados diretamente?
+
+Para responder a essas perguntas, foram extraídos seis descritores: histograma global de cores em HSV (GCH), Local Binary Patterns (LBP), atributos de Haralick derivados de matrizes de co-ocorrência (GLCM), Histogram of Oriented Gradients (HOG), correlograma de cores e filtros de Gabor. O descritor de Gabor foi escolhido como o descritor não visto em aula. Os mesmos descritores foram usados em classificação e busca, permitindo comparar como cada representação se comporta em tarefas semânticas diferentes.
+
+\section{Base de Dados e Protocolo Experimental}
+
+A base recebida contém um arquivo CSV com metadados e duas versões das imagens. O arquivo \texttt{pets.csv} lista o identificador da classe, o nome padronizado do pet e o caminho relativo da imagem. A pasta \texttt{pets256} contém as imagens redimensionadas para 256x256 pixels e com nomes padronizados; essa foi a versão usada nos experimentos. A pasta \texttt{pets\_original} mantém os nomes, dimensões e formatos originais, servindo apenas como referência.
+
+Embora o enunciado mencione 42 animais de estimação, o CSV disponibilizado contém 367 imagens distribuídas em 43 classes. Como o relatório deve refletir os dados efetivamente usados, todos os números apresentados a seguir são calculados a partir do CSV e dos arquivos fornecidos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{class_distribution.png}
+    \caption{Distribuição do número de imagens por classe na base de dados.}
+    \label{fig:class-distribution}
+\end{figure}
+
+Para a tarefa de classificação, pets com menos de três fotos foram excluídos, como definido no enunciado. Isso removeu cinco classes com uma imagem cada: \texttt{de\_bruno\_1}, \texttt{de\_bruno\_2}, \texttt{de\_bruno\_3}, \texttt{de\_bruno\_4} e \texttt{de\_bruno\_5}. Assim, a classificação usou 362 imagens de 38 classes. A divisão foi feita em conjuntos separados de treino, validação e teste, buscando a proporção 80\%, 10\% e 10\%. Como há classes pequenas, foi usado um particionamento estratificado manual por classe, garantindo amostras para validação e teste quando possível.
+
+O classificador escolhido foi uma SVM, com seleção de hiperparâmetros no conjunto de validação. Foram avaliados kernel linear com valores de \(C \in \{0.1, 1, 10\}\) e kernel RBF com \(C \in \{0.1, 1, 10\}\) e \(\gamma \in \{\text{scale}, 0.01, 0.001\}\). A configuração com maior acurácia de validação foi usada para avaliar o conjunto de teste.
+
+Na tarefa de busca, todas as 367 imagens foram usadas. Para cada imagem de consulta, o sistema calcula a distância euclidiana entre o vetor da consulta e os vetores das demais imagens, removendo a própria consulta do ranking. Os resultados foram avaliados por Precision@1, Precision@5, Precision@10 e mean Average Precision (mAP).
+
+\section{Descritores: Semântica, Implementação e Hipóteses}
+
+\subsection{GCH: Histograma Global de Cores}
+
+O histograma global de cores busca representar a distribuição cromática da imagem. A semântica esperada é simples: pets com pelagens muito distintas, ou fotografados em fundos visualmente diferentes, devem produzir histogramas diferentes. Esse descritor foi escolhido porque a cor costuma ser uma das primeiras pistas visuais usadas para distinguir animais, principalmente quando há diferenças claras entre pelagens claras, escuras, alaranjadas, brancas ou manchadas.
+
+Na implementação, cada imagem RGB foi convertida para HSV. O canal de matiz foi quantizado em 16 intervalos, saturação em 4 e valor em 4, totalizando \(16 \times 4 \times 4 = 256\) bins. O histograma final foi normalizado por soma L1.
+
+A hipótese para classificação era que o GCH teria desempenho razoável, mas limitado, pois ele ignora a posição das cores e não diferencia bem pets de pelagem semelhante. Para busca, a hipótese era semelhante: o descritor deveria retornar bons vizinhos quando a cor dominante fosse discriminante, mas poderia falhar quando o fundo ou a iluminação dominassem a distribuição de cores.
+
+\subsection{LBP: Local Binary Patterns}
+
+O LBP descreve padrões locais de textura ao comparar cada pixel com seus vizinhos. A semântica pretendida é capturar regularidades finas da imagem, como textura da pelagem, presença de pelos longos ou curtos, rugosidade e pequenos padrões locais. Esse descritor foi escolhido porque textura é uma característica complementar à cor: dois pets podem ter cores parecidas, mas padrões de pelo diferentes.
+
+A implementação usou a imagem em escala de cinza e uma vizinhança 3x3. Para cada pixel interno, os oito vizinhos foram comparados com o valor central, formando um código binário de 8 bits. O vetor final é um histograma normalizado com 256 bins.
+
+A hipótese para classificação era que o LBP poderia ser útil, mas não necessariamente forte sozinho, por ser sensível a iluminação, pose e escala. Para busca, esperava-se que o LBP fosse mais competitivo quando combinado com cor, pois a textura local poderia refinar resultados visualmente semelhantes em termos cromáticos.
+
+\subsection{GLCM/Haralick}
+
+As matrizes de co-ocorrência de níveis de cinza modelam relações estatísticas entre intensidades próximas. A semântica capturada é textura global: contraste, regularidade, homogeneidade, energia e complexidade da distribuição de tons. Esse descritor foi escolhido como uma alternativa estatística ao LBP, menos focada em microcódigos locais e mais voltada a propriedades agregadas.
+
+Na implementação, a imagem em cinza foi quantizada em 32 níveis. Foram calculadas matrizes de co-ocorrência para distâncias 1, 2 e 3 e quatro direções. Para cada matriz, extraíram-se contraste, homogeneidade, energia, correlação e entropia. O vetor final contém a média e o desvio padrão dessas propriedades, resultando em 10 dimensões.
+
+A hipótese para classificação era que o GLCM poderia funcionar como descritor compacto, mas dificilmente capturaria detalhes suficientes para separar muitos pets individuais. Para busca, esperava-se desempenho intermediário, com maior utilidade em combinação com descritores de cor.
+
+\subsection{HOG: Histogram of Oriented Gradients}
+
+O HOG representa a distribuição de orientações de gradientes, sendo associado a forma, contornos e estrutura de bordas. Sua semântica esperada está relacionada à silhueta do animal, pose, orelhas, cabeça, patas e outras estruturas geométricas. Ele foi incluído porque forma é uma dimensão visual distinta de cor e textura.
+
+As imagens foram convertidas para cinza e redimensionadas para 128x128 pixels. Em seguida foram calculados gradientes por filtros de Sobel, organizados em células de 16x16 pixels com 9 bins de orientação. Blocos 2x2 foram normalizados por norma L2, gerando um vetor de 1764 dimensões.
+
+A hipótese para classificação era ambígua: HOG poderia ajudar quando a pose fosse consistente, mas também poderia sofrer com variações grandes de enquadramento e posição do pet. Para busca, esperava-se que a alta dimensionalidade e a variação de pose dificultassem a distância euclidiana, tornando o descritor frágil isoladamente.
+
+\subsection{Correlograma de Cores}
+
+O correlograma de cores adiciona informação espacial à cor. Em vez de apenas contar cores, ele mede a frequência com que pixels de mesma cor aparecem a certas distâncias. A semântica pretendida é capturar padrões como manchas, distribuição espacial da pelagem e repetição de cores em regiões próximas.
+
+Na implementação, a imagem foi convertida para HSV e o canal de matiz foi quantizado em 16 níveis. Para as distâncias 1, 3 e 5, foram calculadas frequências de repetição da mesma cor em deslocamentos horizontais, verticais e diagonais. O vetor final tem \(16 \times 3 = 48\) dimensões.
+
+A hipótese para classificação era que o correlograma poderia melhorar em relação ao histograma global quando os padrões espaciais de cor fossem importantes. Por outro lado, havia o risco de perder informação por usar apenas matiz e de sofrer com mudanças de pose. Para busca, esperava-se que fosse útil em imagens com manchas e distribuição de cores característica.
+
+\subsection{Filtros de Gabor}
+
+Os filtros de Gabor foram escolhidos como o descritor não visto em aula. Eles modelam respostas a padrões de textura em diferentes frequências e orientações, capturando estruturas como listras, pelos orientados, transições repetidas e padrões multi-escala. Sua semântica é especialmente ligada a textura orientada.
+
+A implementação converte a imagem para cinza e a redimensiona para 128x128 pixels. Foram usados filtros em 5 frequências e 8 orientações. Para cada resposta, foram extraídos média, desvio padrão e energia, produzindo um vetor de 120 dimensões.
+
+A hipótese para classificação era que Gabor poderia ser um descritor individual forte, porque combina textura, orientação e escala em uma representação relativamente compacta. Para busca, esperava-se que funcionasse bem em pets com padrões de pelagem consistentes, mas que fosse prejudicado quando o fundo tivesse textura dominante.
+
+\section{Resultados Quantitativos}
+
+\subsection{Classificação}
+
+A Tabela~\ref{tab:classification} apresenta os resultados de classificação. A melhor acurácia de teste foi obtida pela combinação GCH+LBP+GLCM+Gabor, com 38,30\%. Entre descritores isolados, o LBP obteve a maior acurácia de teste, com 34,04\%, seguido por GCH e Gabor.
+
+\begin{table}[H]
+\centering
+\caption{Resultados de classificação por descritor e combinação.}
+\label{tab:classification}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Método & Modelo & Dim. & Val. Acc & Test Acc & F1 Macro & F1 Pond. \\
+\midrule
+GCH & RBF, C=10 & 256 & 0.3191 & 0.2766 & 0.1818 & 0.2145 \\
+LBP & RBF, C=10 & 256 & 0.2553 & 0.3404 & 0.2289 & 0.2624 \\
+GLCM & RBF, C=10 & 10 & 0.1915 & 0.1915 & 0.1004 & 0.1340 \\
+HOG & RBF, C=10 & 1764 & 0.2128 & 0.1277 & 0.0430 & 0.0634 \\
+Correlograma & RBF, C=10 & 48 & 0.1489 & 0.1489 & 0.1044 & 0.1284 \\
+Gabor & RBF, C=10 & 120 & 0.2340 & 0.2553 & 0.1402 & 0.1948 \\
+GCH+LBP & Linear, C=0.1 & 512 & 0.3404 & 0.3404 & 0.2415 & 0.2671 \\
+GCH+GLCM & Linear, C=0.1 & 266 & 0.3191 & 0.2979 & 0.2430 & 0.2638 \\
+GCH+LBP+GLCM & Linear, C=0.1 & 522 & 0.3404 & 0.3617 & 0.2660 & 0.2869 \\
+GCH+LBP+GLCM+Gabor & Linear, C=0.1 & 642 & 0.3404 & 0.3830 & 0.2947 & 0.3170 \\
+Todos & Linear, C=0.1 & 2454 & 0.2979 & 0.3404 & 0.1930 & 0.2411 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{confusion_best_individual.png}
+    \caption{Matriz de confusão para o melhor descritor individual.}
+    \label{fig:conf-best-individual}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{confusion_best_combination.png}
+    \caption{Matriz de confusão para a melhor combinação de descritores.}
+    \label{fig:conf-best-combination}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{confusion_gch_baseline.png}
+    \caption{Matriz de confusão para o descritor GCH, usado como referência simples de cor.}
+    \label{fig:conf-gch}
+\end{figure}
+
+\subsection{Busca}
+
+A Tabela~\ref{tab:retrieval} mostra os resultados de busca por similaridade. A melhor configuração combinou GCH, LBP e GLCM, com mAP de 0.1346 e P@1 de 0.2970. A combinação que também inclui Gabor teve desempenho muito próximo, mas ligeiramente inferior em mAP.
+
+\begin{table}[H]
+\centering
+\caption{Resultados de busca por distância euclidiana.}
+\label{tab:retrieval}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Método & Dim. & mAP & P@1 & P@5 & P@10 \\
+\midrule
+GCH & 256 & 0.0997 & 0.2262 & 0.1248 & 0.0940 \\
+LBP & 256 & 0.1183 & 0.2643 & 0.1439 & 0.1125 \\
+GLCM & 10 & 0.0877 & 0.1635 & 0.1003 & 0.0801 \\
+HOG & 1764 & 0.0837 & 0.1662 & 0.0926 & 0.0706 \\
+Correlograma & 48 & 0.0952 & 0.1989 & 0.1117 & 0.0888 \\
+Gabor & 120 & 0.0973 & 0.1907 & 0.1188 & 0.0926 \\
+GCH+LBP & 512 & 0.1327 & 0.2807 & 0.1619 & 0.1294 \\
+GCH+GLCM & 266 & 0.1082 & 0.2534 & 0.1390 & 0.1025 \\
+GCH+LBP+GLCM & 522 & 0.1346 & 0.2970 & 0.1640 & 0.1278 \\
+GCH+LBP+GLCM+Gabor & 642 & 0.1329 & 0.2888 & 0.1668 & 0.1283 \\
+Todos & 2454 & 0.1173 & 0.2561 & 0.1422 & 0.1093 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Bag of Visual Words}
+
+O BoVW foi implementado sem usar OpenCV. A imagem foi dividida em patches densos de 16x16 pixels com passo 16. Para cada patch, foi extraído um histograma local de orientações de gradiente, complementado por média e desvio padrão de intensidade. Os descritores locais foram agrupados por K-Means com \(K=200\), e cada imagem foi representada por um histograma normalizado de visual words.
+
+\begin{table}[H]
+\centering
+\caption{Resultados de busca com BoVW.}
+\label{tab:bovw}
+\begin{tabular}{lrrrrr}
+\toprule
+Método & K & Dim. & mAP & P@1 & P@5/P@10 \\
+\midrule
+BoVW & 200 & 200 & 0.1073 & 0.2262 & 0.1297 / 0.1063 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{bovw_tsne_all.png}
+        \caption{t-SNE com todas as classes.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{bovw_umap_all.png}
+        \caption{UMAP com todas as classes.}
+    \end{subfigure}
+    \caption{Projeções 2D dos histogramas BoVW.}
+    \label{fig:bovw-projections}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{bovw_tsne_top_classes.png}
+    \caption{t-SNE dos histogramas BoVW destacando as classes mais frequentes.}
+    \label{fig:bovw-top}
+\end{figure}
+
+\section{Análise por Descritor}
+
+\subsection{GCH}
+
+O GCH confirmou parcialmente sua hipótese inicial. Ele obteve 27,66\% de acurácia no teste de classificação e mAP de 0.0997 na busca. Esses valores indicam que cor é uma pista relevante, mas insuficiente para identificação individual de pets. A P@1 de 0.2262 mostra que, em uma fração significativa das consultas, a imagem mais próxima tem o mesmo pet, mas a representação global confunde casos em que fundo e iluminação têm forte peso no histograma.
+
+Nas combinações, o GCH foi importante. Quando combinado com LBP e GLCM, produziu a melhor busca. Isso sugere que a cor ajuda a formar um primeiro agrupamento visual, enquanto textura refina a distinção entre imagens de cores próximas.
+
+\subsection{LBP}
+
+O LBP teve o melhor desempenho individual na classificação, com 34,04\% de acurácia de teste, e também foi o melhor descritor isolado na busca, com mAP de 0.1183. Esse resultado foi mais forte do que o esperado para um descritor local simples. Uma explicação provável é que a textura da pelagem, junto com padrões locais de fundo e iluminação, cria uma assinatura visual recorrente para algumas classes.
+
+A hipótese de complementaridade com cor também se confirmou. GCH+LBP melhorou a busca em relação a ambos isoladamente, chegando a mAP de 0.1327. A combinação com GLCM melhorou ainda mais, indicando que textura local e textura estatística capturam aspectos diferentes da imagem.
+
+\subsection{GLCM/Haralick}
+
+O GLCM teve desempenho modesto isoladamente: 19,15\% de acurácia e mAP de 0.0877. Isso mostra que suas estatísticas globais de textura são compactas demais para separar muitas classes individuais. Ainda assim, o descritor foi útil quando combinado com GCH e LBP.
+
+O ganho observado em GCH+LBP+GLCM indica que o GLCM adiciona informação complementar. Mesmo com apenas 10 dimensões, ele melhora a combinação de cor e textura local, provavelmente por capturar regularidade e contraste em escala mais global.
+
+\subsection{HOG}
+
+O HOG foi o descritor individual com pior acurácia de teste, 12,77\%, e também teve o pior mAP, 0.0837. A hipótese de fragilidade por variação de pose e alta dimensionalidade se confirmou. Embora o HOG represente forma e bordas, a base não possui enquadramento controlado: o mesmo pet pode aparecer deitado, em pé, parcialmente cortado ou com fundo muito diferente.
+
+Além disso, o HOG tem 1764 dimensões. Na combinação com todos os descritores, a dimensionalidade sobe para 2454 e o desempenho não supera combinações compactas. Isso sugere que adicionar forma de alta dimensão pode diluir sinais úteis quando o número de imagens é pequeno.
+
+\subsection{Correlograma de Cores}
+
+O correlograma obteve 14,89\% de acurácia no teste e mAP de 0.0952. O resultado ficou abaixo do GCH na classificação e próximo dele na busca. A hipótese de que informação espacial de cor poderia ajudar não se confirmou de forma forte.
+
+Uma possível causa é a decisão de usar apenas o canal de matiz. Essa escolha torna o vetor compacto, mas remove informação de saturação e brilho. Além disso, padrões espaciais de cor mudam bastante com pose, recorte e fundo. Assim, o ganho de espacialidade não compensou a perda de informação cromática completa.
+
+\subsection{Gabor}
+
+O Gabor teve acurácia individual de 25,53\% e mAP de 0.0973. Embora não tenha sido o melhor descritor isolado, ele foi decisivo na melhor combinação de classificação. A combinação GCH+LBP+GLCM+Gabor alcançou 38,30\% de acurácia, superando GCH+LBP+GLCM.
+
+Isso indica que filtros de Gabor capturam textura orientada complementar. O descritor não foi dominante sozinho, mas acrescentou informação útil quando combinado com cor e outras texturas. Na busca, porém, sua adição não melhorou o mAP em relação a GCH+LBP+GLCM, sugerindo que a distância euclidiana no espaço combinado é mais sensível à inclusão de blocos adicionais.
+
+\section{Análise Comparativa e Estudos de Caso}
+
+Os resultados mostram uma diferença importante entre classificação e busca. Na classificação, a melhor combinação inclui Gabor, sugerindo que o classificador consegue aproveitar a textura orientada como informação adicional. Na busca, a melhor combinação é GCH+LBP+GLCM, sem Gabor. Isso indica que o melhor espaço para um classificador supervisionado não é necessariamente o melhor espaço para vizinhança euclidiana.
+
+Outro resultado relevante é que a combinação de todos os descritores não foi a melhor. Ela alcançou 34,04\% de acurácia e mAP de 0.1173, ficando abaixo de combinações menores. Esse comportamento é consistente com o problema da alta dimensionalidade, especialmente pela inclusão do HOG. Em bases pequenas, vetores grandes podem introduzir ruído e prejudicar a distância euclidiana.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{best_success_1.png}
+    \caption{Exemplo de busca bem-sucedida: os primeiros retornos mantêm forte semelhança visual com a consulta.}
+    \label{fig:success1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{best_success_2.png}
+    \caption{Segundo exemplo de busca bem-sucedida, mostrando consistência visual entre consulta e retornos corretos.}
+    \label{fig:success2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{best_failure_1.png}
+    \caption{Exemplo de falha de busca: imagens visualmente próximas em cor, textura ou fundo podem pertencer a classes diferentes.}
+    \label{fig:failure1}
+\end{figure}
+
+Nos casos de sucesso, observa-se que a combinação de cor e textura consegue recuperar imagens em que o pet aparece com pelagem e contexto visual semelhantes. Nos casos de falha, os erros são explicáveis pela natureza dos descritores: eles não reconhecem semanticamente o animal, mas comparam padrões visuais. Assim, um pet diferente com cor, textura ou fundo parecido pode aparecer acima de imagens corretas mais diferentes em pose ou iluminação.
+
+\section{Hipóteses sobre a Distribuição BoVW}
+
+As projeções BoVW mostram uma distribuição com sobreposição considerável entre classes. Isso é coerente com o mAP de 0.1073, que fica abaixo da melhor combinação global. Como as visual words foram construídas a partir de patches densos de gradiente, elas descrevem padrões locais de orientação e intensidade, mas não incorporam cor diretamente. Essa limitação reduz a capacidade de separar pets cuja identidade depende muito da pelagem e da coloração.
+
+Mesmo assim, a projeção não é completamente aleatória. Algumas regiões mostram pequenos agrupamentos, o que sugere que o BoVW captura recorrências locais de textura, pose ou fundo. Na visualização com classes mais frequentes, é possível observar que algumas classes aparecem mais concentradas do que outras. Uma hipótese é que pets com muitas fotos em ambientes semelhantes geram histogramas de visual words mais consistentes, enquanto pets fotografados em poses e fundos variados se espalham mais.
+
+Comparando t-SNE e UMAP, as duas projeções reforçam a mesma conclusão: há estrutura local, mas não há separação limpa entre a maioria dos pets. Portanto, o BoVW implementado é útil como representação adicional e atende ao objetivo experimental, mas não supera as melhores combinações de descritores globais.
+
+\section{Conclusão}
+
+O trabalho implementou e avaliou um sistema completo de busca e classificação de animais de estimação usando descritores clássicos. Foram extraídos seis descritores para todas as imagens, incluindo Gabor como descritor não visto em aula. Os descritores foram avaliados individualmente e em combinações nas tarefas de classificação e busca, e também foi implementado um método Bag of Visual Words com visualizações em t-SNE e UMAP.
+
+Na classificação, a melhor configuração foi GCH+LBP+GLCM+Gabor, com 38,30\% de acurácia no teste. Na busca, a melhor configuração foi GCH+LBP+GLCM, com mAP de 0.1346 e P@1 de 0.2970. Esses resultados indicam que cor e textura são as pistas mais importantes na base, enquanto forma por HOG foi menos confiável devido à variação de pose e ao alto número de dimensões.
+
+O BoVW obteve mAP de 0.1073 e P@1 de 0.2262. Embora competitivo com alguns descritores isolados, ele ficou abaixo das melhores combinações globais. As visualizações confirmam uma distribuição com agrupamentos locais, mas forte sobreposição entre classes.
+
+Como limitações, a base possui poucas imagens por classe e grande variação de captura. Além disso, descritores clássicos comparam propriedades visuais de baixo nível e não reconhecem semanticamente o pet. Como trabalhos futuros, seria possível avaliar redução de dimensionalidade antes da classificação, testar descritores locais mais ricos e comparar os resultados com características extraídas de redes neurais pré-treinadas.
+
+\end{document}

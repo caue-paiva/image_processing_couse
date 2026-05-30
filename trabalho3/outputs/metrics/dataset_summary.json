@@ -1,0 +1,16 @@
+{
+  "total_images": 367,
+  "total_classes": 43,
+  "min_images_per_class": 1,
+  "max_images_per_class": 20,
+  "classes_lt_3": [
+    "de_bruno_1",
+    "de_bruno_2",
+    "de_bruno_3",
+    "de_bruno_4",
+    "de_bruno_5"
+  ],
+  "images_lt_3": 5,
+  "classification_classes": 38,
+  "classification_images": 362
+}
