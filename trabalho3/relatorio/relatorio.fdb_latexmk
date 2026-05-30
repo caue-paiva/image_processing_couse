@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1780168958.23931 "relatorio/relatorio.tex" "relatorio/relatorio.pdf" "relatorio" 1780168959.82378 0
+["pdflatex"] 1780170842.80606 "relatorio/relatorio.tex" "relatorio/relatorio.pdf" "relatorio" 1780170844.38092 0
   ".cache/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1095.600pk" 1780168912.68303 28952 123046273b98789e5530650cf4736fb7 ""
   ".cache/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk" 1780168910.01529 40112 a58e9ed6a088caec7be33f6dc72feda2 ""
   ".cache/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk" 1780168911.61613 49076 2bd4db5e8c378d6eb7d83035b5e83fbb ""
@@ -110,9 +110,9 @@
   "relatorio/../outputs/retrieval_examples/best_failure_1.png" 1780167876.79852 690316 af66ade8f255205db10b2e12fd986b6d ""
   "relatorio/../outputs/retrieval_examples/best_success_1.png" 1780167876.57029 477959 b79eec687e8e3717d42e08f2901f5ea9 ""
   "relatorio/../outputs/retrieval_examples/best_success_2.png" 1780167876.68271 751663 a1af6af108d8705c84af6364c9944f8a ""
-  "relatorio/relatorio.aux" 1780168959.75326 6977 824739c811a51487056ad28355b365c1 "pdflatex"
-  "relatorio/relatorio.out" 1780168959.75419 3633 63377420f2843633a5eb9af33571710e "pdflatex"
-  "relatorio/relatorio.tex" 1780168933.28872 25281 44071b6b043cd001a879f5892ef5c7c0 ""
+  "relatorio/relatorio.aux" 1780170844.31241 7047 16ffd6cb6cd4b1a47535eea0ab09eb98 "pdflatex"
+  "relatorio/relatorio.out" 1780170844.31367 3633 63377420f2843633a5eb9af33571710e "pdflatex"
+  "relatorio/relatorio.tex" 1780170832.96458 27973 69d1dc6c1960a08b0b6d88f994450063 ""
   (generated)
   "relatorio/relatorio.aux"
   "relatorio/relatorio.log"

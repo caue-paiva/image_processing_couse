@@ -56,11 +56,13 @@ Embora o enunciado mencione 42 animais de estimação, o CSV disponibilizado con
     \label{fig:class-distribution}
 \end{figure}
 
-Para a tarefa de classificação, pets com menos de três fotos foram excluídos, como definido no enunciado. Isso removeu cinco classes com uma imagem cada: \texttt{de\_bruno\_1}, \texttt{de\_bruno\_2}, \texttt{de\_bruno\_3}, \texttt{de\_bruno\_4} e \texttt{de\_bruno\_5}. Assim, a classificação usou 362 imagens de 38 classes. A divisão foi feita em conjuntos separados de treino, validação e teste, buscando a proporção 80\%, 10\% e 10\%. Como há classes pequenas, foi usado um particionamento estratificado manual por classe, garantindo amostras para validação e teste quando possível.
+Para a tarefa de classificação, pets com menos de três fotos foram excluídos, como definido no enunciado. Isso removeu cinco classes com uma imagem cada: \texttt{de\_bruno\_1}, \texttt{de\_bruno\_2}, \texttt{de\_bruno\_3}, \texttt{de\_bruno\_4} e \texttt{de\_bruno\_5}. Assim, a classificação usou 362 imagens de 38 classes. A divisão foi feita em conjuntos separados de treino, validação e teste, buscando a proporção 80\%, 10\% e 10\%. Como há classes pequenas, foi usado um particionamento estratificado manual por classe, garantindo amostras para validação e teste quando possível. O split final ficou com 268 imagens de treino, 47 de validação e 47 de teste.
 
 O classificador escolhido foi uma SVM, com seleção de hiperparâmetros no conjunto de validação. Foram avaliados kernel linear com valores de \(C \in \{0.1, 1, 10\}\) e kernel RBF com \(C \in \{0.1, 1, 10\}\) e \(\gamma \in \{\text{scale}, 0.01, 0.001\}\). A configuração com maior acurácia de validação foi usada para avaliar o conjunto de teste.
 
 Na tarefa de busca, todas as 367 imagens foram usadas. Para cada imagem de consulta, o sistema calcula a distância euclidiana entre o vetor da consulta e os vetores das demais imagens, removendo a própria consulta do ranking. Os resultados foram avaliados por Precision@1, Precision@5, Precision@10 e mean Average Precision (mAP).
+
+Antes de treinar a SVM ou calcular distâncias euclidianas, os vetores foram padronizados. Em combinações de descritores, cada bloco foi normalizado separadamente antes da concatenação. Essa decisão evita que descritores de maior escala numérica ou maior dimensionalidade dominem o classificador e a distância.
 
 \section{Descritores: Semântica, Implementação e Hipóteses}
 
@@ -146,14 +148,14 @@ Todos & Linear, C=0.1 & 2454 & 0.2979 & 0.3404 & 0.1930 & 0.2411 \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{confusion_best_individual.png}
-    \caption{Matriz de confusão para o melhor descritor individual.}
+    \caption{Matriz de confusão para LBP, melhor descritor individual na classificação (Test Acc = 34,04\%).}
     \label{fig:conf-best-individual}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{confusion_best_combination.png}
-    \caption{Matriz de confusão para a melhor combinação de descritores.}
+    \caption{Matriz de confusão para GCH+LBP+GLCM+Gabor, melhor combinação na classificação (Test Acc = 38,30\%).}
     \label{fig:conf-best-combination}
 \end{figure}
 
@@ -163,6 +165,8 @@ Todos & Linear, C=0.1 & 2454 & 0.2979 & 0.3404 & 0.1930 & 0.2411 \\
     \caption{Matriz de confusão para o descritor GCH, usado como referência simples de cor.}
     \label{fig:conf-gch}
 \end{figure}
+
+As matrizes de confusão mostram que a tarefa é difícil porque o conjunto de teste tem poucas imagens por classe. Mesmo nos melhores métodos, várias classes possuem apenas um ou dois exemplos no teste, de modo que poucos erros já deslocam fortemente a acurácia por classe. Ainda assim, a matriz da melhor combinação apresenta mais acertos na diagonal do que a referência GCH, indicando que a união de cor e textura ajuda a reduzir algumas confusões. A matriz do GCH, por sua vez, evidencia a limitação de usar apenas distribuição global de cor: pets visualmente parecidos ou fotografados em fundos semelhantes tendem a ser confundidos.
 
 \subsection{Busca}
 
@@ -194,17 +198,17 @@ Todos & 2454 & 0.1173 & 0.2561 & 0.1422 & 0.1093 \\
 
 \subsection{Bag of Visual Words}
 
-O BoVW foi implementado sem usar OpenCV. A imagem foi dividida em patches densos de 16x16 pixels com passo 16. Para cada patch, foi extraído um histograma local de orientações de gradiente, complementado por média e desvio padrão de intensidade. Os descritores locais foram agrupados por K-Means com \(K=200\), e cada imagem foi representada por um histograma normalizado de visual words.
+O BoVW foi implementado com descritores locais densos calculados diretamente a partir de gradientes. A imagem foi dividida em patches de 16x16 pixels com passo 16. Para cada patch, foi extraído um histograma local de orientações de gradiente, complementado por média e desvio padrão de intensidade. Os descritores locais foram agrupados por K-Means com \(K=200\), e cada imagem foi representada por um histograma normalizado de visual words.
 
 \begin{table}[H]
 \centering
 \caption{Resultados de busca com BoVW.}
 \label{tab:bovw}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-Método & K & Dim. & mAP & P@1 & P@5/P@10 \\
+Método & K & Dim. & mAP & P@1 & P@5 & P@10 \\
 \midrule
-BoVW & 200 & 200 & 0.1073 & 0.2262 & 0.1297 / 0.1063 \\
+BoVW & 200 & 200 & 0.1073 & 0.2262 & 0.1297 & 0.1063 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -280,25 +284,29 @@ Outro resultado relevante é que a combinação de todos os descritores não foi
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{best_success_1.png}
-    \caption{Exemplo de busca bem-sucedida: os primeiros retornos mantêm forte semelhança visual com a consulta.}
+    \caption{Exemplo de busca bem-sucedida com GCH+LBP+GLCM para a consulta da classe \texttt{kyara}.}
     \label{fig:success1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{best_success_2.png}
-    \caption{Segundo exemplo de busca bem-sucedida, mostrando consistência visual entre consulta e retornos corretos.}
+    \caption{Segundo exemplo de busca bem-sucedida com GCH+LBP+GLCM para a consulta da classe \texttt{nina}.}
     \label{fig:success2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{best_failure_1.png}
-    \caption{Exemplo de falha de busca: imagens visualmente próximas em cor, textura ou fundo podem pertencer a classes diferentes.}
+    \caption{Exemplo de falha de busca com GCH+LBP+GLCM para a consulta da classe \texttt{simba}.}
     \label{fig:failure1}
 \end{figure}
 
-Nos casos de sucesso, observa-se que a combinação de cor e textura consegue recuperar imagens em que o pet aparece com pelagem e contexto visual semelhantes. Nos casos de falha, os erros são explicáveis pela natureza dos descritores: eles não reconhecem semanticamente o animal, mas comparam padrões visuais. Assim, um pet diferente com cor, textura ou fundo parecido pode aparecer acima de imagens corretas mais diferentes em pose ou iluminação.
+No primeiro caso de sucesso, a consulta de \texttt{kyara} retorna várias imagens do mesmo pet nas primeiras posições. A combinação GCH+LBP+GLCM parece aproveitar simultaneamente a cor predominante, a textura da pelagem e o contexto visual semelhante das imagens. Os erros restantes aparecem quando outros animais ou fundos compartilham tons e padrões locais próximos.
+
+No segundo caso, a consulta de \texttt{nina} também mostra bom comportamento: os primeiros resultados preservam a pelagem clara, o enquadramento do corpo e a textura do ambiente externo. A presença de resultados incorretos, como \texttt{tofu} e \texttt{bob}, mostra a limitação do método: imagens de animais diferentes podem ficar próximas quando têm cores claras, pose parecida ou textura de fundo semelhante.
+
+No caso de falha com \texttt{simba}, nenhum dos primeiros resultados pertence à classe correta. A consulta é um gato com textura listrada e fundo escuro, mas os descritores aproximaram imagens com padrões locais, tons ou fundos visualmente parecidos. Esse exemplo evidencia que os descritores não reconhecem a identidade do animal; eles apenas comparam estatísticas visuais de baixo nível.
 
 \section{Hipóteses sobre a Distribuição BoVW}
 
@@ -312,9 +320,11 @@ Comparando t-SNE e UMAP, as duas projeções reforçam a mesma conclusão: há e
 
 O trabalho implementou e avaliou um sistema completo de busca e classificação de animais de estimação usando descritores clássicos. Foram extraídos seis descritores para todas as imagens, incluindo Gabor como descritor não visto em aula. Os descritores foram avaliados individualmente e em combinações nas tarefas de classificação e busca, e também foi implementado um método Bag of Visual Words com visualizações em t-SNE e UMAP.
 
-Na classificação, a melhor configuração foi GCH+LBP+GLCM+Gabor, com 38,30\% de acurácia no teste. Na busca, a melhor configuração foi GCH+LBP+GLCM, com mAP de 0.1346 e P@1 de 0.2970. Esses resultados indicam que cor e textura são as pistas mais importantes na base, enquanto forma por HOG foi menos confiável devido à variação de pose e ao alto número de dimensões.
+A primeira pergunta experimental era quais descritores capturam melhor diferenças entre pets individuais. Os resultados indicam que textura e cor foram mais úteis que forma. O LBP foi o melhor descritor individual tanto em classificação quanto em busca, enquanto o GCH também teve papel importante nas combinações. A hipótese de que HOG seria sensível a pose e enquadramento foi validada: ele teve o pior desempenho individual, apesar de sua alta dimensionalidade.
 
-O BoVW obteve mAP de 0.1073 e P@1 de 0.2262. Embora competitivo com alguns descritores isolados, ele ficou abaixo das melhores combinações globais. As visualizações confirmam uma distribuição com agrupamentos locais, mas forte sobreposição entre classes.
+A segunda pergunta era se combinações seriam mais robustas que descritores isolados. A resposta é positiva, mas com uma ressalva importante. Na classificação, a melhor configuração foi GCH+LBP+GLCM+Gabor, com 38,30\% de acurácia no teste. Na busca, a melhor configuração foi GCH+LBP+GLCM, com mAP de 0.1346 e P@1 de 0.2970. Porém, combinar todos os descritores não foi a melhor escolha, indicando que adicionar vetores de alta dimensionalidade ou pouco alinhados com a tarefa pode introduzir ruído.
+
+A terceira pergunta era se BoVW conseguiria competir com os descritores globais. O BoVW obteve mAP de 0.1073 e P@1 de 0.2262. Esse resultado é competitivo com alguns descritores isolados, mas fica abaixo das melhores combinações globais. As visualizações confirmam uma distribuição com agrupamentos locais, mas forte sobreposição entre classes, validando a hipótese de que as visual words capturam alguma estrutura, mas não separam claramente a identidade dos pets.
 
 Como limitações, a base possui poucas imagens por classe e grande variação de captura. Além disso, descritores clássicos comparam propriedades visuais de baixo nível e não reconhecem semanticamente o pet. Como trabalhos futuros, seria possível avaliar redução de dimensionalidade antes da classificação, testar descritores locais mais ricos e comparar os resultados com características extraídas de redes neurais pré-treinadas.
 

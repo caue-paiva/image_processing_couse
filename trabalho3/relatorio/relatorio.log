@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  30 MAY 2026 16:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  30 MAY 2026 16:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -497,75 +497,75 @@ Package pdftex.def Info: ../outputs/figures/class_distribution.png  used on inp
 ut line 54.
 (pdftex.def)             Requested size: 455.24411pt x 195.10735pt.
  [2 <relatorio/../outputs/figures/class_distribution.png>] [3] [4]
-<../outputs/figures/confusion_best_individual.png, id=130, 794.97pt x 722.7pt>
+<../outputs/figures/confusion_best_individual.png, id=129, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_best_individual.png Graphic file (type png)
 <use ../outputs/figures/confusion_best_individual.png>
 Package pdftex.def Info: ../outputs/figures/confusion_best_individual.png  used
- on input line 148.
+ on input line 150.
 (pdftex.def)             Requested size: 432.48051pt x 393.17447pt.
-<../outputs/figures/confusion_best_combination.png, id=131, 794.97pt x 722.7pt>
+ [5]
+<../outputs/figures/confusion_best_combination.png, id=135, 794.97pt x 722.7pt>
 
 File: ../outputs/figures/confusion_best_combination.png Graphic file (type png)
 
 <use ../outputs/figures/confusion_best_combination.png>
 Package pdftex.def Info: ../outputs/figures/confusion_best_combination.png  use
-d on input line 155.
+d on input line 157.
 (pdftex.def)             Requested size: 432.48051pt x 393.17447pt.
- [5 <relatorio/../outputs/figures/confusion_best_individual.png>]
-<../outputs/figures/confusion_gch_baseline.png, id=138, 794.97pt x 722.7pt>
+ [6 <relatorio/../outputs/figures/confusion_best_individual.png>]
+<../outputs/figures/confusion_gch_baseline.png, id=142, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_gch_baseline.png Graphic file (type png)
 <use ../outputs/figures/confusion_gch_baseline.png>
 Package pdftex.def Info: ../outputs/figures/confusion_gch_baseline.png  used on
- input line 162.
+ input line 164.
 (pdftex.def)             Requested size: 432.48051pt x 393.17447pt.
- [6 <relatorio/../outputs/figures/confusion_best_combination.png>] [7 <relatori
+ [7 <relatorio/../outputs/figures/confusion_best_combination.png>] [8 <relatori
 o/../outputs/figures/confusion_gch_baseline.png>]
-<../outputs/figures/bovw_tsne_all.png, id=154, 650.43pt x 505.89pt>
+<../outputs/figures/bovw_tsne_all.png, id=158, 650.43pt x 505.89pt>
 File: ../outputs/figures/bovw_tsne_all.png Graphic file (type png)
 <use ../outputs/figures/bovw_tsne_all.png>
 Package pdftex.def Info: ../outputs/figures/bovw_tsne_all.png  used on input li
-ne 216.
+ne 220.
 (pdftex.def)             Requested size: 218.51521pt x 169.95471pt.
-<../outputs/figures/bovw_umap_all.png, id=155, 650.43pt x 505.89pt>
+<../outputs/figures/bovw_umap_all.png, id=159, 650.43pt x 505.89pt>
 File: ../outputs/figures/bovw_umap_all.png Graphic file (type png)
 <use ../outputs/figures/bovw_umap_all.png>
 Package pdftex.def Info: ../outputs/figures/bovw_umap_all.png  used on input li
-ne 222.
+ne 226.
 (pdftex.def)             Requested size: 218.51521pt x 169.95471pt.
-<../outputs/figures/bovw_tsne_top_classes.png, id=156, 650.43pt x 505.89pt>
+<../outputs/figures/bovw_tsne_top_classes.png, id=160, 650.43pt x 505.89pt>
 File: ../outputs/figures/bovw_tsne_top_classes.png Graphic file (type png)
 <use ../outputs/figures/bovw_tsne_top_classes.png>
 Package pdftex.def Info: ../outputs/figures/bovw_tsne_top_classes.png  used on 
-input line 231.
+input line 235.
 (pdftex.def)             Requested size: 364.19667pt x 283.2733pt.
-
-[8 <relatorio/../outputs/figures/bovw_tsne_all.png> <relatorio/../outputs/figur
-es/bovw_umap_all.png>] [9 <relatorio/../outputs/figures/bovw_tsne_top_classes.p
-ng>] [10]
-<../outputs/retrieval_examples/best_success_1.png, id=176, 798.182pt x 127.677p
+ [9 <relatorio/../outputs/figures/bovw_tsne_all.png> <relatorio/../outputs/figu
+res/bovw_umap_all.png>] [10 <relatorio/../outputs/figures/bovw_tsne_top_classes
+.png>] [11]
+<../outputs/retrieval_examples/best_success_1.png, id=180, 798.182pt x 127.677p
 t>
 File: ../outputs/retrieval_examples/best_success_1.png Graphic file (type png)
 <use ../outputs/retrieval_examples/best_success_1.png>
 Package pdftex.def Info: ../outputs/retrieval_examples/best_success_1.png  used
- on input line 282.
+ on input line 286.
 (pdftex.def)             Requested size: 455.24411pt x 72.82144pt.
-<../outputs/retrieval_examples/best_success_2.png, id=177, 798.182pt x 127.677p
+<../outputs/retrieval_examples/best_success_2.png, id=181, 798.182pt x 127.677p
 t>
 File: ../outputs/retrieval_examples/best_success_2.png Graphic file (type png)
 <use ../outputs/retrieval_examples/best_success_2.png>
 Package pdftex.def Info: ../outputs/retrieval_examples/best_success_2.png  used
- on input line 289.
+ on input line 293.
 (pdftex.def)             Requested size: 455.24411pt x 72.82144pt.
-<../outputs/retrieval_examples/best_failure_1.png, id=178, 798.182pt x 128.0785
+<../outputs/retrieval_examples/best_failure_1.png, id=182, 798.182pt x 128.0785
 pt>
 File: ../outputs/retrieval_examples/best_failure_1.png Graphic file (type png)
 <use ../outputs/retrieval_examples/best_failure_1.png>
 Package pdftex.def Info: ../outputs/retrieval_examples/best_failure_1.png  used
- on input line 296.
+ on input line 300.
 (pdftex.def)             Requested size: 455.24411pt x 73.05043pt.
- [11 <relatorio/../outputs/retrieval_examples/best_success_1.png> <relatorio/..
+ [12 <relatorio/../outputs/retrieval_examples/best_success_1.png> <relatorio/..
 /outputs/retrieval_examples/best_success_2.png> <relatorio/../outputs/retrieval
-_examples/best_failure_1.png>] [12] (relatorio/relatorio.aux)
+_examples/best_failure_1.png>] [13] [14] (relatorio/relatorio.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -574,9 +574,9 @@ Package rerunfilecheck Info: File `relatorio.out' has not changed.
 (rerunfilecheck)             Checksum: 63377420F2843633A5EB9AF33571710E;3633.
  ) 
 Here is how much of TeX's memory you used:
- 13197 strings out of 469006
- 213329 string characters out of 5454813
- 647617 words of memory out of 5000000
+ 13199 strings out of 469006
+ 213343 string characters out of 5454813
+ 646626 words of memory out of 5000000
  41701 multiletter control sequences out of 15000+600000
  641654 words of font info for 72 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
@@ -596,10 +596,10 @@ appen/ec/ecrm1440.600pk> </Users/caue.lira/Desktop/facul/proc_imagens/trabalho3
 e/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/te
 xlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local
 /texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on relatorio/relatorio.pdf (12 pages, 3773555 bytes).
+Output written on relatorio/relatorio.pdf (14 pages, 3777169 bytes).
 PDF statistics:
- 547 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 48 named destinations out of 1000 (max. 500000)
+ 561 PDF objects out of 1000 (max. 8388607)
+ 211 compressed objects within 3 object streams
+ 50 named destinations out of 1000 (max. 500000)
  235 words of extra memory for PDF output out of 10000 (max. 10000000)
 
