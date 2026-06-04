@@ -32,7 +32,7 @@
 \maketitle
 
 \begin{abstract}
-Este trabalho apresenta um sistema de busca e classificação de animais de estimação baseado em descritores clássicos de imagens. Foram avaliados seis descritores globais ou semiglobais, incluindo um descritor não visto em aula, além de combinações entre eles. A base utilizada contém 367 imagens distribuídas em 43 classes de pets. Para classificação, foram consideradas 362 imagens de 38 classes, removendo pets com menos de três fotos. Para busca, foram usadas todas as 367 imagens. Os experimentos mostram que combinações compactas de cor e textura produzem os melhores resultados, com destaque para GCH+LBP+GLCM+Gabor na classificação e GCH+LBP+GLCM na busca. O método Bag of Visual Words também foi implementado e analisado por métricas de busca e projeções em duas dimensões.
+Este trabalho apresenta um sistema de busca e classificação de animais de estimação baseado em descritores clássicos de imagens. Foram avaliados seis descritores globais ou semiglobais, incluindo um descritor não visto em aula, além de combinações entre eles. A base utilizada contém 367 imagens distribuídas em 43 classes de pets. Para classificação, foram consideradas 362 imagens de 38 classes, removendo pets com menos de três fotos. Para busca, foram usadas todas as 367 imagens. Os experimentos mostram que a combinação de todos os descritores obteve o melhor resultado de classificação, enquanto uma combinação compacta de cor e textura, GCH+LBP+GLCM, produziu o melhor resultado de busca. O método Bag of Visual Words também foi implementado e analisado por métricas de busca e projeções em duas dimensões.
 \end{abstract}
 
 \section{Introdução}
@@ -56,11 +56,11 @@ Embora o enunciado mencione 42 animais de estimação, o CSV disponibilizado con
     \label{fig:class-distribution}
 \end{figure}
 
-Para a tarefa de classificação, pets com menos de três fotos foram excluídos, como definido no enunciado. Isso removeu cinco classes com uma imagem cada: \texttt{de\_bruno\_1}, \texttt{de\_bruno\_2}, \texttt{de\_bruno\_3}, \texttt{de\_bruno\_4} e \texttt{de\_bruno\_5}. Assim, a classificação usou 362 imagens de 38 classes. A divisão foi feita em conjuntos separados de treino, validação e teste, buscando a proporção 80\%, 10\% e 10\%. Como há classes pequenas, foi usado um particionamento estratificado manual por classe, garantindo amostras para validação e teste quando possível. O split final ficou com 268 imagens de treino, 47 de validação e 47 de teste.
+Para a tarefa de classificação, pets com menos de três fotos foram excluídos, como definido no enunciado. Isso removeu cinco classes com uma imagem cada: \texttt{de\_bruno\_1}, \texttt{de\_bruno\_2}, \texttt{de\_bruno\_3}, \texttt{de\_bruno\_4} e \texttt{de\_bruno\_5}. Assim, a classificação usou 362 imagens de 38 classes. A divisão seguiu fielmente a proporção global solicitada de 80\%, 10\% e 10\%, resultando em 290 imagens de treino, 36 de validação e 36 de teste. A separação entre treino e subconjunto temporário foi estratificada por classe; em seguida, o subconjunto temporário foi dividido igualmente em validação e teste. Todos os sorteios usaram semente fixa igual a 42, para tornar os experimentos reprodutíveis. Como validação e teste têm apenas 36 imagens cada em um problema com 38 classes, as métricas desses conjuntos devem ser interpretadas como estimativas de alta variância.
 
 O classificador escolhido foi uma SVM, com seleção de hiperparâmetros no conjunto de validação. Foram avaliados kernel linear com valores de \(C \in \{0.1, 1, 10\}\) e kernel RBF com \(C \in \{0.1, 1, 10\}\) e \(\gamma \in \{\text{scale}, 0.01, 0.001\}\). A configuração com maior acurácia de validação foi usada para avaliar o conjunto de teste.
 
-Na tarefa de busca, todas as 367 imagens foram usadas. Para cada imagem de consulta, o sistema calcula a distância euclidiana entre o vetor da consulta e os vetores das demais imagens, removendo a própria consulta do ranking. Os resultados foram avaliados por Precision@1, Precision@5, Precision@10 e mean Average Precision (mAP).
+Na tarefa de busca, todas as 367 imagens foram usadas. Para cada imagem de consulta, o sistema calcula a distância euclidiana entre o vetor da consulta e os vetores das demais imagens, removendo a própria consulta do ranking. Os resultados foram avaliados por Precision@1, Precision@5, Precision@10 e mean Average Precision (mAP). Como a busca é uma tarefa não supervisionada sobre a própria coleção, não foi aplicado split de treino, validação e teste nessa etapa.
 
 Antes de treinar a SVM ou calcular distâncias euclidianas, os vetores foram padronizados. Em combinações de descritores, cada bloco foi normalizado separadamente antes da concatenação. Essa decisão evita que descritores de maior escala numérica ou maior dimensionalidade dominem o classificador e a distância.
 
@@ -118,7 +118,7 @@ A hipótese para classificação era que Gabor poderia ser um descritor individu
 
 \subsection{Classificação}
 
-A Tabela~\ref{tab:classification} apresenta os resultados de classificação. A melhor acurácia de teste foi obtida pela combinação GCH+LBP+GLCM+Gabor, com 38,30\%. Entre descritores isolados, o LBP obteve a maior acurácia de teste, com 34,04\%, seguido por GCH e Gabor.
+A Tabela~\ref{tab:classification} apresenta os resultados de classificação. A melhor acurácia de teste foi obtida pela combinação de todos os descritores, com 38,89\%. Entre descritores isolados, o HOG obteve a maior acurácia de teste, com 27,78\%, seguido por Gabor e Correlograma. Embora esses valores sejam modestos em termos absolutos, eles estão acima de uma referência aleatória uniforme para 38 classes, que teria acurácia esperada de aproximadamente 2,63\%. Isso indica que os descritores capturam informação discriminante, ainda que insuficiente para resolver completamente a identificação individual dos pets.
 
 \begin{table}[H]
 \centering
@@ -130,17 +130,17 @@ A Tabela~\ref{tab:classification} apresenta os resultados de classificação. A 
 \toprule
 Método & Modelo & Dim. & Val. Acc & Test Acc & F1 Macro & F1 Pond. \\
 \midrule
-GCH & RBF, C=10 & 256 & 0.3191 & 0.2766 & 0.1818 & 0.2145 \\
-LBP & RBF, C=10 & 256 & 0.2553 & 0.3404 & 0.2289 & 0.2624 \\
-GLCM & RBF, C=10 & 10 & 0.1915 & 0.1915 & 0.1004 & 0.1340 \\
-HOG & RBF, C=10 & 1764 & 0.2128 & 0.1277 & 0.0430 & 0.0634 \\
-Correlograma & RBF, C=10 & 48 & 0.1489 & 0.1489 & 0.1044 & 0.1284 \\
-Gabor & RBF, C=10 & 120 & 0.2340 & 0.2553 & 0.1402 & 0.1948 \\
-GCH+LBP & Linear, C=0.1 & 512 & 0.3404 & 0.3404 & 0.2415 & 0.2671 \\
-GCH+GLCM & Linear, C=0.1 & 266 & 0.3191 & 0.2979 & 0.2430 & 0.2638 \\
-GCH+LBP+GLCM & Linear, C=0.1 & 522 & 0.3404 & 0.3617 & 0.2660 & 0.2869 \\
-GCH+LBP+GLCM+Gabor & Linear, C=0.1 & 642 & 0.3404 & 0.3830 & 0.2947 & 0.3170 \\
-Todos & Linear, C=0.1 & 2454 & 0.2979 & 0.3404 & 0.1930 & 0.2411 \\
+GCH & RBF, C=1 & 256 & 0.3333 & 0.1111 & 0.0431 & 0.0671 \\
+LBP & RBF, C=10 & 256 & 0.5556 & 0.1667 & 0.0940 & 0.1213 \\
+GLCM & RBF, C=1 & 10 & 0.2500 & 0.1111 & 0.0766 & 0.1111 \\
+HOG & Linear, C=0.1 & 1764 & 0.4167 & 0.2778 & 0.1963 & 0.2389 \\
+Correlograma & RBF, C=1 & 48 & 0.2500 & 0.1944 & 0.1280 & 0.1843 \\
+Gabor & RBF, C=10, $\gamma=0.01$ & 120 & 0.3056 & 0.2222 & 0.1599 & 0.2378 \\
+GCH+LBP & Linear, C=0.1 & 512 & 0.5000 & 0.2778 & 0.1782 & 0.2176 \\
+GCH+GLCM & RBF, C=10, $\gamma=0.001$ & 266 & 0.3889 & 0.2222 & 0.1453 & 0.1981 \\
+GCH+LBP+GLCM & Linear, C=0.1 & 522 & 0.5000 & 0.2778 & 0.1678 & 0.1963 \\
+GCH+LBP+GLCM+Gabor & Linear, C=0.1 & 642 & 0.4722 & 0.3056 & 0.2261 & 0.2447 \\
+Todos & Linear, C=0.1 & 2454 & 0.5000 & 0.3889 & 0.2610 & 0.3479 \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -148,14 +148,14 @@ Todos & Linear, C=0.1 & 2454 & 0.2979 & 0.3404 & 0.1930 & 0.2411 \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{confusion_best_individual.png}
-    \caption{Matriz de confusão para LBP, melhor descritor individual na classificação (Test Acc = 34,04\%).}
+    \caption{Matriz de confusão para HOG, melhor descritor individual na classificação (Test Acc = 27,78\%).}
     \label{fig:conf-best-individual}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{confusion_best_combination.png}
-    \caption{Matriz de confusão para GCH+LBP+GLCM+Gabor, melhor combinação na classificação (Test Acc = 38,30\%).}
+    \caption{Matriz de confusão para a combinação de todos os descritores, melhor resultado de classificação (Test Acc = 38,89\%).}
     \label{fig:conf-best-combination}
 \end{figure}
 
@@ -166,7 +166,7 @@ Todos & Linear, C=0.1 & 2454 & 0.2979 & 0.3404 & 0.1930 & 0.2411 \\
     \label{fig:conf-gch}
 \end{figure}
 
-As matrizes de confusão mostram que a tarefa é difícil porque o conjunto de teste tem poucas imagens por classe. Mesmo nos melhores métodos, várias classes possuem apenas um ou dois exemplos no teste, de modo que poucos erros já deslocam fortemente a acurácia por classe. Ainda assim, a matriz da melhor combinação apresenta mais acertos na diagonal do que a referência GCH, indicando que a união de cor e textura ajuda a reduzir algumas confusões. A matriz do GCH, por sua vez, evidencia a limitação de usar apenas distribuição global de cor: pets visualmente parecidos ou fotografados em fundos semelhantes tendem a ser confundidos.
+As matrizes de confusão mostram que a tarefa é difícil porque o conjunto de teste tem apenas 36 imagens distribuídas em muitas classes. Mesmo nos melhores métodos, várias classes possuem apenas uma imagem no conjunto de teste, de modo que poucos erros já deslocam fortemente a acurácia por classe. Essa característica também torna a comparação entre descritores sensível ao split: diferenças de uma ou duas imagens classificadas corretamente já alteram a acurácia em vários pontos percentuais. Ainda assim, a matriz da combinação de todos os descritores apresenta mais acertos na diagonal do que a referência GCH, indicando que a união de múltiplas semânticas visuais ajuda a reduzir algumas confusões. A matriz do GCH, por sua vez, evidencia a limitação de usar apenas distribuição global de cor: pets visualmente parecidos ou fotografados em fundos semelhantes tendem a ser confundidos.
 
 \subsection{Busca}
 
@@ -198,7 +198,7 @@ Todos & 2454 & 0.1173 & 0.2561 & 0.1422 & 0.1093 \\
 
 \subsection{Bag of Visual Words}
 
-O BoVW foi implementado com descritores locais densos calculados diretamente a partir de gradientes. A imagem foi dividida em patches de 16x16 pixels com passo 16. Para cada patch, foi extraído um histograma local de orientações de gradiente, complementado por média e desvio padrão de intensidade. Os descritores locais foram agrupados por K-Means com \(K=200\), e cada imagem foi representada por um histograma normalizado de visual words.
+O BoVW foi implementado com descritores locais densos calculados diretamente a partir de gradientes. A imagem foi dividida em patches de 16x16 pixels com passo 16. Para cada patch, foi extraído um histograma local de orientações de gradiente, complementado por média e desvio padrão de intensidade. Os descritores locais foram agrupados por K-Means com \(K=200\), e cada imagem foi representada por um histograma normalizado de visual words. O vocabulário visual foi aprendido de forma não supervisionada sobre a coleção completa usada na busca, seguindo a mesma lógica da avaliação de retrieval: todas as imagens participam da coleção consultável, mas os rótulos não são usados para construir o dicionário.
 
 \begin{table}[H]
 \centering
@@ -212,6 +212,8 @@ BoVW & 200 & 200 & 0.1073 & 0.2262 & 0.1297 & 0.1063 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+Comparado aos descritores globais e semiglobais, o BoVW teve desempenho intermediário. Seu mAP de 0.1073 supera descritores isolados como GLCM, HOG, Correlograma, Gabor e GCH, mas fica abaixo de LBP e das melhores combinações, especialmente GCH+LBP+GLCM. Portanto, o BoVW capturou estrutura visual útil, mas não foi a representação mais discriminante para esta base.
 
 \begin{figure}[H]
     \centering
@@ -241,64 +243,64 @@ BoVW & 200 & 200 & 0.1073 & 0.2262 & 0.1297 & 0.1063 \\
 
 \subsection{GCH}
 
-O GCH confirmou parcialmente sua hipótese inicial. Ele obteve 27,66\% de acurácia no teste de classificação e mAP de 0.0997 na busca. Esses valores indicam que cor é uma pista relevante, mas insuficiente para identificação individual de pets. A P@1 de 0.2262 mostra que, em uma fração significativa das consultas, a imagem mais próxima tem o mesmo pet, mas a representação global confunde casos em que fundo e iluminação têm forte peso no histograma.
+O GCH confirmou parcialmente sua hipótese inicial. Ele obteve apenas 11,11\% de acurácia no teste de classificação, mas alcançou mAP de 0.0997 na busca. Isso indica que a cor isolada não foi suficiente para treinar um classificador robusto no split 80/10/10, mas ainda forneceu alguma informação útil para vizinhança visual. A P@1 de 0.2262 mostra que, em uma fração relevante das consultas, a imagem mais próxima tem o mesmo pet, embora a representação global ainda confunda casos em que fundo e iluminação têm forte peso no histograma.
 
 Nas combinações, o GCH foi importante. Quando combinado com LBP e GLCM, produziu a melhor busca. Isso sugere que a cor ajuda a formar um primeiro agrupamento visual, enquanto textura refina a distinção entre imagens de cores próximas.
 
 \subsection{LBP}
 
-O LBP teve o melhor desempenho individual na classificação, com 34,04\% de acurácia de teste, e também foi o melhor descritor isolado na busca, com mAP de 0.1183. Esse resultado foi mais forte do que o esperado para um descritor local simples. Uma explicação provável é que a textura da pelagem, junto com padrões locais de fundo e iluminação, cria uma assinatura visual recorrente para algumas classes.
+O LBP teve acurácia de teste de 16,67\% na classificação, apesar de ter obtido a maior acurácia de validação entre os descritores individuais. Essa diferença sugere instabilidade causada pelo pequeno número de imagens por classe no conjunto de validação e teste. Na busca, porém, o LBP foi o melhor descritor isolado, com mAP de 0.1183. Uma explicação provável é que a textura da pelagem, junto com padrões locais de fundo e iluminação, cria uma assinatura visual útil para ranqueamento, mesmo que não seja suficiente para classificação supervisionada robusta.
 
 A hipótese de complementaridade com cor também se confirmou. GCH+LBP melhorou a busca em relação a ambos isoladamente, chegando a mAP de 0.1327. A combinação com GLCM melhorou ainda mais, indicando que textura local e textura estatística capturam aspectos diferentes da imagem.
 
 \subsection{GLCM/Haralick}
 
-O GLCM teve desempenho modesto isoladamente: 19,15\% de acurácia e mAP de 0.0877. Isso mostra que suas estatísticas globais de textura são compactas demais para separar muitas classes individuais. Ainda assim, o descritor foi útil quando combinado com GCH e LBP.
+O GLCM teve desempenho baixo isoladamente: 11,11\% de acurácia e mAP de 0.0877. Isso mostra que suas estatísticas globais de textura são compactas demais para separar muitas classes individuais. Ainda assim, o descritor foi útil em algumas combinações, principalmente na busca, onde GCH+LBP+GLCM foi o melhor método.
 
 O ganho observado em GCH+LBP+GLCM indica que o GLCM adiciona informação complementar. Mesmo com apenas 10 dimensões, ele melhora a combinação de cor e textura local, provavelmente por capturar regularidade e contraste em escala mais global.
 
 \subsection{HOG}
 
-O HOG foi o descritor individual com pior acurácia de teste, 12,77\%, e também teve o pior mAP, 0.0837. A hipótese de fragilidade por variação de pose e alta dimensionalidade se confirmou. Embora o HOG represente forma e bordas, a base não possui enquadramento controlado: o mesmo pet pode aparecer deitado, em pé, parcialmente cortado ou com fundo muito diferente.
+O HOG foi o melhor descritor individual na classificação, com 27,78\% de acurácia no teste, mas teve o pior mAP na busca, com 0.0837. Esse contraste mostra que a informação de forma e bordas pode ser explorada pela SVM no conjunto supervisionado, mas não define um bom espaço de vizinhança euclidiana para retrieval. A hipótese de fragilidade por pose continua válida para a busca, pois a base não possui enquadramento controlado: o mesmo pet pode aparecer deitado, em pé, parcialmente cortado ou com fundo muito diferente.
 
-Além disso, o HOG tem 1764 dimensões. Na combinação com todos os descritores, a dimensionalidade sobe para 2454 e o desempenho não supera combinações compactas. Isso sugere que adicionar forma de alta dimensão pode diluir sinais úteis quando o número de imagens é pequeno.
+Além disso, o HOG tem 1764 dimensões. Na classificação, sua inclusão contribuiu para que a combinação de todos os descritores alcançasse o melhor resultado. Na busca, entretanto, a combinação de todos os descritores ficou abaixo de combinações mais compactas, sugerindo que a mesma alta dimensionalidade que ajuda o classificador pode prejudicar a distância euclidiana.
 
 \subsection{Correlograma de Cores}
 
-O correlograma obteve 14,89\% de acurácia no teste e mAP de 0.0952. O resultado ficou abaixo do GCH na classificação e próximo dele na busca. A hipótese de que informação espacial de cor poderia ajudar não se confirmou de forma forte.
+O correlograma obteve 19,44\% de acurácia no teste e mAP de 0.0952. O resultado superou o GCH na classificação, mas ficou próximo dele na busca. A hipótese de que informação espacial de cor poderia ajudar se confirmou apenas parcialmente.
 
 Uma possível causa é a decisão de usar apenas o canal de matiz. Essa escolha torna o vetor compacto, mas remove informação de saturação e brilho. Além disso, padrões espaciais de cor mudam bastante com pose, recorte e fundo. Assim, o ganho de espacialidade não compensou a perda de informação cromática completa.
 
 \subsection{Gabor}
 
-O Gabor teve acurácia individual de 25,53\% e mAP de 0.0973. Embora não tenha sido o melhor descritor isolado, ele foi decisivo na melhor combinação de classificação. A combinação GCH+LBP+GLCM+Gabor alcançou 38,30\% de acurácia, superando GCH+LBP+GLCM.
+O Gabor teve acurácia individual de 22,22\% e mAP de 0.0973. Embora não tenha sido o melhor descritor isolado, ele melhorou a classificação quando combinado com GCH, LBP e GLCM: essa combinação alcançou 30,56\% de acurácia, acima de GCH+LBP+GLCM.
 
 Isso indica que filtros de Gabor capturam textura orientada complementar. O descritor não foi dominante sozinho, mas acrescentou informação útil quando combinado com cor e outras texturas. Na busca, porém, sua adição não melhorou o mAP em relação a GCH+LBP+GLCM, sugerindo que a distância euclidiana no espaço combinado é mais sensível à inclusão de blocos adicionais.
 
-\section{Análise Comparativa e Estudos de Caso}
+\section{Análise Comparativa e Estudos de Caso da Busca por Similaridade}
 
-Os resultados mostram uma diferença importante entre classificação e busca. Na classificação, a melhor combinação inclui Gabor, sugerindo que o classificador consegue aproveitar a textura orientada como informação adicional. Na busca, a melhor combinação é GCH+LBP+GLCM, sem Gabor. Isso indica que o melhor espaço para um classificador supervisionado não é necessariamente o melhor espaço para vizinhança euclidiana.
+Os resultados mostram uma diferença importante entre classificação e busca. Na classificação, a melhor configuração foi a combinação de todos os descritores, sugerindo que a SVM conseguiu aproveitar informação complementar de cor, textura e forma. Na busca, a melhor combinação foi GCH+LBP+GLCM, sem HOG, Correlograma ou Gabor. Isso indica que o melhor espaço para um classificador supervisionado não é necessariamente o melhor espaço para vizinhança euclidiana.
 
-Outro resultado relevante é que a combinação de todos os descritores não foi a melhor. Ela alcançou 34,04\% de acurácia e mAP de 0.1173, ficando abaixo de combinações menores. Esse comportamento é consistente com o problema da alta dimensionalidade, especialmente pela inclusão do HOG. Em bases pequenas, vetores grandes podem introduzir ruído e prejudicar a distância euclidiana.
+Outro resultado relevante é que a combinação de todos os descritores foi a melhor na classificação, com 38,89\% de acurácia, mas não foi a melhor na busca, com mAP de 0.1173. Esse comportamento mostra que alta dimensionalidade e múltiplas semânticas podem beneficiar o classificador supervisionado, mas prejudicar o ranqueamento por distância euclidiana quando há descritores pouco alinhados à noção de similaridade visual.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{best_success_1.png}
-    \caption{Exemplo de busca bem-sucedida com GCH+LBP+GLCM para a consulta da classe \texttt{kyara}.}
+    \caption{Estudo de caso bem-sucedido da busca por similaridade com GCH+LBP+GLCM para a consulta da classe \texttt{kyara}.}
     \label{fig:success1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{best_success_2.png}
-    \caption{Segundo exemplo de busca bem-sucedida com GCH+LBP+GLCM para a consulta da classe \texttt{nina}.}
+    \caption{Segundo estudo de caso bem-sucedido da busca por similaridade com GCH+LBP+GLCM para a consulta da classe \texttt{nina}.}
     \label{fig:success2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{best_failure_1.png}
-    \caption{Exemplo de falha de busca com GCH+LBP+GLCM para a consulta da classe \texttt{simba}.}
+    \caption{Estudo de caso de falha da busca por similaridade com GCH+LBP+GLCM para a consulta da classe \texttt{simba}.}
     \label{fig:failure1}
 \end{figure}
 
@@ -306,7 +308,7 @@ No primeiro caso de sucesso, a consulta de \texttt{kyara} retorna várias imagen
 
 No segundo caso, a consulta de \texttt{nina} também mostra bom comportamento: os primeiros resultados preservam a pelagem clara, o enquadramento do corpo e a textura do ambiente externo. A presença de resultados incorretos, como \texttt{tofu} e \texttt{bob}, mostra a limitação do método: imagens de animais diferentes podem ficar próximas quando têm cores claras, pose parecida ou textura de fundo semelhante.
 
-No caso de falha com \texttt{simba}, nenhum dos primeiros resultados pertence à classe correta. A consulta é um gato com textura listrada e fundo escuro, mas os descritores aproximaram imagens com padrões locais, tons ou fundos visualmente parecidos. Esse exemplo evidencia que os descritores não reconhecem a identidade do animal; eles apenas comparam estatísticas visuais de baixo nível.
+No caso de falha com \texttt{simba}, nenhum dos primeiros resultados pertence à classe correta. A consulta é um gato com textura listrada e fundo escuro, mas os descritores aproximaram imagens com padrões locais, tons ou fundos visualmente parecidos. Esse estudo de caso evidencia que os descritores não reconhecem a identidade do animal; eles apenas comparam estatísticas visuais de baixo nível.
 
 \section{Hipóteses sobre a Distribuição BoVW}
 
@@ -320,9 +322,9 @@ Comparando t-SNE e UMAP, as duas projeções reforçam a mesma conclusão: há e
 
 O trabalho implementou e avaliou um sistema completo de busca e classificação de animais de estimação usando descritores clássicos. Foram extraídos seis descritores para todas as imagens, incluindo Gabor como descritor não visto em aula. Os descritores foram avaliados individualmente e em combinações nas tarefas de classificação e busca, e também foi implementado um método Bag of Visual Words com visualizações em t-SNE e UMAP.
 
-A primeira pergunta experimental era quais descritores capturam melhor diferenças entre pets individuais. Os resultados indicam que textura e cor foram mais úteis que forma. O LBP foi o melhor descritor individual tanto em classificação quanto em busca, enquanto o GCH também teve papel importante nas combinações. A hipótese de que HOG seria sensível a pose e enquadramento foi validada: ele teve o pior desempenho individual, apesar de sua alta dimensionalidade.
+A primeira pergunta experimental era quais descritores capturam melhor diferenças entre pets individuais. Os resultados dependem da tarefa: HOG foi o melhor descritor individual para classificação, enquanto LBP foi o melhor descritor individual para busca. Assim, forma e bordas ajudaram mais a SVM, enquanto textura local foi mais adequada para ranqueamento por distância euclidiana. A hipótese de que HOG seria sensível a pose e enquadramento se confirmou na busca, onde ele teve o pior mAP.
 
-A segunda pergunta era se combinações seriam mais robustas que descritores isolados. A resposta é positiva, mas com uma ressalva importante. Na classificação, a melhor configuração foi GCH+LBP+GLCM+Gabor, com 38,30\% de acurácia no teste. Na busca, a melhor configuração foi GCH+LBP+GLCM, com mAP de 0.1346 e P@1 de 0.2970. Porém, combinar todos os descritores não foi a melhor escolha, indicando que adicionar vetores de alta dimensionalidade ou pouco alinhados com a tarefa pode introduzir ruído.
+A segunda pergunta era se combinações seriam mais robustas que descritores isolados. A resposta é positiva, mas depende da tarefa. Na classificação, a melhor configuração foi a combinação de todos os descritores, com 38,89\% de acurácia no teste. Na busca, a melhor configuração foi GCH+LBP+GLCM, com mAP de 0.1346 e P@1 de 0.2970. Portanto, combinar descritores melhora o desempenho, mas a combinação ideal para SVM não é a mesma para distância euclidiana.
 
 A terceira pergunta era se BoVW conseguiria competir com os descritores globais. O BoVW obteve mAP de 0.1073 e P@1 de 0.2262. Esse resultado é competitivo com alguns descritores isolados, mas fica abaixo das melhores combinações globais. As visualizações confirmam uma distribuição com agrupamentos locais, mas forte sobreposição entre classes, validando a hipótese de que as visual words capturam alguma estrutura, mas não separam claramente a identidade dos pets.
 

@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import numpy as np
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
+from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 
 import config
@@ -15,29 +16,36 @@ def make_split(records):
     by_class = defaultdict(list)
     for pos, record in enumerate(records):
         by_class[record.class_name].append(pos)
-    rng = np.random.default_rng(config.RANDOM_SEED)
-    train, val, test = [], [], []
     removed = []
+    valid = []
     for cls, idxs in sorted(by_class.items()):
-        idxs = np.array(idxs, dtype=np.int32)
         if len(idxs) < 3:
             removed.append(cls)
-            continue
-        rng.shuffle(idxs)
-        n = len(idxs)
-        n_test = max(1, int(round(0.10 * n)))
-        n_val = max(1, int(round(0.10 * n)))
-        if n - n_test - n_val < 1:
-            n_test, n_val = 1, 1
-        test.extend(idxs[:n_test].tolist())
-        val.extend(idxs[n_test : n_test + n_val].tolist())
-        train.extend(idxs[n_test + n_val :].tolist())
+        else:
+            valid.extend(idxs)
+    valid = np.array(sorted(valid), dtype=np.int32)
+    labels = np.array([records[i].class_name for i in valid], dtype=object)
+    train, temp = train_test_split(
+        valid,
+        train_size=290,
+        test_size=72,
+        random_state=config.RANDOM_SEED,
+        stratify=labels,
+    )
+    val, test = train_test_split(
+        temp,
+        train_size=36,
+        test_size=36,
+        random_state=config.RANDOM_SEED,
+        stratify=None,
+    )
     split = {
-        "train": sorted(train),
-        "val": sorted(val),
-        "test": sorted(test),
+        "train": sorted([int(i) for i in train]),
+        "val": sorted([int(i) for i in val]),
+        "test": sorted([int(i) for i in test]),
         "removed_classes": removed,
         "counts": {"train": len(train), "val": len(val), "test": len(test)},
+        "strategy": "Global 80/10/10: train stratificado com 290 imagens; temporario de 72 imagens dividido em 36 validacao e 36 teste.",
     }
     utils.write_json(config.SPLITS_DIR / "classification_split.json", split)
     return split
@@ -123,4 +131,3 @@ def _write_confusion_figures(matrices):
 
 def _format_params(params):
     return ";".join(f"{k}={v}" for k, v in sorted(params.items()))
-
