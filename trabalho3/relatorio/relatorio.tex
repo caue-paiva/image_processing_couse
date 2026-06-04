@@ -145,6 +145,27 @@ Todos & Linear, C=0.1 & 2454 & 0.5000 & 0.3889 & 0.2610 & 0.3479 \\
 \end{tabular}}
 \end{table}
 
+A Tabela~\ref{tab:confusion-summary} resume as matrizes de confusão dos seis descritores individuais. Ela apresenta o número de acertos na diagonal e as confusões mais frequentes observadas no teste. As matrizes completas de todos os métodos avaliados, incluindo descritores individuais e combinações, podem ser consultadas na \hyperref[sec:confusion-matrices]{seção final de matrizes de confusão}.
+
+\begin{table}[H]
+\centering
+\caption{Resumo das matrizes de confusão dos descritores individuais.}
+\label{tab:confusion-summary}
+\scriptsize
+\begin{tabular}{lrrrp{0.40\textwidth}}
+\toprule
+Descritor & Test Acc & F1 Macro & Acertos & Principais confusões \\
+\midrule
+GCH & 0.1111 & 0.0431 & 4/36 & \texttt{hamtaro}$\rightarrow$\texttt{de\_victor} (2); \texttt{ada\_pipoca}$\rightarrow$\texttt{kefka} (1) \\
+LBP & 0.1667 & 0.0940 & 6/36 & \texttt{ada\_pipoca}$\rightarrow$\texttt{hamtaro} (1); \texttt{alan}$\rightarrow$\texttt{spike} (1) \\
+GLCM & 0.1111 & 0.0766 & 4/36 & \texttt{milka}$\rightarrow$\texttt{hamtaro} (2); \texttt{ada\_pipoca}$\rightarrow$\texttt{luna} (1) \\
+HOG & 0.2778 & 0.1963 & 10/36 & \texttt{hamtaro}$\rightarrow$\texttt{emilia} (3); \texttt{ada\_pipoca}$\rightarrow$\texttt{lulu} (1) \\
+Correlograma & 0.1944 & 0.1280 & 7/36 & \texttt{bob}$\rightarrow$\texttt{de\_victor} (2); \texttt{lulu}$\rightarrow$\texttt{hamtaro} (2) \\
+Gabor & 0.2222 & 0.1599 & 8/36 & \texttt{ada\_pipoca}$\rightarrow$\texttt{hamtaro} (1); \texttt{alan}$\rightarrow$\texttt{kefka} (1) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{confusion_best_individual.png}
@@ -166,7 +187,7 @@ Todos & Linear, C=0.1 & 2454 & 0.5000 & 0.3889 & 0.2610 & 0.3479 \\
     \label{fig:conf-gch}
 \end{figure}
 
-As matrizes de confusão mostram que a tarefa é difícil porque o conjunto de teste tem apenas 36 imagens distribuídas em muitas classes. Mesmo nos melhores métodos, várias classes possuem apenas uma imagem no conjunto de teste, de modo que poucos erros já deslocam fortemente a acurácia por classe. Essa característica também torna a comparação entre descritores sensível ao split: diferenças de uma ou duas imagens classificadas corretamente já alteram a acurácia em vários pontos percentuais. Ainda assim, a matriz da combinação de todos os descritores apresenta mais acertos na diagonal do que a referência GCH, indicando que a união de múltiplas semânticas visuais ajuda a reduzir algumas confusões. A matriz do GCH, por sua vez, evidencia a limitação de usar apenas distribuição global de cor: pets visualmente parecidos ou fotografados em fundos semelhantes tendem a ser confundidos.
+As matrizes de confusão mostram que a tarefa é difícil porque o conjunto de teste tem apenas 36 imagens distribuídas em muitas classes. Mesmo nos melhores métodos, várias classes possuem apenas uma imagem no conjunto de teste, de modo que poucos erros já deslocam fortemente a acurácia por classe. Essa característica também torna a comparação entre descritores sensível ao split: diferenças de uma ou duas imagens classificadas corretamente já alteram a acurácia em vários pontos percentuais. Ainda assim, a matriz da combinação de todos os descritores apresenta mais acertos na diagonal do que a referência GCH, indicando que a união de múltiplas semânticas visuais ajuda a reduzir algumas confusões. A matriz do GCH, por sua vez, evidencia a limitação de usar apenas distribuição global de cor: pets visualmente parecidos ou fotografados em fundos semelhantes tendem a ser confundidos. Para manter a leitura principal concentrada nos resultados mais informativos, as demais matrizes aparecem reunidas na \hyperref[sec:confusion-matrices]{seção de matrizes de confusão por método}.
 
 \subsection{Busca}
 
@@ -261,7 +282,7 @@ O ganho observado em GCH+LBP+GLCM indica que o GLCM adiciona informação comple
 
 \subsection{HOG}
 
-O HOG foi o melhor descritor individual na classificação, com 27,78\% de acurácia no teste, mas teve o pior mAP na busca, com 0.0837. Esse contraste mostra que a informação de forma e bordas pode ser explorada pela SVM no conjunto supervisionado, mas não define um bom espaço de vizinhança euclidiana para retrieval. A hipótese de fragilidade por pose continua válida para a busca, pois a base não possui enquadramento controlado: o mesmo pet pode aparecer deitado, em pé, parcialmente cortado ou com fundo muito diferente.
+Neste split de dados, o HOG obteve a maior acurácia individual na classificação, com 27,78\% de acurácia no teste, mas teve o pior mAP na busca, com 0.0837. Esse contraste mostra que a informação de forma e bordas pode ser explorada pela SVM no conjunto supervisionado, mas não define um bom espaço de vizinhança euclidiana para retrieval. A hipótese de fragilidade por pose continua válida para a busca, pois a base não possui enquadramento controlado: o mesmo pet pode aparecer deitado, em pé, parcialmente cortado ou com fundo muito diferente.
 
 Além disso, o HOG tem 1764 dimensões. Na classificação, sua inclusão contribuiu para que a combinação de todos os descritores alcançasse o melhor resultado. Na busca, entretanto, a combinação de todos os descritores ficou abaixo de combinações mais compactas, sugerindo que a mesma alta dimensionalidade que ajuda o classificador pode prejudicar a distância euclidiana.
 
@@ -324,10 +345,93 @@ O trabalho implementou e avaliou um sistema completo de busca e classificação 
 
 A primeira pergunta experimental era quais descritores capturam melhor diferenças entre pets individuais. Os resultados dependem da tarefa: HOG foi o melhor descritor individual para classificação, enquanto LBP foi o melhor descritor individual para busca. Assim, forma e bordas ajudaram mais a SVM, enquanto textura local foi mais adequada para ranqueamento por distância euclidiana. A hipótese de que HOG seria sensível a pose e enquadramento se confirmou na busca, onde ele teve o pior mAP.
 
-A segunda pergunta era se combinações seriam mais robustas que descritores isolados. A resposta é positiva, mas depende da tarefa. Na classificação, a melhor configuração foi a combinação de todos os descritores, com 38,89\% de acurácia no teste. Na busca, a melhor configuração foi GCH+LBP+GLCM, com mAP de 0.1346 e P@1 de 0.2970. Portanto, combinar descritores melhora o desempenho, mas a combinação ideal para SVM não é a mesma para distância euclidiana.
+A segunda pergunta era se combinações seriam mais robustas que descritores isolados. A resposta é positiva, mas depende da tarefa. Na classificação, a melhor configuração foi a combinação de todos os descritores, com 38,89\% de acurácia no teste. Na busca, a melhor configuração foi GCH+LBP+GLCM, com mAP de 0.1346 e P@1 de 0.2970. Portanto, as melhores combinações superaram os descritores isolados em alguns cenários, mas a combinação ideal para SVM não é a mesma para distância euclidiana.
 
 A terceira pergunta era se BoVW conseguiria competir com os descritores globais. O BoVW obteve mAP de 0.1073 e P@1 de 0.2262. Esse resultado é competitivo com alguns descritores isolados, mas fica abaixo das melhores combinações globais. As visualizações confirmam uma distribuição com agrupamentos locais, mas forte sobreposição entre classes, validando a hipótese de que as visual words capturam alguma estrutura, mas não separam claramente a identidade dos pets.
 
 Como limitações, a base possui poucas imagens por classe e grande variação de captura. Além disso, descritores clássicos comparam propriedades visuais de baixo nível e não reconhecem semanticamente o pet. Como trabalhos futuros, seria possível avaliar redução de dimensionalidade antes da classificação, testar descritores locais mais ricos e comparar os resultados com características extraídas de redes neurais pré-treinadas.
+
+\clearpage
+\section{Matrizes de Confusão por Método}
+\label{sec:confusion-matrices}
+
+Esta seção reúne as matrizes de confusão completas dos métodos avaliados na classificação. As figuras complementam a Tabela~\ref{tab:confusion-summary}: a tabela resume os padrões principais, enquanto as matrizes abaixo permitem verificar a distribuição completa de acertos e erros por classe.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_gch.png}
+    \caption{Matriz de confusão completa para GCH.}
+    \label{fig:confusion-gch-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_lbp.png}
+    \caption{Matriz de confusão completa para LBP.}
+    \label{fig:confusion-lbp-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_glcm.png}
+    \caption{Matriz de confusão completa para GLCM.}
+    \label{fig:confusion-glcm-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_hog.png}
+    \caption{Matriz de confusão completa para HOG.}
+    \label{fig:confusion-hog-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_correlogram.png}
+    \caption{Matriz de confusão completa para Correlograma.}
+    \label{fig:confusion-correlogram-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_gabor.png}
+    \caption{Matriz de confusão completa para Gabor.}
+    \label{fig:confusion-gabor-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_gch_lbp.png}
+    \caption{Matriz de confusão completa para GCH+LBP.}
+    \label{fig:confusion-gch-lbp-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_gch_glcm.png}
+    \caption{Matriz de confusão completa para GCH+GLCM.}
+    \label{fig:confusion-gch-glcm-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_gch_lbp_glcm.png}
+    \caption{Matriz de confusão completa para GCH+LBP+GLCM.}
+    \label{fig:confusion-gch-lbp-glcm-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_gch_lbp_glcm_gabor.png}
+    \caption{Matriz de confusão completa para GCH+LBP+GLCM+Gabor.}
+    \label{fig:confusion-gch-lbp-glcm-gabor-full}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{confusion_all.png}
+    \caption{Matriz de confusão completa para a combinação de todos os descritores.}
+    \label{fig:confusion-all-full}
+\end{figure}
 
 \end{document}

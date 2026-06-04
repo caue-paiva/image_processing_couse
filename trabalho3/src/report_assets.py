@@ -7,6 +7,7 @@ def build_report_summary():
     sections = ["# Artefatos para o relatorio\n"]
     for title, path in [
         ("Classificacao", config.METRICS_DIR / "classification_results.md"),
+        ("Resumo das matrizes de confusao", config.METRICS_DIR / "confusion_summary.md"),
         ("Busca", config.METRICS_DIR / "retrieval_results.md"),
         ("BoVW", config.METRICS_DIR / "bovw_results.md"),
     ]:
@@ -22,6 +23,17 @@ def build_report_summary():
         "confusion_best_individual.png",
         "confusion_best_combination.png",
         "confusion_gch_baseline.png",
+        "confusion_gch.png",
+        "confusion_lbp.png",
+        "confusion_glcm.png",
+        "confusion_hog.png",
+        "confusion_correlogram.png",
+        "confusion_gabor.png",
+        "confusion_gch_lbp.png",
+        "confusion_gch_glcm.png",
+        "confusion_gch_lbp_glcm.png",
+        "confusion_gch_lbp_glcm_gabor.png",
+        "confusion_all.png",
         "bovw_tsne_all.png",
         "bovw_umap_all.png",
         "bovw_tsne_top_classes.png",

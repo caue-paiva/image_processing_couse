@@ -95,6 +95,7 @@ def run_classification(records, fast=False):
             "matrix": confusion_matrix(y_test, pred_test, labels=labels),
             "labels": labels,
             "test_acc": test_acc,
+            "f1_macro": f1_macro,
             "is_individual": len(desc_names) == 1,
         }
         print(f"classificacao {combo_name}: val={best['val_acc']:.3f} test={test_acc:.3f}")
@@ -102,10 +103,18 @@ def run_classification(records, fast=False):
     utils.write_csv(config.METRICS_DIR / "classification_results.csv", rows, fieldnames)
     (config.METRICS_DIR / "classification_results.md").write_text(utils.markdown_table(rows, fieldnames), encoding="utf-8")
     _write_confusion_figures(matrices)
+    _write_confusion_summary(matrices)
     return rows
 
 
 def _write_confusion_figures(matrices):
+    for method, data in matrices.items():
+        visualization.plot_confusion(
+            data["matrix"],
+            data["labels"],
+            config.FIGURES_DIR / f"confusion_{_safe_name(method)}.png",
+            f"Matriz de confusao - {method}",
+        )
     if "gch" in matrices:
         visualization.plot_confusion(
             matrices["gch"]["matrix"],
@@ -127,6 +136,43 @@ def _write_confusion_figures(matrices):
         config.FIGURES_DIR / "confusion_best_combination.png",
         "Matriz de confusao - melhor combinacao",
     )
+
+
+def _write_confusion_summary(matrices):
+    rows = []
+    for method, data in matrices.items():
+        if not data["is_individual"]:
+            continue
+        matrix = data["matrix"]
+        total = int(matrix.sum())
+        correct = int(np.trace(matrix))
+        rows.append({
+            "method": method,
+            "test_acc": f"{data['test_acc']:.4f}",
+            "f1_macro": f"{data['f1_macro']:.4f}",
+            "correct": correct,
+            "total": total,
+            "top_confusions": _top_confusions(matrix, data["labels"]),
+        })
+    fieldnames = ["method", "test_acc", "f1_macro", "correct", "total", "top_confusions"]
+    utils.write_csv(config.METRICS_DIR / "confusion_summary.csv", rows, fieldnames)
+    (config.METRICS_DIR / "confusion_summary.md").write_text(utils.markdown_table(rows, fieldnames), encoding="utf-8")
+
+
+def _top_confusions(matrix, labels, limit=3):
+    items = []
+    for real_idx, pred_idx in np.argwhere(matrix > 0):
+        if real_idx == pred_idx:
+            continue
+        items.append((int(matrix[real_idx, pred_idx]), labels[real_idx], labels[pred_idx]))
+    if not items:
+        return "sem confusoes"
+    items.sort(key=lambda item: (-item[0], item[1], item[2]))
+    return "; ".join(f"{real}->{pred} ({count})" for count, real, pred in items[:limit])
+
+
+def _safe_name(name):
+    return name.replace("+", "_").replace(" ", "_")
 
 
 def _format_params(params):
