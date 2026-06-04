@@ -24,7 +24,7 @@
 }
 
 \title{Sistema de Busca e Classificação de Animais de Estimação}
-\author{Caue Lira}
+\author{Cauê Paiva Lira - 14675416}
 \date{\today}
 
 \begin{document}
@@ -37,7 +37,7 @@ Este trabalho apresenta um sistema de busca e classificação de animais de esti
 
 \section{Introdução}
 
-A identificação visual de animais de estimação é uma tarefa difícil para descritores clássicos, pois diferentes imagens do mesmo pet podem variar em pose, iluminação, enquadramento, fundo e escala. Ao mesmo tempo, pets diferentes podem compartilhar cores de pelagem, texturas e formas muito parecidas. Neste trabalho, o objetivo é investigar até que ponto descritores de cor, textura e forma conseguem representar características úteis para duas tarefas: classificação do pet e busca por imagens similares.
+A identificação visual de animais de estimação é uma tarefa difícil para descritores clássicos, pois diferentes imagens do mesmo pet podem variar em pose, iluminação, enquadramento, fundo e escala. Ao mesmo tempo, pets diferentes podem compartilhar cores de pelagem, texturas e formas muito parecidas. Neste trabalho, o objetivo é investigar até que ponto descritores de cor, textura e forma conseguem representar características úteis para duas tarefas: \textbf{classificação do pet} e \textbf{busca por imagens similares}.
 
 O estudo foi organizado em torno de três perguntas experimentais. Primeiro, quais tipos de descritores capturam melhor as diferenças entre pets individuais? Segundo, combinações de descritores são mais robustas do que descritores isolados? Terceiro, uma representação por Bag of Visual Words (BoVW) consegue competir com os descritores globais usados diretamente?
 
@@ -145,7 +145,7 @@ Todos & Linear, C=0.1 & 2454 & 0.5000 & 0.3889 & 0.2610 & 0.3479 \\
 \end{tabular}}
 \end{table}
 
-A Tabela~\ref{tab:confusion-summary} resume as matrizes de confusão dos seis descritores individuais. Ela apresenta o número de acertos na diagonal e as confusões mais frequentes observadas no teste. As matrizes completas de todos os métodos avaliados, incluindo descritores individuais e combinações, podem ser consultadas na \hyperref[sec:confusion-matrices]{seção final de matrizes de confusão}.
+A Tabela~\ref{tab:confusion-summary} resume as matrizes de confusão dos seis descritores individuais. Ela apresenta o número de acertos na diagonal e as confusões mais frequentes observadas no teste. As matrizes de GCH, HOG e da combinação de todos os descritores aparecem a seguir no corpo principal. As demais matrizes completas podem ser consultadas na \hyperref[sec:confusion-matrices]{seção final de matrizes complementares}.
 
 \begin{table}[H]
 \centering
@@ -187,7 +187,7 @@ Gabor & 0.2222 & 0.1599 & 8/36 & \texttt{ada\_pipoca}$\rightarrow$\texttt{hamtar
     \label{fig:conf-gch}
 \end{figure}
 
-As matrizes de confusão mostram que a tarefa é difícil porque o conjunto de teste tem apenas 36 imagens distribuídas em muitas classes. Mesmo nos melhores métodos, várias classes possuem apenas uma imagem no conjunto de teste, de modo que poucos erros já deslocam fortemente a acurácia por classe. Essa característica também torna a comparação entre descritores sensível ao split: diferenças de uma ou duas imagens classificadas corretamente já alteram a acurácia em vários pontos percentuais. Ainda assim, a matriz da combinação de todos os descritores apresenta mais acertos na diagonal do que a referência GCH, indicando que a união de múltiplas semânticas visuais ajuda a reduzir algumas confusões. A matriz do GCH, por sua vez, evidencia a limitação de usar apenas distribuição global de cor: pets visualmente parecidos ou fotografados em fundos semelhantes tendem a ser confundidos. Para manter a leitura principal concentrada nos resultados mais informativos, as demais matrizes aparecem reunidas na \hyperref[sec:confusion-matrices]{seção de matrizes de confusão por método}.
+As matrizes de confusão mostram que a tarefa é difícil porque o conjunto de teste tem apenas 36 imagens distribuídas em muitas classes. Mesmo nos melhores métodos, várias classes possuem apenas uma imagem no conjunto de teste, de modo que poucos erros já deslocam fortemente a acurácia por classe. Essa característica também torna a comparação entre descritores sensível ao split: diferenças de uma ou duas imagens classificadas corretamente já alteram a acurácia em vários pontos percentuais. Ainda assim, a matriz da combinação de todos os descritores apresenta mais acertos na diagonal do que a referência GCH, indicando que a união de múltiplas semânticas visuais ajuda a reduzir algumas confusões. A matriz do GCH, por sua vez, evidencia a limitação de usar apenas distribuição global de cor: pets visualmente parecidos ou fotografados em fundos semelhantes tendem a ser confundidos. Para manter a leitura principal concentrada nos resultados mais informativos, as matrizes complementares aparecem reunidas na \hyperref[sec:confusion-matrices]{seção final}.
 
 \subsection{Busca}
 
@@ -352,17 +352,10 @@ A terceira pergunta era se BoVW conseguiria competir com os descritores globais.
 Como limitações, a base possui poucas imagens por classe e grande variação de captura. Além disso, descritores clássicos comparam propriedades visuais de baixo nível e não reconhecem semanticamente o pet. Como trabalhos futuros, seria possível avaliar redução de dimensionalidade antes da classificação, testar descritores locais mais ricos e comparar os resultados com características extraídas de redes neurais pré-treinadas.
 
 \clearpage
-\section{Matrizes de Confusão por Método}
+\section{Matrizes de Confusão Complementares}
 \label{sec:confusion-matrices}
 
-Esta seção reúne as matrizes de confusão completas dos métodos avaliados na classificação. As figuras complementam a Tabela~\ref{tab:confusion-summary}: a tabela resume os padrões principais, enquanto as matrizes abaixo permitem verificar a distribuição completa de acertos e erros por classe.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.90\textwidth]{confusion_gch.png}
-    \caption{Matriz de confusão completa para GCH.}
-    \label{fig:confusion-gch-full}
-\end{figure}
+Esta seção reúne as matrizes de confusão completas que não foram exibidas no corpo principal do relatório. As figuras complementam a Tabela~\ref{tab:confusion-summary} e as matrizes já apresentadas para GCH, HOG e para a combinação de todos os descritores, permitindo verificar a distribuição completa de acertos e erros dos demais métodos.
 
 \begin{figure}[H]
     \centering
@@ -376,13 +369,6 @@ Esta seção reúne as matrizes de confusão completas dos métodos avaliados na
     \includegraphics[width=0.90\textwidth]{confusion_glcm.png}
     \caption{Matriz de confusão completa para GLCM.}
     \label{fig:confusion-glcm-full}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.90\textwidth]{confusion_hog.png}
-    \caption{Matriz de confusão completa para HOG.}
-    \label{fig:confusion-hog-full}
 \end{figure}
 
 \begin{figure}[H]
@@ -425,13 +411,6 @@ Esta seção reúne as matrizes de confusão completas dos métodos avaliados na
     \includegraphics[width=0.90\textwidth]{confusion_gch_lbp_glcm_gabor.png}
     \caption{Matriz de confusão completa para GCH+LBP+GLCM+Gabor.}
     \label{fig:confusion-gch-lbp-glcm-gabor-full}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.90\textwidth]{confusion_all.png}
-    \caption{Matriz de confusão completa para a combinação de todos os descritores.}
-    \label{fig:confusion-all-full}
 \end{figure}
 
 \end{document}
