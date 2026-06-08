@@ -1,2 +1,7 @@
 *.png
+*.jpg
 *.zip
+teste/data
+*.csv
+*.npz
+*.pyc

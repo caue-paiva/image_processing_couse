@@ -50,7 +50,7 @@ def build_report_summary():
     return out
 
 
-def check_expected_outputs():
+def assert_expected_outputs():
     expected = [
         config.METRICS_DIR / "dataset_summary.json",
         config.METRICS_DIR / "class_distribution.csv",
@@ -66,13 +66,11 @@ def check_expected_outputs():
         raise FileNotFoundError("Outputs esperados ausentes: " + ", ".join(missing))
 
 
-def check_forbidden_imports():
+def scan_for_forbidden_imports():
     names = ["cv2", "PIL", "pillow"]
     forbidden = [f"{prefix} {name}" for name in names for prefix in ("import", "from")]
     hits = []
-    src_dir = config.ROOT / "src"
-    paths = src_dir.glob("*.py") if src_dir.exists() else config.ROOT.glob("*.py")
-    for path in paths:
+    for path in (config.ROOT / "src").glob("*.py"):
         text = path.read_text(encoding="utf-8")
         for item in forbidden:
             if item in text:

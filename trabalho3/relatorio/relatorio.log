@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  3 JUN 2026 23:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.12)  8 JUN 2026 15:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -521,20 +521,20 @@ Package pdftex.def Info: ../outputs/figures/confusion_gch_baseline.png  used on
 (pdftex.def)             Requested size: 432.48051pt x 393.17447pt.
  [7 <relatorio/../outputs/figures/confusion_best_combination.png>] [8 <relatori
 o/../outputs/figures/confusion_gch_baseline.png>]
-<../outputs/figures/bovw_tsne_all.png, id=174, 650.43pt x 505.89pt>
+<../outputs/figures/bovw_tsne_all.png, id=173, 650.43pt x 505.89pt>
 File: ../outputs/figures/bovw_tsne_all.png Graphic file (type png)
 <use ../outputs/figures/bovw_tsne_all.png>
 Package pdftex.def Info: ../outputs/figures/bovw_tsne_all.png  used on input li
 ne 243.
 (pdftex.def)             Requested size: 218.51521pt x 169.95471pt.
-<../outputs/figures/bovw_umap_all.png, id=175, 650.43pt x 505.89pt>
+<../outputs/figures/bovw_umap_all.png, id=174, 650.43pt x 505.89pt>
 File: ../outputs/figures/bovw_umap_all.png Graphic file (type png)
 <use ../outputs/figures/bovw_umap_all.png>
 Package pdftex.def Info: ../outputs/figures/bovw_umap_all.png  used on input li
 ne 249.
 (pdftex.def)             Requested size: 218.51521pt x 169.95471pt.
  [9]
-<../outputs/figures/bovw_tsne_top_classes.png, id=182, 650.43pt x 505.89pt>
+<../outputs/figures/bovw_tsne_top_classes.png, id=181, 650.43pt x 505.89pt>
 File: ../outputs/figures/bovw_tsne_top_classes.png Graphic file (type png)
 <use ../outputs/figures/bovw_tsne_top_classes.png>
 Package pdftex.def Info: ../outputs/figures/bovw_tsne_top_classes.png  used on 
@@ -543,7 +543,7 @@ input line 258.
  [10 <relatorio/../outputs/figures/bovw_tsne_all.png> <relatorio/../outputs/fig
 ures/bovw_umap_all.png> <relatorio/../outputs/figures/bovw_tsne_top_classes.png
 >] [11]
-<../outputs/retrieval_examples/best_success_1.png, id=196, 798.182pt x 127.677p
+<../outputs/retrieval_examples/best_success_1.png, id=195, 798.182pt x 127.677p
 t>
 File: ../outputs/retrieval_examples/best_success_1.png Graphic file (type png)
 <use ../outputs/retrieval_examples/best_success_1.png>
@@ -556,7 +556,7 @@ Underfull \hbox (badness 7631) in paragraph at lines 310--310
 ri-dade com
  []
 
-<../outputs/retrieval_examples/best_success_2.png, id=197, 798.182pt x 127.677p
+<../outputs/retrieval_examples/best_success_2.png, id=196, 798.182pt x 127.677p
 t>
 File: ../outputs/retrieval_examples/best_success_2.png Graphic file (type png)
 <use ../outputs/retrieval_examples/best_success_2.png>
@@ -564,7 +564,7 @@ Package pdftex.def Info: ../outputs/retrieval_examples/best_success_2.png  used
  on input line 316.
 (pdftex.def)             Requested size: 455.24411pt x 72.82144pt.
 [12 <relatorio/../outputs/retrieval_examples/best_success_1.png>]
-<../outputs/retrieval_examples/best_failure_1.png, id=204, 798.182pt x 128.0785
+<../outputs/retrieval_examples/best_failure_1.png, id=203, 798.182pt x 128.0785
 pt>
 File: ../outputs/retrieval_examples/best_failure_1.png Graphic file (type png)
 <use ../outputs/retrieval_examples/best_failure_1.png>
@@ -573,17 +573,17 @@ Package pdftex.def Info: ../outputs/retrieval_examples/best_failure_1.png  used
 (pdftex.def)             Requested size: 455.24411pt x 73.05043pt.
  [13 <relatorio/../outputs/retrieval_examples/best_success_2.png> <relatorio/..
 /outputs/retrieval_examples/best_failure_1.png>] [14]
-<../outputs/figures/confusion_lbp.png, id=219, 794.97pt x 722.7pt>
+<../outputs/figures/confusion_lbp.png, id=218, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_lbp.png Graphic file (type png)
 <use ../outputs/figures/confusion_lbp.png>
 Package pdftex.def Info: ../outputs/figures/confusion_lbp.png  used on input li
-ne 362.
+ne 364.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
-<../outputs/figures/confusion_glcm.png, id=220, 794.97pt x 722.7pt>
+<../outputs/figures/confusion_glcm.png, id=219, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_glcm.png Graphic file (type png)
 <use ../outputs/figures/confusion_glcm.png>
 Package pdftex.def Info: ../outputs/figures/confusion_glcm.png  used on input l
-ine 369.
+ine 371.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
  [15
 
@@ -592,35 +592,35 @@ ine 369.
 File: ../outputs/figures/confusion_correlogram.png Graphic file (type png)
 <use ../outputs/figures/confusion_correlogram.png>
 Package pdftex.def Info: ../outputs/figures/confusion_correlogram.png  used on 
-input line 376.
+input line 378.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
  [16 <relatorio/../outputs/figures/confusion_glcm.png>]
 <../outputs/figures/confusion_gabor.png, id=234, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_gabor.png Graphic file (type png)
 <use ../outputs/figures/confusion_gabor.png>
 Package pdftex.def Info: ../outputs/figures/confusion_gabor.png  used on input 
-line 383.
+line 385.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
  [17 <relatorio/../outputs/figures/confusion_correlogram.png>]
 <../outputs/figures/confusion_gch_lbp.png, id=241, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_gch_lbp.png Graphic file (type png)
 <use ../outputs/figures/confusion_gch_lbp.png>
 Package pdftex.def Info: ../outputs/figures/confusion_gch_lbp.png  used on inpu
-t line 390.
+t line 392.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
  [18 <relatorio/../outputs/figures/confusion_gabor.png>]
 <../outputs/figures/confusion_gch_glcm.png, id=248, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_gch_glcm.png Graphic file (type png)
 <use ../outputs/figures/confusion_gch_glcm.png>
 Package pdftex.def Info: ../outputs/figures/confusion_gch_glcm.png  used on inp
-ut line 397.
+ut line 399.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
  [19 <relatorio/../outputs/figures/confusion_gch_lbp.png>]
 <../outputs/figures/confusion_gch_lbp_glcm.png, id=256, 794.97pt x 722.7pt>
 File: ../outputs/figures/confusion_gch_lbp_glcm.png Graphic file (type png)
 <use ../outputs/figures/confusion_gch_lbp_glcm.png>
 Package pdftex.def Info: ../outputs/figures/confusion_gch_lbp_glcm.png  used on
- input line 404.
+ input line 406.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
  [20 <relatorio/../outputs/figures/confusion_gch_glcm.png>]
 <../outputs/figures/confusion_gch_lbp_glcm_gabor.png, id=263, 794.97pt x 722.7p
@@ -629,7 +629,7 @@ File: ../outputs/figures/confusion_gch_lbp_glcm_gabor.png Graphic file (type pn
 g)
 <use ../outputs/figures/confusion_gch_lbp_glcm_gabor.png>
 Package pdftex.def Info: ../outputs/figures/confusion_gch_lbp_glcm_gabor.png  u
-sed on input line 411.
+sed on input line 413.
 (pdftex.def)             Requested size: 409.71692pt x 372.47586pt.
  [21 <relatorio/../outputs/figures/confusion_gch_lbp_glcm.png>] [22 <relatorio/
 ../outputs/figures/confusion_gch_lbp_glcm_gabor.png>] (relatorio/relatorio.aux)
@@ -638,16 +638,16 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `relatorio.out' has not changed.
-(rerunfilecheck)             Checksum: DA489094DDE53FF4A793B4979746BC28;4006.
+(rerunfilecheck)             Checksum: EB2CCCF58A8C351FCCFCBD52923944DF;4064.
  ) 
 Here is how much of TeX's memory you used:
- 13305 strings out of 469006
- 217075 string characters out of 5454813
- 653489 words of memory out of 5000000
+ 13306 strings out of 469006
+ 217090 string characters out of 5454813
+ 653502 words of memory out of 5000000
  41787 multiletter control sequences out of 15000+600000
  642970 words of font info for 75 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 75i,11n,79p,1143b,549s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,11n,79p,1139b,549s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/caue.lira/Desktop/facul/proc_imagens/trabalho3/.cache/texmf-var/font
 s/pk/ljfour/jknappen/ec/ectt0800.600pk> </Users/caue.lira/Desktop/facul/proc_im
 agens/trabalho3/.cache/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0800.600pk> </
@@ -671,10 +671,10 @@ ic/amsfonts/cm/cmr10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/p
 ublic/amsfonts/cm/cmr12.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on relatorio/relatorio.pdf (22 pages, 4603239 bytes).
+Output written on relatorio/relatorio.pdf (22 pages, 4607997 bytes).
 PDF statistics:
  757 PDF objects out of 1000 (max. 8388607)
  279 compressed objects within 3 object streams
- 68 named destinations out of 1000 (max. 500000)
+ 69 named destinations out of 1000 (max. 500000)
  283 words of extra memory for PDF output out of 10000 (max. 10000000)
 

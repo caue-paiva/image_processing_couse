@@ -12,7 +12,7 @@ import visualization
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Trabalho 3 de Processamento de Imagens")
+    parser = argparse.ArgumentParser(description="Pipeline do Trabalho 3 de Processamento de Imagens")
     parser.add_argument(
         "command",
         choices=["prepare", "extract", "classify", "retrieve", "bovw", "visualize", "report-assets", "validate", "all"],
@@ -40,10 +40,10 @@ def main():
         visualization.plot_class_distribution(records)
         features.extract_features(records, force=args.force)
     if args.command in ("classify", "all"):
-        _prepare_features(records, args.force)
+        _ensure_features(records, args.force)
         classification.run_classification(records, fast=args.fast)
     if args.command in ("retrieve", "all"):
-        _prepare_features(records, args.force)
+        _ensure_features(records, args.force)
         retrieval.run_retrieval(records, fast=args.fast)
     if args.command in ("bovw", "all"):
         bovw.build_bovw(records, fast=args.fast, force=args.force)
@@ -54,12 +54,12 @@ def main():
     if args.command in ("report-assets", "all"):
         report_assets.build_report_summary()
     if args.command in ("validate", "all"):
-        report_assets.check_forbidden_imports()
-        report_assets.check_expected_outputs()
+        report_assets.scan_for_forbidden_imports()
+        report_assets.assert_expected_outputs()
         print("validacao concluida")
 
 
-def _prepare_features(records, force):
+def _ensure_features(records, force):
     missing = [name for name in config.DESCRIPTORS if not (config.FEATURES_DIR / f"{name}.npz").exists()]
     if missing:
         print(f"features ausentes: {missing}. Extraindo antes da etapa.")

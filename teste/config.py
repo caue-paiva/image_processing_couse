@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-ROOT = SCRIPT_DIR.parent if SCRIPT_DIR.name == "src" else SCRIPT_DIR
+_CODE_DIR = Path(__file__).resolve().parent
+ROOT = _CODE_DIR.parent if _CODE_DIR.name == "src" else _CODE_DIR
 CSV_PATH = ROOT / "pets.csv"
 PETS256_ZIP = ROOT / "pets256.zip"
 PETS_ORIGINAL_ZIP = ROOT / "pets_original.zip"

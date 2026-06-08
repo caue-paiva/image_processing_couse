@@ -1,0 +1,13 @@
+| method | descriptors | dim | best_model | val_acc | test_acc | f1_macro | f1_weighted |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| gch | gch | 256 | C=1.0;gamma=scale;kernel=rbf | 0.3333 | 0.1111 | 0.0431 | 0.0671 |
+| lbp | lbp | 256 | C=10.0;gamma=scale;kernel=rbf | 0.5556 | 0.1667 | 0.0940 | 0.1213 |
+| glcm | glcm | 10 | C=1.0;gamma=scale;kernel=rbf | 0.2500 | 0.1111 | 0.0766 | 0.1111 |
+| hog | hog | 1764 | C=0.1;kernel=linear | 0.4167 | 0.2778 | 0.1963 | 0.2389 |
+| correlogram | correlogram | 48 | C=1.0;gamma=scale;kernel=rbf | 0.2500 | 0.1944 | 0.1280 | 0.1843 |
+| gabor | gabor | 120 | C=10.0;gamma=0.01;kernel=rbf | 0.3056 | 0.2222 | 0.1599 | 0.2378 |
+| gch+lbp | gch+lbp | 512 | C=0.1;kernel=linear | 0.5000 | 0.2778 | 0.1782 | 0.2176 |
+| gch+glcm | gch+glcm | 266 | C=10.0;gamma=0.001;kernel=rbf | 0.3889 | 0.2222 | 0.1453 | 0.1981 |
+| gch+lbp+glcm | gch+lbp+glcm | 522 | C=0.1;kernel=linear | 0.5000 | 0.2778 | 0.1678 | 0.1963 |
+| gch+lbp+glcm+gabor | gch+lbp+glcm+gabor | 642 | C=0.1;kernel=linear | 0.4722 | 0.3056 | 0.2261 | 0.2447 |
+| all | gch+lbp+glcm+hog+correlogram+gabor | 2454 | C=0.1;kernel=linear | 0.5000 | 0.3889 | 0.2610 | 0.3479 |
